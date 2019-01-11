@@ -1,0 +1,8 @@
+<div class="offset-2 col-8">
+  <input type="text" class="form-control" placeholder="nombre" (keyup)="setNombre($event.target.value)"/><br>
+  <input type="text" class="form-control" placeholder="apellidos" (keyup)="setApellidos($event.target.value)"/><br>
+  <input type="text" class="form-control" placeholder="rol" (keyup)="setRol($event.target.value)"/><br>
+  <input type="text" class="form-control" placeholder="usuario" (keyup)="setUsuario($event.target.value)"/><br>
+  <input type="text" class="form-control" placeholder="empleado" (keyup)="setEmpleado($event.target.value)"/><br>
+  <button (click)="addUsuario()">Añadir</button>
+</div>

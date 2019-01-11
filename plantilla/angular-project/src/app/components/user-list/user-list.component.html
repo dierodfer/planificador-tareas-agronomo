@@ -1,0 +1,5 @@
+<div class="offset-3">
+  <ng-container *ngFor="let item of items | async">
+    <p>{{item.nombre}} {{item.apellidos}}-{{item.usuario}}, {{item.rol}} id:{{item.empleado}}</p>
+  </ng-container>
+</div>
