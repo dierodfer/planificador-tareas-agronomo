@@ -1,8 +1,20 @@
-<div class="offset-2 col-8">
-  <input type="text" class="form-control" placeholder="nombre" (keyup)="setNombre($event.target.value)"/><br>
-  <input type="text" class="form-control" placeholder="apellidos" (keyup)="setApellidos($event.target.value)"/><br>
-  <input type="text" class="form-control" placeholder="rol" (keyup)="setRol($event.target.value)"/><br>
-  <input type="text" class="form-control" placeholder="usuario" (keyup)="setUsuario($event.target.value)"/><br>
-  <input type="text" class="form-control" placeholder="empleado" (keyup)="setEmpleado($event.target.value)"/><br>
-  <button (click)="addUsuario()">Añadir</button>
+<div class="offset-md-3 col-md-6">
+  <mat-form-field class="w-100">
+    <input matInput placeholder="nombre" (keyup)="setNombre($event.target.value)">
+  </mat-form-field>
+  <mat-form-field class="w-100">
+    <input matInput placeholder="apellidos" (keyup)="setApellidos($event.target.value)">
+  </mat-form-field>
+  <mat-form-field class="w-100">
+    <input matInput placeholder="rol" (keyup)="setRol($event.target.value)">
+  </mat-form-field>
+  <mat-form-field class="w-100">
+    <input matInput placeholder="usuario" (keyup)="setUsuario($event.target.value)">
+  </mat-form-field>
+  <mat-form-field class="w-100">  
+    <input matInput placeholder="empleado" (keyup)="setEmpleado($event.target.value)">
+  </mat-form-field>
+  <br>
+  <a mat-raised-button class="btn-block mb-5" color="primary" (click)="addUsuario()"><mat-icon>add_circle_outline</mat-icon> Añadir/actualizar</a>
+
 </div>

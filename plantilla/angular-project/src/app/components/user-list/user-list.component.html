@@ -1,5 +1,100 @@
-<div class="offset-3">
-  <ng-container *ngFor="let item of items | async">
-    <p>{{item.nombre}} {{item.apellidos}}-{{item.usuario}}, {{item.rol}} id:{{item.empleado}}</p>
-  </ng-container>
+
+  
+<!-- <div class="table-responsive">
+<table class="table table-hover">
+        
+  <thead>
+    <tr>
+      <th scope="col"></th>
+      <th scope="col">id</th>
+      <th scope="col">Nombre</th>
+      <th scope="col">Apellidos</th>
+      <th scope="col">Rol</th>
+      <th scope="col">Usuario</th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-container *ngFor="let item of (items | async);let i = index">
+        <tr>
+          <td>
+              <a mat-mini-fab color="warn" (click)="eliminarUsuario(item.empleado)">
+                  <mat-icon aria-label="Eliminar permanentemente">delete_forever</mat-icon>
+              </a>
+          </td>
+          <td>{{item.empleado}}</td>
+          <td>{{item.nombre}}</td>
+          <td>{{item.apellidos}}</td>
+          <td>{{item.rol}}</td>
+          <td>{{item.usuario}}</td>
+        </tr>
+    </ng-container>
+  </tbody>
+</table>
+</div> -->
+<!-- <div *ngIf="items | async;let itemsTratado">
+    <mat-paginator [length]="itemsTratado.length"
+              [pageSize]="3" color="primary"
+              [pageSizeOptions]="[5,10,25,50]"
+              (page)="pageEvent = $event">
+    </mat-paginator>
+</div> -->
+<mat-form-field class="w-100">
+  <mat-chip-list #chipList>
+    <mat-chip *ngFor="let item of list" [selectable]="selectable"
+             [removable]="removable" (removed)="remove(item)">
+      {{item}}
+      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+    </mat-chip>
+    <input placeholder="Nuevo filtro.."
+           [matChipInputFor]="chipList"
+           [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+           [matChipInputAddOnBlur]="addOnBlur"
+           (matChipInputTokenEnd)="add($event)">
+  </mat-chip-list>
+</mat-form-field>
+
+<div class="table-responsive">
+<table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z6 w-100">
+  
+    <ng-container matColumnDef="nombre">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+      <td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="empleado">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Empleado </th>
+      <td mat-cell *matCellDef="let element"> {{element.empleado}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="usuario">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Usuario </th>
+        <td mat-cell *matCellDef="let element"> {{element.usuario}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="rol">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Rol </th>
+        <td mat-cell *matCellDef="let element"> {{element.rol}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="apellidos">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Apellidos </th>
+        <td mat-cell *matCellDef="let element"> {{element.apellidos}} </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef>  </th>
+        <td mat-cell *matCellDef="let element">               
+          <a mat-mini-fab color="warn" (click)="eliminarUsuario(element.empleado)">
+            <mat-icon aria-label="Eliminar permanentemente">delete_forever</mat-icon>
+          </a> 
+        </td>
+      </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 50]" showFirstLastButtons></mat-paginator>
 </div>
+ <!--  {{(items | async)?.length}} -->
+  

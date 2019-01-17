@@ -1,0 +1,20 @@
+
+<!--   <a class="py-2 btn-block" mat-raised-button [routerLink]="['/lista']" routerLinkActive="mat-accent">
+    <i class="material-icons">view_list</i>Listar
+  </a>
+
+  <a class="py-2 btn-block" mat-raised-button [routerLink]="['/formulario']" routerLinkActive="mat-accent">
+    <i class="material-icons">edit</i>Crear/modificar
+  </a> -->
+
+  <mat-button-toggle-group align='center'>
+    <mat-button-toggle [routerLink]="['/lista']">
+      <mat-icon>view_list</mat-icon> Listar
+    </mat-button-toggle>
+    <mat-button-toggle  [routerLink]="['/formulario']">
+      <mat-icon>edit</mat-icon> Crear/modificar
+    </mat-button-toggle>
+    <mat-button-toggle disabled>
+      <mat-icon>notifications</mat-icon>
+    </mat-button-toggle>
+  </mat-button-toggle-group>

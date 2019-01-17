@@ -11,33 +11,33 @@ export class UserFormComponent implements OnInit {
 
   usuario: Usuario = new Usuario();
 
-  constructor(private userService:UserService) { }
+  constructor(private userService: UserService) { }
 
   ngOnInit() {
   }
 
-  addUsuario(){
+  addUsuario() {
     this.userService.addUsuario(this.usuario);
   }
 
-  setNombre(nombre:string){
+  setNombre(nombre: string) {
     this.usuario.nombre = nombre;
   }
 
-  setRol(rol:string){
+  setRol(rol: string) {
     this.usuario.rol = rol;
   }
 
-  setUsuario(usuario:string){
+  setUsuario(usuario: string) {
     this.usuario.usuario = usuario;
   }
 
-  setApellidos(apellidos:string){
+  setApellidos(apellidos: string) {
     this.usuario.apellidos = apellidos;
   }
 
-  setEmpleado(empleado:string){
-    this.usuario.empleado = parseInt(empleado); 
+  setEmpleado(empleado: string) {
+    this.usuario.empleado = +empleado;
   }
 
 }

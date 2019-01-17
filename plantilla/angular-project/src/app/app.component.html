@@ -1,17 +1,13 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
+<div class="text-center">
+  <h1 class="pb-0">
     Bienvenido Plantilla Angular+Firebase!
   </h1>
-  <small>Version 0.2</small>
-  <p>Contiene firebase,bootstrap, <a href="https://material.io/tools/icons/?style=baseline" target="_blank">material icon</a>, jquery, <a href="https://fontawesome.com/icons">fontawesome</a></p>
+  <small class="pb-5 pt-0 mt-0">Version 0.3</small>
+  <p>Contiene firebase,bootstrap, Material angular, <a href="https://material.io/tools/icons/?style=baseline" target="_blank">material icon</a>, jquery, hammerjs, <a href="https://fontawesome.com/icons">fontawesome</a></p>
   <p>Se actualizó el módulo de rxjs</p>
-  <i class="material-icons" style="font-size: 80px; color:rgb(177, 71, 71);">build</i><br>
+  <br>
+  <app-menu></app-menu>
 </div>
-<nav>
-<a class="offset-md-3 col-md-3 btn btn-outline-primary mr-2" [routerLink]="['/lista']"><i class="material-icons">view_list</i>Listar</a>
-<a class="col-md-3 btn btn-outline-primary" [routerLink]="['/formulario']"><i class="material-icons">edit</i>Crear/modificar</a>
-</nav>
-<div class="pt-4">
-  <router-outlet></router-outlet>
-</div>
+<br>
+<router-outlet></router-outlet>
