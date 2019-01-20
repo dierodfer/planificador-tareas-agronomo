@@ -37,7 +37,7 @@ export class UserFormComponent implements OnInit {
   }
 
   setEmpleado(empleado: string) {
-    this.usuario.empleado = +empleado;
+    this.usuario.empleado = empleado;
   }
 
 }

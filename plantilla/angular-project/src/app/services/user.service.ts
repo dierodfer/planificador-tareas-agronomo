@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection , CollectionReference, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection,
+  DocumentReference, Settings, CollectionReference, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Usuario } from '../models/usuario';
 import {MatSnackBar} from '@angular/material';
 
@@ -13,16 +14,16 @@ export class UserService {
   constructor(private db: AngularFirestore,
     public snackBar: MatSnackBar) { }
 
-  getUsuarios(orderBy: string) {
-     return this.db.collection('usuarios' , ref =>
-     ref.orderBy('nombre')
+  getUsuarios(orderBy?: string) {
+     return this.db.collection('usuarios' ,
+     ref => ref.orderBy(orderBy ? orderBy : 'nombre')
 /*   .startAt(2)
      .limit(8) */
      ).valueChanges();
   }
 
   addUsuario(usuario: Usuario) {
-    this.db.collection('usuarios').doc(usuario.empleado.toString()).set({
+    this.db.collection('usuarios').doc(usuario.empleado).set({
       empleado: usuario.empleado,
       nombre: usuario.nombre,
       apellidos: usuario.apellidos,
@@ -35,9 +36,11 @@ export class UserService {
     });
   }
 
-  deleteUser(usuario: string) {
-    this.db.collection('usuarios').doc(usuario).delete().then(function() {
-      alert('¡Se ha borrado correctamente!');
+  deleteUsuario(id: string) {
+    this.db.collection('usuarios').doc(id).delete().then(() => {
+      this.snackBar.open('El usuario ¡se ha borrado correctamente!', 'Cerrar', {
+        duration: 4000,
+      });
     });
   }
 }

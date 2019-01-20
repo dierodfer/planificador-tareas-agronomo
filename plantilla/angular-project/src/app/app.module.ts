@@ -26,6 +26,8 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatChipsModule} from '@angular/material/chips';
+import {DragDropModule} from '@angular/cdk/drag-drop';
+import { ListaDraggableComponent } from './components/lista-draggable/lista-draggable.component';
 
 
 @NgModule({
@@ -34,7 +36,8 @@ import {MatChipsModule} from '@angular/material/chips';
     UserListComponent,
     UserFormComponent,
     MenuComponent,
-    ModalComponent
+    ModalComponent,
+    ListaDraggableComponent
   ],
   imports: [
     BrowserModule,
@@ -48,7 +51,7 @@ import {MatChipsModule} from '@angular/material/chips';
     MatFormFieldModule, MatInputModule, MatIconModule,
     MatSnackBarModule, MatPaginatorModule, MatTableModule,
     MatSortModule, MatDialogModule, MatButtonToggleModule,
-    MatChipsModule
+    MatChipsModule, DragDropModule
   ],
   providers: [],
   bootstrap: [AppComponent]

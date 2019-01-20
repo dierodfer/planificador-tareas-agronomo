@@ -1,55 +1,17 @@
-
-  
-<!-- <div class="table-responsive">
-<table class="table table-hover">
-        
-  <thead>
-    <tr>
-      <th scope="col"></th>
-      <th scope="col">id</th>
-      <th scope="col">Nombre</th>
-      <th scope="col">Apellidos</th>
-      <th scope="col">Rol</th>
-      <th scope="col">Usuario</th>
-    </tr>
-  </thead>
-  <tbody>
-    <ng-container *ngFor="let item of (items | async);let i = index">
-        <tr>
-          <td>
-              <a mat-mini-fab color="warn" (click)="eliminarUsuario(item.empleado)">
-                  <mat-icon aria-label="Eliminar permanentemente">delete_forever</mat-icon>
-              </a>
-          </td>
-          <td>{{item.empleado}}</td>
-          <td>{{item.nombre}}</td>
-          <td>{{item.apellidos}}</td>
-          <td>{{item.rol}}</td>
-          <td>{{item.usuario}}</td>
-        </tr>
-    </ng-container>
-  </tbody>
-</table>
-</div> -->
-<!-- <div *ngIf="items | async;let itemsTratado">
-    <mat-paginator [length]="itemsTratado.length"
-              [pageSize]="3" color="primary"
-              [pageSizeOptions]="[5,10,25,50]"
-              (page)="pageEvent = $event">
-    </mat-paginator>
-</div> -->
 <mat-form-field class="w-100">
+  <mat-label>Filtros..</mat-label>
+  <mat-icon matSuffix>search</mat-icon>
   <mat-chip-list #chipList>
-    <mat-chip *ngFor="let item of list" [selectable]="selectable"
-             [removable]="removable" (removed)="remove(item)">
-      {{item}}
+    <mat-chip *ngFor="let filter of filters" [selectable]="selectable"
+             [removable]="removable" (removed)="removeFilter(filter)">
+      {{filter}}
       <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
     </mat-chip>
-    <input placeholder="Nuevo filtro.."
+    <input placeholder="Pulse enter para añadir filtro"
            [matChipInputFor]="chipList"
            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
            [matChipInputAddOnBlur]="addOnBlur"
-           (matChipInputTokenEnd)="add($event)">
+           (matChipInputTokenEnd)="addFilter($event)">
   </mat-chip-list>
 </mat-form-field>
 

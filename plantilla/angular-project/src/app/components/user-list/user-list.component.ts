@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import {MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
 import {Usuario} from '../../models/usuario';
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import {COMMA, ENTER, TAB} from '@angular/cdk/keycodes';
 import {MatChipInputEvent} from '@angular/material';
 
 @Component({
@@ -20,13 +20,13 @@ export class UserListComponent implements OnInit {
   selectable = true;
   removable = true;
   addOnBlur = true;
-  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-  list: string[] = [];
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA, TAB];
+  filters: string[] = [];
 
   constructor(private userService: UserService) { }
 
   getUsuarios() {
-  this.userService.getUsuarios('').subscribe(
+  this.userService.getUsuarios().subscribe(
     usuarios => {
       this.dataSource = new MatTableDataSource(usuarios as Usuario[]);
       this.dataSource.paginator = this.paginator;
@@ -35,29 +35,48 @@ export class UserListComponent implements OnInit {
   }
 
   eliminarUsuario(id: number) {
-    this.userService.deleteUser(id.toString());
+    this.userService.deleteUsuario(id.toString());
   }
 
-  add(event: MatChipInputEvent): void {
+  addFilter(event: MatChipInputEvent): void {
     const input = event.input;
-    const value = event.value;
+    const value = event.value.trim().toLowerCase();
 
-    // Add our fruit
-    if ((value || '').trim()) {
-      this.list.push(value.trim());
+    // Añade el filtro y comprueba que no existe
+    if ((value || '').trim() && this.filters.indexOf(value.toLowerCase()) === -1) {
+      this.filters.push(value.trim());
+      this.dataSource.data = this.dataSource.data.filter(usuario =>
+        usuario.nombre.toLowerCase().indexOf(value) > -1 ||
+        usuario.apellidos.toLowerCase().indexOf(value) > -1 ||
+        usuario.empleado.toString().indexOf(value) > -1 ||
+        usuario.rol.toLowerCase().indexOf(value) > -1 ||
+        usuario.usuario.toLowerCase().indexOf(value) > -1);
     }
 
-    // Reset the input value
+    // Resetea el valor del input
     if (input) {
       input.value = '';
     }
   }
 
-  remove(valor: string): void {
-    const index = this.list.indexOf(valor);
+  removeFilter(valor: string): void {
+    const index = this.filters.indexOf(valor);
 
     if (index >= 0) {
-      this.list.splice(index, 1);
+      this.filters.splice(index, 1);
+      this.userService.getUsuarios().subscribe(
+        usuarios => {
+          this.dataSource.data = usuarios as Usuario[];
+          this.filters.forEach(filtro =>
+            this.dataSource.data = this.dataSource.data.filter(
+              usuario =>
+              usuario.nombre.toLowerCase().indexOf(filtro) > -1 ||
+              usuario.apellidos.toLowerCase().indexOf(filtro) > -1 ||
+              usuario.empleado.toString().indexOf(filtro) > -1 ||
+              usuario.rol.toLowerCase().indexOf(filtro) > -1 ||
+              usuario.usuario.toLowerCase().indexOf(filtro) > -1)
+          );
+        });
     }
   }
 

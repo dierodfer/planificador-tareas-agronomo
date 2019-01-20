@@ -1,9 +1,8 @@
 export class Usuario {
-    empleado: number;
+    empleado: string;
     nombre: string;
     apellidos: string;
     rol: string;
     usuario: string;
-    constructor() { }
-
+    constructor() {}
 }
