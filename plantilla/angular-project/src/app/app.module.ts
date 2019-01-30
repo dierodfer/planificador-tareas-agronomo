@@ -31,6 +31,7 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
 import {MatSelectModule} from '@angular/material/select';
 import { ListaDraggableComponent } from './components/lista-draggable/lista-draggable.component';
 import {MatSliderModule} from '@angular/material/slider';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 
 @NgModule({
@@ -55,7 +56,8 @@ import {MatSliderModule} from '@angular/material/slider';
     MatSnackBarModule, MatPaginatorModule, MatTableModule,
     MatSortModule, MatDialogModule, MatButtonToggleModule,
     MatChipsModule, DragDropModule, MatSelectModule, MatRadioModule,
-    MatSliderModule
+    MatSliderModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   entryComponents: [
     ModalComponent

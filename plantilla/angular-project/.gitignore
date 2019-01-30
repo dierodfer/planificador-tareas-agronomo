@@ -39,6 +39,7 @@ testem.log
 Thumbs.db
 
 #firebase
+firebase/*
 .firebase*
 firebase.json
 firestore.indexes.json
