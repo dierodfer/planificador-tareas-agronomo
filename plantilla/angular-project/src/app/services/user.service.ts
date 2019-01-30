@@ -12,6 +12,7 @@ export class UserService {
 
 
   constructor(private db: AngularFirestore,
+/*     private coll: CollectionReference, */
     public snackBar: MatSnackBar) { }
 
   getUsuarios(orderBy?: string) {
@@ -28,7 +29,7 @@ export class UserService {
       nombre: usuario.nombre,
       apellidos: usuario.apellidos,
       rol: usuario.rol,
-      usuario: usuario.usuario
+      genero: usuario.genero
     }).then(() => {
         this.snackBar.open('El usuario se ha guardado correctamente', 'Cerrar', {
           duration: 4000,

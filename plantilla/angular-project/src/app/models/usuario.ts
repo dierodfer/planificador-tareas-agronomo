@@ -3,6 +3,7 @@ export class Usuario {
     nombre: string;
     apellidos: string;
     rol: string;
-    usuario: string;
+    genero: string;
+    tareas: String[];
     constructor() {}
 }

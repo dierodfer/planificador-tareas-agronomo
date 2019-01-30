@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Usuario } from '../../models/usuario';
 import { UserService } from '../../services/user.service';
+import {FormControl, Validators} from '@angular/forms';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-user-form',
@@ -9,35 +11,45 @@ import { UserService } from '../../services/user.service';
 })
 export class UserFormComponent implements OnInit {
 
+  control1 = new FormControl('', [Validators.required, Validators.maxLength(80)]);
+  control2 = new FormControl('', [Validators.required, Validators.maxLength(80)]);
+  control3 = new FormControl('', [Validators.required, Validators.maxLength(80)]);
+  control4 = new FormControl('', [Validators.required, Validators.maxLength(80)]);
+  control5 = new FormControl('', [Validators.required, Validators.maxLength(80)]);
+
   usuario: Usuario = new Usuario();
 
-  constructor(private userService: UserService) { }
+  constructor(
+    private userService: UserService,
+    private snackBar: MatSnackBar) { }
 
   ngOnInit() {
   }
 
   addUsuario() {
-    this.userService.addUsuario(this.usuario);
+    if (this.checkStatus()) {
+      this.userService.addUsuario(this.usuario);
+      this.usuario = new Usuario();
+      this.resetValidators();
+    } else {
+      this.snackBar.open('Ha ocurrido un error', 'Cerrar', {
+        duration: 2500,
+        panelClass: 'bg-danger',
+      });
+    }
   }
 
-  setNombre(nombre: string) {
-    this.usuario.nombre = nombre;
+  checkStatus(): boolean {
+    return this.control1.status === 'VALID' && this.control2.status === 'VALID'
+    && this.control3.status === 'VALID' && this.control4.status === 'VALID' && this.control5.status === 'VALID';
   }
 
-  setRol(rol: string) {
-    this.usuario.rol = rol;
-  }
-
-  setUsuario(usuario: string) {
-    this.usuario.usuario = usuario;
-  }
-
-  setApellidos(apellidos: string) {
-    this.usuario.apellidos = apellidos;
-  }
-
-  setEmpleado(empleado: string) {
-    this.usuario.empleado = empleado;
+  resetValidators() {
+    this.control1.reset('');
+    this.control2.reset('');
+    this.control3.reset('');
+    this.control4.reset('');
+    this.control5.reset('');
   }
 
 }

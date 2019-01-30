@@ -1,20 +1,36 @@
 <div class="offset-md-3 col-md-6">
   <mat-form-field class="w-100">
-    <input matInput placeholder="nombre" (keyup)="setNombre($event.target.value)" required>
+    <input matInput placeholder="nombre" [formControl]="control1" [(ngModel)]="usuario.nombre" required>
+    <mat-error *ngIf="control1.hasError('required')">Campo obligatorio</mat-error>
   </mat-form-field>
   <mat-form-field class="w-100">
-    <input matInput placeholder="apellidos" (keyup)="setApellidos($event.target.value)" required>
+    <input matInput placeholder="apellidos"  [formControl]="control2" [(ngModel)]="usuario.apellidos" required>
+    <mat-error *ngIf="control2.hasError('required')">Campo obligatorio</mat-error>
+    
   </mat-form-field>
   <mat-form-field class="w-100">
-    <input matInput placeholder="rol" (keyup)="setRol($event.target.value)" required>
-  </mat-form-field>
-  <mat-form-field class="w-100">
-    <input matInput placeholder="usuario" (keyup)="setUsuario($event.target.value)" required>
+    <mat-select placeholder="rol" [formControl]="control3" [(value)]="usuario.rol" required>
+        <mat-option>Ninguno</mat-option>
+        <mat-option value="TRABAJADOR">Trabajador</mat-option>
+        <mat-option value="COORDINADOR">Coordinador</mat-option>
+        <mat-option value="ADMIN">Administrador</mat-option>
+    </mat-select>
+    <mat-error *ngIf="control3.hasError('required')">Campo obligatorio</mat-error>
   </mat-form-field>
   <mat-form-field class="w-100">  
-    <input matInput placeholder="empleado" (keyup)="setEmpleado($event.target.value)" required>
+    <input matInput placeholder="nº de empleado" [formControl]="control4" [(ngModel)]="usuario.empleado" required>
+    <mat-error *ngIf="control4.hasError('required')">Campo obligatorio</mat-error>
   </mat-form-field>
+  <mat-radio-group class="w-100" [formControl]="control5" [(ngModel)]="usuario.genero">
+    <label class="pt-3 pr-2">Género:</label>
+    <mat-radio-button class="pr-2" color="primary" value="MUJER">Mujer</mat-radio-button>
+    <mat-radio-button color="primary" value="HOMBRE">Hombre</mat-radio-button>
+  </mat-radio-group>
   <br>
-  <a mat-raised-button class="btn-block mb-5" color="primary" (click)="addUsuario()"><mat-icon>add_circle_outline</mat-icon> Añadir/actualizar</a>
+  <label class="pt-3">Edad:</label>
+  <mat-slider class="w-100" [max]="50" [min]="0" color="primary" thumbLabel [tickInterval]="5">
+</mat-slider>
+<br>
+  <a mat-raised-button class="my-3" color="accent" (click)="addUsuario()"><mat-icon>add_circle_outline</mat-icon> Añadir/actualizar</a>
 
 </div>
