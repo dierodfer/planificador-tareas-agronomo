@@ -6,7 +6,12 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
+
+// Notificaciones Push
+import { AngularFireMessagingModule } from '@angular/fire/messaging';
+import { MessagingService } from './services/messaging.service';
 import { environment } from '../environments/environment';
+import { AsyncPipe } from '../../node_modules/@angular/common';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './/app-routing.module';
@@ -48,7 +53,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     AngularFireModule.initializeApp(environment.firebase), // imports firebase/app needed for everything
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
-    AngularFireStorageModule, // imports firebase/storage only needed for storage features
+    AngularFireMessagingModule,
+    AngularFireStorageModule, // BORRAR
     AppRoutingModule, FormsModule, ReactiveFormsModule,
     // Material Angular
     BrowserAnimationsModule, MatButtonModule, MatCheckboxModule,
@@ -62,7 +68,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
   entryComponents: [
     ModalComponent
   ],
-  providers: [],
+  providers: [MessagingService, AsyncPipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
