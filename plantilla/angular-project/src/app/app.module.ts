@@ -1,10 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 // Firebase Modules
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
-import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 
 // Notificaciones Push
@@ -37,6 +37,10 @@ import {MatSelectModule} from '@angular/material/select';
 import { ListaDraggableComponent } from './components/lista-draggable/lista-draggable.component';
 import {MatSliderModule} from '@angular/material/slider';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { NotificationComponent } from './components/notification/notification.component';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatNativeDateModule} from '@angular/material';
+import {MatCardModule} from '@angular/material/card';
 
 
 @NgModule({
@@ -46,15 +50,16 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     UserFormComponent,
     MenuComponent,
     ModalComponent,
-    ListaDraggableComponent
+    ListaDraggableComponent,
+    NotificationComponent
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AngularFireModule.initializeApp(environment.firebase), // imports firebase/app needed for everything
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
     AngularFireMessagingModule,
-    AngularFireStorageModule, // BORRAR
     AppRoutingModule, FormsModule, ReactiveFormsModule,
     // Material Angular
     BrowserAnimationsModule, MatButtonModule, MatCheckboxModule,
@@ -62,7 +67,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     MatSnackBarModule, MatPaginatorModule, MatTableModule,
     MatSortModule, MatDialogModule, MatButtonToggleModule,
     MatChipsModule, DragDropModule, MatSelectModule, MatRadioModule,
-    MatSliderModule,
+    MatSliderModule, MatSidenavModule, MatNativeDateModule, MatCardModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   entryComponents: [

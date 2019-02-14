@@ -1,0 +1,8 @@
+.mat-drawer{
+    box-shadow: none !important;
+    background-color: transparent;
+}
+
+.clickable{
+    cursor: pointer;
+}
