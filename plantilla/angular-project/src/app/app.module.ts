@@ -19,6 +19,9 @@ import { UserListComponent } from './components/user-list/user-list.component';
 import { UserFormComponent } from './components/user-form/user-form.component';
 import { MenuComponent } from './components/menu/menu.component';
 import { ModalComponent } from './components/modal/modal.component';
+import { HistoricComponent } from './components/historic/historic.component';
+import { TaksListComponent } from './components/taks-list/taks-list.component';
+import { TaksFormComponent } from './components/taks-form/taks-form.component';
 
 // Material Angular
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -41,6 +44,11 @@ import { NotificationComponent } from './components/notification/notification.co
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatNativeDateModule} from '@angular/material';
 import {MatCardModule} from '@angular/material/card';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatGridListModule} from '@angular/material/grid-list';
+import {MatExpansionModule} from '@angular/material/expansion';
+
+
 
 
 @NgModule({
@@ -51,7 +59,10 @@ import {MatCardModule} from '@angular/material/card';
     MenuComponent,
     ModalComponent,
     ListaDraggableComponent,
-    NotificationComponent
+    NotificationComponent,
+    HistoricComponent,
+    TaksListComponent,
+    TaksFormComponent
   ],
   imports: [
     BrowserModule,
@@ -68,6 +79,7 @@ import {MatCardModule} from '@angular/material/card';
     MatSortModule, MatDialogModule, MatButtonToggleModule,
     MatChipsModule, DragDropModule, MatSelectModule, MatRadioModule,
     MatSliderModule, MatSidenavModule, MatNativeDateModule, MatCardModule,
+    MatDatepickerModule, MatGridListModule, MatExpansionModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   entryComponents: [

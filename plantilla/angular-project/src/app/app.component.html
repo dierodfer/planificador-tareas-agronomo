@@ -1,22 +1,15 @@
 <mat-sidenav-container class="example-container" fullscreen>
-    <mat-sidenav #sidenav mode="over" (click)="sidenav.toggle()">  
-        <mat-card class="m-5 clickable" [routerLink]="['/lista']"> 
-          <mat-icon>view_list</mat-icon> Listar
-        </mat-card>
-        <mat-card class="m-5 clickable" [routerLink]="['/formulario']">
-          <mat-icon>edit</mat-icon> Crear/modificar
-        </mat-card>
-        <mat-card class="m-5 clickable" [routerLink]="['/listaDraggable']">
-          <mat-icon>drag_handle</mat-icon> Listas Arrastrables 
-        </mat-card>
-        <mat-card class="m-5 clickable" [routerLink]="['/notificacion']">
-          <mat-icon>notifications_rounded</mat-icon> Notificaciones push
-        </mat-card>
+    
+    <mat-sidenav #sidenav mode="over" (click)="sidenav.toggle()"> 
+      <app-menu></app-menu>
     </mat-sidenav>
-  
+
     <mat-sidenav-content>
         <div class="fixed-top bg-white">
             <button mat-button class="m-3" (click)="sidenav.toggle()"><mat-icon>menu</mat-icon>Abrir menu</button>
+            <button mat-button class="m-3 float-right" [routerLink]="['/notificaciones']">
+              <mat-icon>notifications</mat-icon>
+            </button>
         </div>
         <div class="text-center pt-5">
             <h1 class="pb-0 pt-5">

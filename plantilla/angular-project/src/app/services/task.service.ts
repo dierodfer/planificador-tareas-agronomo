@@ -14,11 +14,17 @@ export class TaskService {
   constructor(private db: AngularFirestore,
     public snackBar: MatSnackBar) { }
 
-  getTareas(orderBy?: string) {
+  getTasks() {
     return this.db.collection('tareas' , ref =>
-    ref.orderBy(orderBy ? orderBy : 'orden')
+    ref.orderBy('orden')
     ).valueChanges();
- }
+  }
+
+  getTaskByUser(userId: string) {
+    return this.db.collection('tareas' , ref =>
+    ref.orderBy('orden').where('usuario', '==', userId)
+    ).valueChanges();
+  }
 
   updateTarea(tarea: Tarea) {
 

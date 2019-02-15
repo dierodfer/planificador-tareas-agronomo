@@ -1,14 +1,23 @@
- <mat-button-toggle-group>
-    <mat-button-toggle [routerLink]="['/lista']">
-      <mat-icon>view_list</mat-icon> Listar
-    </mat-button-toggle>
-    <mat-button-toggle  [routerLink]="['/formulario']">
-      <mat-icon>edit</mat-icon> Crear/modificar
-    </mat-button-toggle>
-    <mat-button-toggle  [routerLink]="['/listaDraggable']">
-      <mat-icon>drag_handle</mat-icon> Listas Arrastrables
-    </mat-button-toggle>
-    <mat-button-toggle disabled>
-      <mat-icon>notifications</mat-icon>
-    </mat-button-toggle>
-  </mat-button-toggle-group>
+ 
+<mat-card class="m-5 btn" [routerLink]="['/usuarios/lista']"> 
+  <mat-icon>supervised_user_circle</mat-icon> Usuarios
+</mat-card>
+
+<mat-card class="m-5 btn" [routerLink]="['tareas/lista']"> 
+  <mat-icon>view_list</mat-icon> Tareas
+</mat-card>
+
+<mat-card class="m-5 btn" [routerLink]="['/tareas/historico']"> 
+  <mat-icon>date_range</mat-icon> Histórico
+</mat-card>
+<!--     <mat-card class="m-5 clickable" [routerLink]="['/formulario']">
+  <mat-icon>edit</mat-icon> Crear/modificar
+</mat-card> -->
+<!--     <mat-card class="m-5 clickable" [routerLink]="['/listaDraggable']">
+  <mat-icon>drag_handle</mat-icon> Listas Arrastrables 
+</mat-card> -->
+
+<!-- <mat-card class="m-5 clickable" [routerLink]="['/notificacion']">
+  <mat-icon>notifications</mat-icon> Notificaciones
+</mat-card> -->
+

@@ -3,5 +3,7 @@ export class Tarea {
     descripcion: string;
     nombre: string;
     orden: string;
+    fecha: Date;
+    usuario: string;
     constructor() {}
 }

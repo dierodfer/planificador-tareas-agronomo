@@ -19,7 +19,7 @@ export class ListaDraggableComponent implements OnInit {
   constructor(private taskService: TaskService) { }
 
   ngOnInit() {
-      this.taskService.getTareas().subscribe(
+      this.taskService.getTasks().subscribe(
         tareas => {
           // Realiza una copia de las listas recibidas
           this.todo = tareas.map(x => Object.assign({}, x)) as Tarea[];
