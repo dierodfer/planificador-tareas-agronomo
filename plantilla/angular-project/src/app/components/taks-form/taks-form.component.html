@@ -1,3 +1,70 @@
-<p>
-  taks-form works!
-</p>
+<div class="offset-md-3 col-md-6">
+<!--     <mat-form-field class="w-100">
+      <input matInput placeholder="Titulo" [formControl]="control1" [(ngModel)]="tarea.nombre" required>
+      <mat-error *ngIf="control1.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
+    </mat-form-field> -->
+    <mat-form-field class="w-100">
+      <textarea matInput placeholder="Descripcion (opcional)" [(ngModel)]="tarea.descripcion"></textarea>
+    </mat-form-field>
+    <mat-form-field class="w-100">
+      <mat-select placeholder="Tipo de tarea" [formControl]="control3" [(value)]="tarea.tipo" required>
+          <mat-option>Ninguno</mat-option>
+
+          <mat-option value="Desinfección">Desinfección</mat-option>
+          <mat-option value="Fase de plantación">Fase de plantación</mat-option>
+
+          <mat-option value="Hibridación">Hibridación</mat-option>
+          <mat-option value="Castración y polinización">Castración y polinización (mujeres)</mat-option>
+          <mat-option value="Mantenimiento de plantas">Mantenimiento de plantas (hombres)</mat-option>
+
+          <mat-option value="Recolección de frutos">Recolección de frutos</mat-option>
+          <mat-option value="Limpieza de frutos">Limpieza de frutos</mat-option>
+          <mat-option value="Retirada plantas">Retirada plantas</mat-option>
+          <mat-option value="Limpieza otros">Limpieza otros</mat-option>
+
+      </mat-select>
+      <mat-error *ngIf="control3.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="tarea.tipo == 'Mantenimiento de plantas' || tarea.tipo == 'Limpieza otros'" class="w-100" required>
+      <mat-select placeholder="Tipo de subtarea" [(value)]="tarea.subtipo">
+          <ng-container *ngIf="tarea.tipo == 'Mantenimiento de plantas'">
+            <mat-option value="Retirada de hojas y malas hierbas">Retirada de hojas y malas hierbas</mat-option>
+            <mat-option value="Sulfatación">Sulfatación</mat-option>
+            <mat-option value="Sujeción de plantas">Sujeción de plantas</mat-option>
+          </ng-container>
+          <ng-container *ngIf="tarea.tipo == 'Limpieza otros'">
+            <mat-option value="Cuartones y pasillos">Cuartones y pasillos</mat-option>
+            <mat-option value="Retirada de tablas">Retirada de tablas</mat-option>
+            <mat-option value="Acceso a los invernaderos y herramientas">Acceso a los invernaderos y herramientas</mat-option>
+          </ng-container>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="w-100">
+      <mat-select placeholder="Elige los usuarios de la tarea" [formControl]="control6" multiple required>
+        <mat-select-trigger>
+          {{control6.value[0] ? control6.value[0].nombre+','+control6.value[0].apellidos : ''}}
+          <span *ngIf="control6.value?.length > 1" class="example-additional-selection">
+            (+{{control6.value.length - 1}} {{control6.value?.length === 2 ? 'persona' : 'personas'}})
+          </span>
+        </mat-select-trigger>
+        <mat-option *ngFor="let usuario of usuarios" [value]="usuario">{{usuario.nombre}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="control6.hasError('required')">Debe añadir al menos a <strong>1</strong> trabajador</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="w-100">
+      <input matInput [min]="minDatepicker" [formControl]="control5" [matDatepicker]="picker" placeholder="Elige una fecha de comienzo" [(ngModel)]="tarea.fecha" required>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-error *ngIf="control5.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="w-100">
+      <input matInput placeholder="Duración (opcional)" type="number" [(ngModel)]="repit">
+    </mat-form-field>
+ 
+    <br>
+    <a mat-raised-button class="my-3" color="accent" (click)="submit()"><mat-icon>add_circle_outline</mat-icon> Añadir/actualizar</a>
+  </div>

@@ -7,22 +7,14 @@
     <mat-sidenav-content>
         <div class="fixed-top bg-white">
             <button mat-button class="m-3" (click)="sidenav.toggle()"><mat-icon>menu</mat-icon>Abrir menu</button>
+            <small>v.1.0.2</small>
             <button mat-button class="m-3 float-right" [routerLink]="['/notificaciones']">
               <mat-icon>notifications</mat-icon>
             </button>
         </div>
-        <div class="text-center pt-5">
-            <h1 class="pb-0 pt-5">
-              Bienvenido Plantilla <img src="https://cdn-images-1.medium.com/max/1000/1*AyVeOIKqYMkpeZRxNOxRjg.png" height="60px"/>Angular+Firebase!
-            </h1>
-            <small class="pb-5 pt-0 mt-0">Version 1.0</small>
-            <p>Contiene firebase,bootstrap, Material angular, <a href="https://material.io/tools/icons/?style=baseline" target="_blank">material icon</a>, jquery, hammerjs, <a href="https://fontawesome.com/icons">fontawesome</a></p>
-            <p>Se actualizó el módulo de rxjs</p>
-            <br>
-
-          </div>
-          <br>
+        <div style="margin-top: 92px;">
           <router-outlet></router-outlet>
+        </div>
     </mat-sidenav-content>
 </mat-sidenav-container>
 

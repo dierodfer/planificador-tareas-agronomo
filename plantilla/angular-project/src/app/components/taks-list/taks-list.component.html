@@ -1,73 +1,67 @@
 <div class="row">
-<div class="col-md-5">
-<mat-form-field class="w-100">
-  <mat-label>Filtros..</mat-label>
-  <mat-icon matSuffix>search</mat-icon>
-  <mat-chip-list #chipList>
-    <mat-chip *ngFor="let filter of filters" (removed)="removeFilter(filter)">
-      {{filter}}
-      <mat-icon matChipRemove>cancel</mat-icon>
-    </mat-chip>
-    <input placeholder="Pulse enter para añadir filtro"
-           [matChipInputFor]="chipList"
-           [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-           [matChipInputAddOnBlur]="true"
-           (matChipInputTokenEnd)="addFilter($event)">
-  </mat-chip-list>
-</mat-form-field>
+  <div class="col-sm-5">
+  <mat-form-field class="w-100">
+    <mat-label>Filtros..</mat-label>
+    <mat-icon matSuffix>search</mat-icon>
+    <mat-chip-list #chipList>
+      <mat-chip *ngFor="let filter of filters" (removed)="removeFilter(filter)">
+        {{filter}}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+      <input placeholder="Pulse enter para añadir filtro"
+            [matChipInputFor]="chipList"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            [matChipInputAddOnBlur]="true"
+            (matChipInputTokenEnd)="addFilter($event)">
+    </mat-chip-list>
+  </mat-form-field>
 
-<div class="table-responsive">
-<table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z6 w-100">
-  
-    <ng-container matColumnDef="nombre">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
-      <td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
-    </ng-container>
+  <div class="table-responsive">
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z6 w-100">
+    
+      <ng-container matColumnDef="nombre">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+        <td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
+      </ng-container>
 
-    <ng-container matColumnDef="apellidos">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Apellidos </th>
-        <td mat-cell *matCellDef="let element"> {{element.apellidos}} </td>
-    </ng-container>
+      <ng-container matColumnDef="apellidos">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Apellidos </th>
+          <td mat-cell *matCellDef="let element"> {{element.apellidos}} </td>
+      </ng-container>
 
+  <!-- 
+      <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef>  </th>
+          <td mat-cell *matCellDef="let element">               
+            <a mat-mini-fab color="primary" (click)="getTareas(element.empleado)">
+              <mat-icon aria-label="ver tareas">calendar_view_day</mat-icon>
+            </a>  
+          </td>
+      </ng-container>  -->
+    
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="getTareas(row.empleado)" class="clickable"></tr>
+    </table>
+    <mat-paginator [pageSizeOptions]="[10, 50]"></mat-paginator>
+  </div>
+  </div>
 
-    <ng-container matColumnDef="acciones">
-        <th mat-header-cell *matHeaderCellDef>  </th>
-        <td mat-cell *matCellDef="let element">               
-           <a mat-mini-fab color="primary" (click)="getTareas(element.empleado)">
-            <mat-icon aria-label="ver tareas">calendar_view_day</mat-icon>
-          </a>  
-        </td>
-    </ng-container> 
-  
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
-  <mat-paginator [pageSizeOptions]="[10, 50]"></mat-paginator>
-</div>
-</div>
-
-<mat-accordion class="col-md-7" *ngIf="userSelected">
-<button class="float-right" mat-raised-button [routerLink]="[ '/tareas/formulario' ]" color="primary"> <mat-icon>add</mat-icon>Nueva tarea</button>
-<p class="text-center col-6">Tareas de {{userSelected.nombre}} {{userSelected.apellidos}}</p>
-    <mat-expansion-panel *ngFor="let tarea of tareas">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          {{tarea.nombre}}  
-        </mat-panel-title>
-        <mat-panel-description>
-          {{tarea.fecha.toDate() | date}}
-        </mat-panel-description>
-      </mat-expansion-panel-header>
-      
-      {{tarea.descripcion}}<br>
-
-      <mat-form-field>
-        <input matInput placeholder="First name">
-      </mat-form-field>
-  
-      <mat-form-field>
-        <input matInput placeholder="Age">
-      </mat-form-field>
-    </mat-expansion-panel>
-</mat-accordion>
+  <mat-accordion class="col-sm-7" *ngIf="userSelected">
+      <button class="float-right" mat-raised-button [routerLink]="[ '/tareas/formulario' ]" color="primary"> <mat-icon>add</mat-icon>Nueva tarea</button>
+      <p class="text-center col-6">Tareas de {{userSelected.nombre}} {{userSelected.apellidos}}</p>
+      <mat-expansion-panel *ngFor="let tarea of tareas">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon *ngIf="tarea.cancelada">block</mat-icon>
+            {{tarea.tipo}}{{tarea.subtipo ? ' - '+tarea.subtipo : '' }}
+          </mat-panel-title>
+          <mat-panel-description>
+            {{tarea.fecha.toDate() | date}}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <p>{{tarea.descripcion}}</p>
+        <button *ngIf="!tarea.cancelada" class="float-right" mat-raised-button color="warn" (click)="cancelarTarea(tarea.id)">Cancelar</button>
+        <button *ngIf="tarea.cancelada" class="float-right" mat-raised-button color="accent" (click)="descancelarTarea(tarea.id)">Activar</button>
+      </mat-expansion-panel>
+  </mat-accordion>
 </div>

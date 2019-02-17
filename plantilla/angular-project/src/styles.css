@@ -1,2 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+
+.clickable{
+    cursor: pointer;
+}
+
+.mat-row:hover {
+    background-color: rgba(0,0,0,.05);
+}

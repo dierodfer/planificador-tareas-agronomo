@@ -14,7 +14,7 @@ import {MatChipInputEvent} from '@angular/material';
 })
 export class TaksListComponent implements OnInit {
 
-  displayedColumns: string[] = ['nombre', 'apellidos', 'acciones'];
+  displayedColumns: string[] = ['nombre', 'apellidos'];
   dataSource: MatTableDataSource<Usuario>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -23,12 +23,12 @@ export class TaksListComponent implements OnInit {
   tareas: Tarea[] = [];
   userSelected: Usuario;
 
-  constructor(private tareaService: TaskService,
+  constructor(private taskService: TaskService,
     private usuarioService: UserService) { }
 
   getTareas(userId) {
     this.userSelected = this.dataSource.data.find(usuario => usuario.empleado === userId);
-    this.tareaService.getTaskByUser(userId).subscribe(tareas => this.tareas = tareas as Tarea[]);
+    this.taskService.getTaskByUser(userId).subscribe(tareas => this.tareas = tareas as Tarea[]);
   }
 
   getUsuarios() {
@@ -82,10 +82,19 @@ export class TaksListComponent implements OnInit {
     }
   }
 
+  cancelarTarea(id) {
+    this.taskService.cancelTask(id);
+  }
+
+  descancelarTarea(id) {
+    this.taskService.uncancelTask(id);
+  }
+
   ngOnInit() {
     // SEGURIDAD
     this.getUsuarios();
     /* this.getTareas(userId); */
   }
+
 }
 
