@@ -22,11 +22,13 @@ export class TaksListComponent implements OnInit {
   filters: string[] = [];
   tareas: Tarea[] = [];
   userSelected: Usuario;
+  filtro = false;
 
   constructor(private taskService: TaskService,
     private usuarioService: UserService) { }
 
   getTareas(userId) {
+    this.filtro = false;
     this.userSelected = this.dataSource.data.find(usuario => usuario.empleado === userId);
     this.taskService.getTaskByUser(userId).subscribe(tareas => this.tareas = tareas as Tarea[]);
   }
@@ -88,6 +90,24 @@ export class TaksListComponent implements OnInit {
 
   descancelarTarea(id) {
     this.taskService.uncancelTask(id);
+  }
+
+  finalizarTarea(id){
+    this.taskService.finishTask(id);
+  }
+
+  activarTarea(id) {
+    this.taskService.unfinishedTask(id);
+  }
+
+  dateChange(event) {
+    this.filtro = true;
+    this.taskService.getTaskByUserAndDate(this.userSelected.empleado, event.value).subscribe(tareas => this.tareas = tareas as Tarea[]);
+  }
+
+  limpiarFiltro() {
+    this.filtro = false;
+    this.taskService.getTaskByUser(this.userSelected.empleado).subscribe(tareas => this.tareas = tareas as Tarea[]);
   }
 
   ngOnInit() {

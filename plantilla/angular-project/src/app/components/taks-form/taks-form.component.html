@@ -4,12 +4,7 @@
       <mat-error *ngIf="control1.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
     </mat-form-field> -->
     <mat-form-field class="w-100">
-      <textarea matInput placeholder="Descripcion (opcional)" [(ngModel)]="tarea.descripcion"></textarea>
-    </mat-form-field>
-    <mat-form-field class="w-100">
       <mat-select placeholder="Tipo de tarea" [formControl]="control3" [(value)]="tarea.tipo" required>
-          <mat-option>Ninguno</mat-option>
-
           <mat-option value="Desinfección">Desinfección</mat-option>
           <mat-option value="Fase de plantación">Fase de plantación</mat-option>
 
@@ -57,12 +52,16 @@
     <mat-form-field class="w-100">
       <input matInput [min]="minDatepicker" [formControl]="control5" [matDatepicker]="picker" placeholder="Elige una fecha de comienzo" [(ngModel)]="tarea.fecha" required>
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
+      <mat-datepicker touchUi #picker></mat-datepicker>
       <mat-error *ngIf="control5.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
     </mat-form-field>
 
     <mat-form-field class="w-100">
-      <input matInput placeholder="Duración (opcional)" type="number" [(ngModel)]="repit">
+      <input matInput placeholder="Duración en dias (por implementar)" type="number" [(value)]="repit" disabled>
+    </mat-form-field>
+
+    <mat-form-field class="w-100">
+      <textarea matInput placeholder="Descripción (opcional)" rows="3" [(ngModel)]="tarea.descripcion"></textarea>
     </mat-form-field>
  
     <br>

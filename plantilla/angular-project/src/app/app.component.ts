@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MessagingService } from './services/messaging.service';
+import { MatDialog } from '@angular/material';
+import {DialogIncidentComponent} from './components/dialog-incident/dialog-incident.component';
 
 
 @Component({
@@ -11,7 +13,12 @@ export class AppComponent implements OnInit {
 
   message;
 
-  constructor(private messagingService: MessagingService) { }
+  constructor(private messagingService: MessagingService,
+    private dialog: MatDialog) { }
+
+  openIncidenceDialog() {
+    this.dialog.open(DialogIncidentComponent);
+  }
 
   ngOnInit() {
      const userId = 'user001';

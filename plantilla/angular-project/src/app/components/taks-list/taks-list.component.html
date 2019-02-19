@@ -39,29 +39,43 @@
           </td>
       </ng-container>  -->
     
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+<!--       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr> -->
       <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="getTareas(row.empleado)" class="clickable"></tr>
     </table>
-    <mat-paginator [pageSizeOptions]="[10, 50]"></mat-paginator>
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 50]"></mat-paginator>
   </div>
   </div>
 
-  <mat-accordion class="col-sm-7" *ngIf="userSelected">
-      <button class="float-right" mat-raised-button [routerLink]="[ '/tareas/formulario' ]" color="primary"> <mat-icon>add</mat-icon>Nueva tarea</button>
-      <p class="text-center col-6">Tareas de {{userSelected.nombre}} {{userSelected.apellidos}}</p>
+  <mat-accordion class="col-sm-7 pt-4" *ngIf="userSelected">
+      <div class="row pb-3">      
+      <div class="col-9 pt-2">Tareas de {{userSelected.nombre}} {{userSelected.apellidos}}</div>
+      <div class="col-3">
+        <button mat-button *ngIf="filtro" (click)="limpiarFiltro()">Limpiar</button>
+        <button mat-icon-button class="float-right" (click)="picker.open()"><mat-icon>date_range</mat-icon></button>
+        <mat-form-field class="d-none">
+            <input matInput [matDatepicker]="picker" (dateChange)="dateChange($event)">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker touchUi #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+      </div>
       <mat-expansion-panel *ngFor="let tarea of tareas">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            <mat-icon *ngIf="tarea.cancelada">block</mat-icon>
+        <mat-expansion-panel-header class="my-2">
+          <mat-panel-title> 
+            <mat-icon *ngIf="tarea.finalizada" class="text-success">check_circle</mat-icon>
+            <mat-icon *ngIf="tarea.cancelada"  class="text-danger">block</mat-icon>
             {{tarea.tipo}}{{tarea.subtipo ? ' - '+tarea.subtipo : '' }}
           </mat-panel-title>
           <mat-panel-description>
             {{tarea.fecha.toDate() | date}}
           </mat-panel-description>
         </mat-expansion-panel-header>
-        <p>{{tarea.descripcion}}</p>
-        <button *ngIf="!tarea.cancelada" class="float-right" mat-raised-button color="warn" (click)="cancelarTarea(tarea.id)">Cancelar</button>
-        <button *ngIf="tarea.cancelada" class="float-right" mat-raised-button color="accent" (click)="descancelarTarea(tarea.id)">Activar</button>
+        <p>{{tarea.descripcion ? 'Detalles:'+tarea.descripcion : ''}}</p>
+        <button *ngIf="!tarea.cancelada && !tarea.finalizada" class="float-right" mat-raised-button color="warn" (click)="cancelarTarea(tarea.id)"><mat-icon>block</mat-icon> Cancelar</button>
+        <button *ngIf="tarea.cancelada  && !tarea.finalizada" class="float-right" mat-raised-button color="accent" (click)="descancelarTarea(tarea.id)">Descancelar</button>
+        <button *ngIf="!tarea.cancelada && !tarea.finalizada" class="float-left mx-2" mat-raised-button color="primary" (click)="finalizarTarea(tarea.id)"><mat-icon>check_circle</mat-icon> Marcar como finalizada</button>
+        <button *ngIf="!tarea.cancelada && tarea.finalizada" class="float-left mx-2" mat-raised-button color="accent" (click)="activarTarea(tarea.id)">Volver a activar</button>
       </mat-expansion-panel>
+      <button class="float-right mt-3" mat-raised-button [routerLink]="[ '/tareas/formulario' ]" color="primary"> <mat-icon>add</mat-icon> Nueva tarea</button>
   </mat-accordion>
 </div>

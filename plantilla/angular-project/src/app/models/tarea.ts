@@ -7,5 +7,6 @@ export class Tarea {
     tipo: string;
     subtipo: string;
     cancelada: boolean;
+    finalizada: boolean;
     constructor() {}
 }

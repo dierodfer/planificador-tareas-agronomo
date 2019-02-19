@@ -7,7 +7,10 @@
     <mat-sidenav-content>
         <div class="fixed-top bg-white">
             <button mat-button class="m-3" (click)="sidenav.toggle()"><mat-icon>menu</mat-icon>Abrir menu</button>
-            <small>v.1.0.2</small>
+            <small>v.1.0.3</small>
+            <button mat-button class="m-3 float-right" (click)="openIncidenceDialog()">
+              <mat-icon>warning</mat-icon>
+            </button>
             <button mat-button class="m-3 float-right" [routerLink]="['/notificaciones']">
               <mat-icon>notifications</mat-icon>
             </button>

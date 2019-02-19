@@ -26,7 +26,7 @@ export class TaskService {
 
   getTaskByUserAndDate(userId: string, date: Date ) {
     return this.db.collection('tareas' , ref =>
-    ref.orderBy('fecha').where('usuario', '==', userId).where('fecha', '==', date)
+    ref.where('usuario', '==', userId).where('fecha', '==', date)
     ).valueChanges();
   }
 
@@ -66,9 +66,9 @@ export class TaskService {
   }
 
   cancelTask(id: string) {
-      this.db.collection('tareas').doc(id).update({
+    this.db.collection('tareas').doc(id).update({
         cancelada: true
-      }).then(() => {
+    }).then(() => {
         this.snackBar.open('La tarea se ha cancelado correctamente', 'Cerrar', {
           duration: 4000,
         });
@@ -83,5 +83,25 @@ export class TaskService {
         duration: 4000,
       });
   });
-}
+  }
+
+  finishTask(id: string) {
+    this.db.collection('tareas').doc(id).update({
+      finalizada: true
+    }).then(() => {
+      this.snackBar.open('La tarea se ha marcado como finalizada', 'Cerrar', {
+        duration: 4000,
+      });
+    });
+  }
+
+  unfinishedTask(id: string) {
+    this.db.collection('tareas').doc(id).update({
+      finalizada: false
+    }).then(() => {
+      this.snackBar.open('La tarea se ha marcado como NO finalizada', 'Cerrar', {
+        duration: 4000,
+      });
+    });
+  }
 }

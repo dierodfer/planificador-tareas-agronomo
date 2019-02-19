@@ -1,0 +1,51 @@
+<h4 class="py-3">Nueva Incidencia</h4>
+<form>
+  <mat-form-field class="w-100">
+    <mat-select placeholder="Tipo de incidencia" [(formControl)]="control1" required>
+        <mat-option value="Infección">Infección</mat-option>
+        <mat-option value="Problemas">Problemas</mat-option>
+        <mat-option value="Otro">Otro...</mat-option>
+    </mat-select>
+    <mat-error *ngIf="control1.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
+  </mat-form-field> 
+  <mat-form-field class="w-100" *ngIf="control1.value == 'Otro'">
+    <textarea matInput placeholder="Descripción" [(formControl)]="control2" rows="3" required></textarea>
+    <mat-error *ngIf="control2.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
+  </mat-form-field>
+  <mat-form-field class="w-50">
+      <input matInput [value]="control3.value" placeholder="Fecha" disabled>
+      <mat-error *ngIf="control3.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
+  </mat-form-field>
+  <mat-form-field class="w-50">
+      <input matInput [value]="control4.value"  placeholder="Autor" disabled>
+  </mat-form-field>
+  <mat-form-field class="w-100">
+  <mat-select placeholder="Invernadero" [(formControl)]="controlInver" required>
+      <mat-option value="Invernadero 1">Invernadero 1</mat-option>
+      <mat-option value="...">...</mat-option>
+      <mat-option value="...">...</mat-option>
+  </mat-select>
+  <mat-error *ngIf="controlInver.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
+  </mat-form-field>
+  <mat-form-field *ngIf="controlInver.value">
+    <mat-select placeholder="Sector (opcional)" [(formControl)]="controlSector">
+        <mat-option value="A">A</mat-option>
+        <mat-option value="B">B</mat-option>
+        <mat-option value="C">C</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field *ngIf="controlInver.value">
+      <mat-select placeholder="Tabla (opcional)" [(formControl)]="controlTabla">
+          <mat-option value="A">A</mat-option>
+          <mat-option value="B">B</mat-option>
+          <mat-option value="C">C</mat-option>
+      </mat-select>
+  </mat-form-field>
+  <mat-form-field class="w-50" *ngIf="controlInver.value">
+      <input matInput placeholder="Número de planta (opcional)" type="number" [(formControl)]="controlPlanta">
+  </mat-form-field>
+</form>
+<div mat-dialog-actions class="float-right">
+    <button mat-button (click)="submit()">Enviar</button>
+    <button mat-button (click)="close()" color="warn">Cerrar</button>
+</div>

@@ -22,6 +22,7 @@ import { ModalComponent } from './components/modal/modal.component';
 import { HistoricComponent } from './components/historic/historic.component';
 import { TaksListComponent } from './components/taks-list/taks-list.component';
 import { TaksFormComponent } from './components/taks-form/taks-form.component';
+import { DialogIncidentComponent } from './components/dialog-incident/dialog-incident.component';
 
 // Material Angular
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -47,6 +48,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 
 
@@ -62,7 +64,8 @@ import {MatExpansionModule} from '@angular/material/expansion';
     NotificationComponent,
     HistoricComponent,
     TaksListComponent,
-    TaksFormComponent
+    TaksFormComponent,
+    DialogIncidentComponent
   ],
   imports: [
     BrowserModule,
@@ -79,11 +82,12 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatSortModule, MatDialogModule, MatButtonToggleModule,
     MatChipsModule, DragDropModule, MatSelectModule, MatRadioModule,
     MatSliderModule, MatSidenavModule, MatNativeDateModule, MatCardModule,
-    MatDatepickerModule, MatGridListModule, MatExpansionModule,
+    MatDatepickerModule, MatGridListModule, MatExpansionModule, MatTooltipModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   entryComponents: [
-    ModalComponent
+    ModalComponent,
+    DialogIncidentComponent
   ],
   providers: [MessagingService, AsyncPipe],
   bootstrap: [AppComponent]

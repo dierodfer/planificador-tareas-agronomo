@@ -18,7 +18,7 @@
     <mat-error *ngIf="control3.hasError('required')">Campo obligatorio</mat-error>
   </mat-form-field>
   <mat-form-field class="w-100">  
-    <input matInput type="number" min="0" placeholder="nº de empleado" [formControl]="control4" [(ngModel)]="usuario.empleado" required>
+    <input matInput placeholder="nº de empleado" [formControl]="control4" [(ngModel)]="usuario.empleado" required>
     <mat-error *ngIf="control4.hasError('required')">Campo obligatorio</mat-error>
   </mat-form-field>
   <mat-radio-group class="w-100" [formControl]="control5" [(ngModel)]="usuario.genero">
