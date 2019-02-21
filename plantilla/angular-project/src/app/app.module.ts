@@ -13,16 +13,21 @@ import { MessagingService } from './services/messaging.service';
 import { environment } from '../environments/environment';
 import { AsyncPipe } from '../../node_modules/@angular/common';
 
+// Cookies
+import { CookieService } from 'ngx-cookie-service';
+
+// Componentes Applicacion
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { UserListComponent } from './components/user-list/user-list.component';
 import { UserFormComponent } from './components/user-form/user-form.component';
 import { MenuComponent } from './components/menu/menu.component';
 import { ModalComponent } from './components/modal/modal.component';
-import { HistoricComponent } from './components/historic/historic.component';
 import { TaksListComponent } from './components/taks-list/taks-list.component';
 import { TaksFormComponent } from './components/taks-form/taks-form.component';
 import { DialogIncidentComponent } from './components/dialog-incident/dialog-incident.component';
+import { HomeComponent } from './components/home/home.component';
+import { LoginComponent } from './components/login/login.component';
 
 // Material Angular
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -49,6 +54,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 
 
@@ -62,10 +68,11 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     ModalComponent,
     ListaDraggableComponent,
     NotificationComponent,
-    HistoricComponent,
     TaksListComponent,
     TaksFormComponent,
-    DialogIncidentComponent
+    DialogIncidentComponent,
+    HomeComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -83,13 +90,14 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     MatChipsModule, DragDropModule, MatSelectModule, MatRadioModule,
     MatSliderModule, MatSidenavModule, MatNativeDateModule, MatCardModule,
     MatDatepickerModule, MatGridListModule, MatExpansionModule, MatTooltipModule,
+    MatProgressSpinnerModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   entryComponents: [
     ModalComponent,
     DialogIncidentComponent
   ],
-  providers: [MessagingService, AsyncPipe],
+  providers: [MessagingService, AsyncPipe, CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

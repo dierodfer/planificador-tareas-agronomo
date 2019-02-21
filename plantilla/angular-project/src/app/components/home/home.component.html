@@ -1,0 +1,23 @@
+<mat-sidenav-container class="example-container" fullscreen>
+    
+  <mat-sidenav #sidenav mode="over" (click)="sidenav.toggle()"> 
+    <app-menu></app-menu>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+      <div class="py-3 pr-3 fixed-top bg-white">
+          <button mat-button (click)="sidenav.toggle()"><mat-icon>menu</mat-icon> Menu</button>
+          <small>v1.1.0</small>
+          <button mat-button class="float-right" [routerLink]="['notificaciones']">
+            <mat-icon>notifications</mat-icon>
+          </button>
+          <button mat-button class="float-right" (click)="openIncidenceDialog()">
+            <mat-icon>warning</mat-icon>
+          </button>
+      </div>
+      <div style="margin-top: 92px;">
+        <router-outlet></router-outlet>
+      </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+

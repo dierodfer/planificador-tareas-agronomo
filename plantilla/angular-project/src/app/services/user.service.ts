@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection,
-  DocumentReference, Settings, CollectionReference, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { AngularFirestore} from '@angular/fire/firestore';
 import { Usuario } from '../models/usuario';
 import {MatSnackBar} from '@angular/material';
 
@@ -10,16 +9,16 @@ import {MatSnackBar} from '@angular/material';
 
 export class UserService {
 
-
   constructor(private db: AngularFirestore,
-/*     private coll: CollectionReference, */
     public snackBar: MatSnackBar) { }
+
+  getUserById(id) {
+    return this.db.collection('usuarios').doc(id).valueChanges();
+  }
 
   getUsuarios(orderBy?: string) {
      return this.db.collection('usuarios' ,
      ref => ref.orderBy(orderBy ? orderBy : 'nombre')
-/*   .startAt(2)
-     .limit(8) */
      ).valueChanges();
   }
 

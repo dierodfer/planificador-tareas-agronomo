@@ -1,0 +1,12 @@
+<div class="fullscreen main text-center">
+  <div class="margin mb-5">
+      <mat-icon class="mr-5">today</mat-icon><mat-icon class="">alarm_on</mat-icon>
+  </div>
+  <mat-form-field appearance="outline">
+    <mat-label>Número de empleado</mat-label>
+    <input matInput [(formControl)]="control" (keyup.enter)="login()">
+    <mat-spinner matSuffix *ngIf="loading" [diameter]="30"></mat-spinner>
+    <button mat-icon-button matSuffix *ngIf="!loading" (click)="login()" matTooltip="Click para acceder"><mat-icon>arrow_forward</mat-icon></button>
+    <mat-hint class="text-danger" *ngIf="error">Número de empleado <strong>inválido</strong></mat-hint>
+  </mat-form-field>
+</div>

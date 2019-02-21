@@ -5,5 +5,6 @@ export class Usuario {
     rol: string;
     genero: string;
     tareas: String[];
+    ban: boolean;
     constructor() {}
 }

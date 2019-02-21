@@ -1,5 +1,5 @@
-<h4 class="py-3">Nueva Incidencia</h4>
-<form>
+<h4 mat-dialog-title class="py-3">Enviar Incidencia</h4>
+<div mat-dialog-content>
   <mat-form-field class="w-100">
     <mat-select placeholder="Tipo de incidencia" [(formControl)]="control1" required>
         <mat-option value="Infección">Infección</mat-option>
@@ -44,7 +44,7 @@
   <mat-form-field class="w-50" *ngIf="controlInver.value">
       <input matInput placeholder="Número de planta (opcional)" type="number" [(formControl)]="controlPlanta">
   </mat-form-field>
-</form>
+</div>
 <div mat-dialog-actions class="float-right">
     <button mat-button (click)="submit()">Enviar</button>
     <button mat-button (click)="close()" color="warn">Cerrar</button>

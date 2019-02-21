@@ -1,0 +1,19 @@
+.main{
+    background-image: url('../../../assets/images/login2.jpeg');
+    -webkit-background-size:cover;
+    -moz-background-size:cover;
+    -o-background-size:cover;
+    background-size:cover;
+    background-position:center;
+}
+
+.fullscreen{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+}
+
+.margin{
+    margin-top: 230px;
+}

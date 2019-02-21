@@ -1,5 +1,5 @@
  
-<mat-card class="m-5 clickable" [routerLink]="['/usuarios/lista']"> 
+<mat-card class="m-5 clickable" [routerLink]="['usuarios/lista']"> 
   <mat-icon>supervised_user_circle</mat-icon> Usuarios
 </mat-card>
 
@@ -7,17 +7,14 @@
   <mat-icon>view_list</mat-icon> Tareas
 </mat-card>
 
-<mat-card class="m-5 clickable" [routerLink]="['/tareas/historico']"> 
-  <mat-icon>date_range</mat-icon> Histórico
+<mat-card class="m-5 clickable" [routerLink]="['administracion']"> 
+  <mat-icon>settings</mat-icon> Administración
 </mat-card>
 
-<mat-card class="m-5 clickable logout"> 
+<mat-card class="m-5 clickable logout" (click)="cerrarSesion()"> 
   <mat-icon>power_settings_new</mat-icon> Cerrar sesión
 </mat-card>
 
-<!--     <mat-card class="m-5 clickable" [routerLink]="['/formulario']">
-  <mat-icon>edit</mat-icon> Crear/modificar
-</mat-card> -->
 <!--     <mat-card class="m-5 clickable" [routerLink]="['/listaDraggable']">
   <mat-icon>drag_handle</mat-icon> Listas Arrastrables 
 </mat-card> -->

@@ -6,6 +6,7 @@ import {Usuario} from '../../models/usuario';
 import {Tarea} from '../../models/tarea';
 import {COMMA, ENTER, TAB} from '@angular/cdk/keycodes';
 import {MatChipInputEvent} from '@angular/material';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-taks-list',
@@ -24,8 +25,10 @@ export class TaksListComponent implements OnInit {
   userSelected: Usuario;
   filtro = false;
 
-  constructor(private taskService: TaskService,
-    private usuarioService: UserService) { }
+  constructor(
+    private taskService: TaskService,
+    private usuarioService: UserService,
+    private cookieService: CookieService) { }
 
   getTareas(userId) {
     this.filtro = false;
@@ -112,6 +115,7 @@ export class TaksListComponent implements OnInit {
 
   ngOnInit() {
     // SEGURIDAD
+    this.cookieService.check('sessionId');
     this.getUsuarios();
     /* this.getTareas(userId); */
   }

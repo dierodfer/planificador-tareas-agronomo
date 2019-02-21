@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Incidencia } from '../models/incidencia';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatSnackBar } from '@angular/material';
+import {MessagingService} from './messaging.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,12 @@ import { MatSnackBar } from '@angular/material';
 export class IncidentService {
 
   constructor(private db: AngularFirestore,
-    private snackBar: MatSnackBar) { }
+    private snackBar: MatSnackBar,
+    private messagingService: MessagingService) { }
+
+  getIncidents() {
+    this.db.collection('incidencias', ref => ref.orderBy('fecha')).valueChanges();
+  }
 
   addIncident(incidencia: Incidencia) {
     incidencia.id = Math.random().toString().substring(2); // ARREGLAR
@@ -21,8 +27,10 @@ export class IncidentService {
       fecha: incidencia.fecha,
       zona: [incidencia.zona.invernadero, incidencia.zona.sector, incidencia.zona.tabla, incidencia.zona.numero_planta]
     }).then(() => {
-    this.snackBar.open('La incidencia se ha enviado correctamente', 'Cerrar', {
-      duration: 4000,
+      this.messagingService.sendMessage('Incidencia-' + incidencia.tipo,
+      'Autor: ' + incidencia.autor + ', en la zona de ' + incidencia.zona, '329');
+      this.snackBar.open('La incidencia se ha enviado correctamente', 'Cerrar', {
+        duration: 4000,
       });
     });
   }

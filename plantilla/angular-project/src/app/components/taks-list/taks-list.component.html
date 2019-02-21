@@ -76,6 +76,6 @@
         <button *ngIf="!tarea.cancelada && !tarea.finalizada" class="float-left mx-2" mat-raised-button color="primary" (click)="finalizarTarea(tarea.id)"><mat-icon>check_circle</mat-icon> Marcar como finalizada</button>
         <button *ngIf="!tarea.cancelada && tarea.finalizada" class="float-left mx-2" mat-raised-button color="accent" (click)="activarTarea(tarea.id)">Volver a activar</button>
       </mat-expansion-panel>
-      <button class="float-right mt-3" mat-raised-button [routerLink]="[ '/tareas/formulario' ]" color="primary"> <mat-icon>add</mat-icon> Nueva tarea</button>
+      <button class="float-right mt-3" mat-raised-button [routerLink]="[ '../../tareas/formulario' ]" color="primary"> <mat-icon>add</mat-icon> Nueva tarea</button>
   </mat-accordion>
 </div>
