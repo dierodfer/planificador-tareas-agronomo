@@ -14,11 +14,18 @@ export class MenuComponent implements OnInit {
     private cookieService: CookieService) { }
 
   cerrarSesion() {
-    this.cookieService.deleteAll();
+    this.cookieService.set('sesionId', 'null');
     this.router.navigate(['login']);
   }
 
   ngOnInit() {
+    if (this.cookieService.check('sesionId')) {
+      if (this.cookieService.get('sesionId') === 'null') {
+        this.router.navigate(['login']);
+      }
+    } else {
+      this.router.navigate(['login']);
+    }
   }
 
 }

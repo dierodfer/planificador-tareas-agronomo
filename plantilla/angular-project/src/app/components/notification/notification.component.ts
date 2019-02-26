@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MessagingService } from '../../services/messaging.service';
+import { NotificationService } from 'src/app/services/notification.service';
+import { Buzon } from 'src/app/models/buzon';
+import { Notificacion } from 'src/app/models/notificacion';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-notification',
@@ -8,17 +12,27 @@ import { MessagingService } from '../../services/messaging.service';
 })
 export class NotificationComponent implements OnInit {
 
-  titulo = '';
-  cuerpo = '';
-  empleado = '';
+  buzon: Buzon;
+  notificaciones: Notification[];
 
-  constructor(private mesageService: MessagingService) { }
+  constructor(private mesageService: MessagingService,
+    private notificacionService: NotificationService,
+    private cookie: CookieService) { }
 
-  send() {
-    this.mesageService.sendMessage(this.titulo, this.cuerpo, this.empleado);
+  deleteAllNotificacion(){
+    this.notificacionService.createBuzon(this.cookie.get('sesionId'));
+  }
+
+  enviar() {
+    this.notificacionService.sendNotification('112', new Notificacion('descripcion123', 'titulo123'));
   }
 
   ngOnInit() {
+    this.notificacionService.getMyBuzon().subscribe(
+      (buzon: Buzon) => {
+        this.notificaciones = buzon.notificaciones.reverse();
+      }
+    );
   }
 
 }

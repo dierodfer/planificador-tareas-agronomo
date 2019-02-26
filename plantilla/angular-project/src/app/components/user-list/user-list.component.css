@@ -1,3 +1,17 @@
 a.mat-mini-fab.mat-warn:hover {
     background-color: #bd2a20;
 }
+
+.float-button{
+    width: 55px;
+    height: 55px;
+/*     background: #db4437; */
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    box-shadow: 0px 2px 5px #666;
+}
+
+.addIcon{
+    transform: scale(1.5);
+}

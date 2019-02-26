@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore} from '@angular/fire/firestore';
 import { Usuario } from '../models/usuario';
 import {MatSnackBar} from '@angular/material';
+import { NotificationService } from './notification.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,8 @@ import {MatSnackBar} from '@angular/material';
 export class UserService {
 
   constructor(private db: AngularFirestore,
-    public snackBar: MatSnackBar) { }
+    public snackBar: MatSnackBar,
+    private notificacionService: NotificationService) { }
 
   getUserById(id) {
     return this.db.collection('usuarios').doc(id).valueChanges();
@@ -33,9 +35,11 @@ export class UserService {
         this.snackBar.open('El usuario se ha guardado correctamente', 'Cerrar', {
           duration: 4000,
         });
+        this.notificacionService.createBuzon(usuario.empleado);
     });
   }
 
+  // Cambiar por bloquear
   deleteUsuario(id: string) {
     this.db.collection('usuarios').doc(id).delete().then(() => {
       this.snackBar.open('El usuario ¡se ha borrado correctamente!', 'Cerrar', {

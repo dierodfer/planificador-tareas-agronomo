@@ -8,6 +8,7 @@ import { TaksListComponent } from './components/taks-list/taks-list.component';
 import { TaksFormComponent } from './components/taks-form/taks-form.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
+import { GroupListComponent } from './components/group-list/group-list.component';
 
 const routes: Routes = [
   {
@@ -19,10 +20,13 @@ const routes: Routes = [
           { path: 'tareas/lista', component: TaksListComponent},
           { path: 'tareas/formulario', component: TaksFormComponent},
           { path: 'notificaciones', component: NotificationComponent},
+          { path: 'grupos', component: GroupListComponent},
         ]
   },
-  { path: 'login', component: LoginComponent,},
+  { path: 'login', component: LoginComponent},
   { path: '', redirectTo: '/login', pathMatch: 'full' },
+/*   { path: 'not-found', component: NotFoundComponent },
+  { path: '**', redirectTo: 'not-found'} */
 ];
 
 

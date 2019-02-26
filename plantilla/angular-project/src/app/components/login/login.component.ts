@@ -43,16 +43,14 @@ export class LoginComponent implements OnInit {
     } else {
       this.loading = false;
       this.error = true;
-    /*this.snackBar.open('Hubo un problema', 'Cerrar', {
-        duration: 2500,
-        panelClass: 'bg-danger',
-      }); */
     }
   }
 
   ngOnInit() {
     if (this.cookieService.check('sesionId')) {
-      this.goHome();
+      if (this.cookieService.get('sesionId') !== 'null'){
+        this.goHome();
+      }
     }
   }
 

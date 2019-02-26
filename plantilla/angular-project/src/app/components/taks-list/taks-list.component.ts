@@ -15,10 +15,10 @@ import { CookieService } from 'ngx-cookie-service';
 })
 export class TaksListComponent implements OnInit {
 
-  displayedColumns: string[] = ['nombre', 'apellidos'];
+  displayedColumns: string[] = ['nombre'];
   dataSource: MatTableDataSource<Usuario>;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+/*@ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort; */
   readonly separatorKeysCodes: number[] = [ENTER, COMMA, TAB];
   filters: string[] = [];
   tareas: Tarea[] = [];
@@ -40,8 +40,8 @@ export class TaksListComponent implements OnInit {
     this.usuarioService.getUsuarios().subscribe(
       usuarios => {
         this.dataSource = new MatTableDataSource(usuarios as Usuario[]);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+/*         this.dataSource.paginator = this.paginator; */
+/*         this.dataSource.sort = this.sort; */
       });
     }
 
@@ -115,7 +115,7 @@ export class TaksListComponent implements OnInit {
 
   ngOnInit() {
     // SEGURIDAD
-    this.cookieService.check('sessionId');
+   /*  this.cookieService.check('sessionId'); */
     this.getUsuarios();
     /* this.getTareas(userId); */
   }

@@ -7,9 +7,10 @@
   <mat-sidenav-content>
       <div class="py-3 pr-3 fixed-top bg-white">
           <button mat-button (click)="sidenav.toggle()"><mat-icon>menu</mat-icon> Menu</button>
-          <small>v1.1.0</small>
-          <button mat-button class="float-right" [routerLink]="['notificaciones']">
-            <mat-icon>notifications</mat-icon>
+          <small>v1.1.1</small>
+          <button mat-button class="float-right" (click)="openNotifications()">
+            <mat-icon *ngIf="nuevasNoti">notifications</mat-icon> 
+            <mat-icon *ngIf="!nuevasNoti" class="shake">notifications_active</mat-icon>
           </button>
           <button mat-button class="float-right" (click)="openIncidenceDialog()">
             <mat-icon>warning</mat-icon>

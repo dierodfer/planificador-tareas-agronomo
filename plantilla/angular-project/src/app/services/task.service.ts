@@ -2,7 +2,10 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatSnackBar } from '@angular/material';
 import { Tarea } from '../models/tarea';
+import { NotificationService } from './notification.service';
+import { Notificacion } from '../models/notificacion';
 
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,12 +13,11 @@ import { Tarea } from '../models/tarea';
 export class TaskService {
 
   constructor(private db: AngularFirestore,
-    public snackBar: MatSnackBar) { }
+    public snackBar: MatSnackBar,
+    private notificacionService: NotificationService) { }
 
   getTasks() {
-    return this.db.collection('tareas' , ref =>
-    ref.orderBy('orden')
-    ).valueChanges();
+    return this.db.collection('tareas').valueChanges();
   }
 
   getTaskByUser(userId: string) {
@@ -51,7 +53,6 @@ export class TaskService {
     tarea.id = Math.random().toString().substring(2); // ARREGLAR
     this.db.collection('tareas').doc(tarea.id).set({
       id: tarea.id,
-/*       nombre: tarea.nombre, */
       descripcion: tarea.descripcion ? tarea.descripcion : '',
       tipo: tarea.tipo,
       subtipo: tarea.subtipo ? tarea.subtipo : '',
@@ -62,6 +63,13 @@ export class TaskService {
     this.snackBar.open('La tarea se ha guardado correctamente', 'Cerrar', {
       duration: 4000,
       });
+      // Comprueba que la fecha de la tarea es hoy (solo fechas) y envia notificacion a los usuarios afectados
+      if (moment(tarea.fecha).startOf('day').diff(moment().startOf('day')) === 0) {
+       this.notificacionService.sendNotification(tarea.usuario,
+        new Notificacion(
+        'Se le ha asignado nueva tarea para HOY: ' + tarea.tipo + tarea.subtipo ? tarea.subtipo : '',
+        'Nueva Tarea'));
+      }
     });
   }
 

@@ -13,14 +13,15 @@ import * as moment from 'moment';
   styleUrls: ['./taks-form.component.css']
 })
 export class TaksFormComponent implements OnInit {
-  control3 = new FormControl('', [Validators.required]);
-  control5 = new FormControl('', [Validators.required]);
-  control6 = new FormControl('');
+  controlTipo = new FormControl('', [Validators.required]);
+  controlFecha = new FormControl('', [Validators.required]);
+  controlUsuarios = new FormControl('', [Validators.required]);
+  controlDescrip = new FormControl('');
+  controlRepit = new FormControl('', [Validators.required, Validators.min(1), Validators.max(30)]);
+  controlSubtipo = new FormControl('');
 
   minDatepicker = moment().subtract(6, 'days').toDate();
-  tarea: Tarea = new Tarea();
   usuarios: Usuario[] = [];
-  repit = 0;
 
   constructor(
     private userService: UserService,
@@ -32,13 +33,22 @@ export class TaksFormComponent implements OnInit {
   }
 
   submit() {
-    if (this.checkStatus()) {
+     if (this.checkStatus()) {
+      const tarea = this.getTarea();
       const userIds = this.getUsersID();
       userIds.forEach(user => {
-        this.tarea.usuario = user;
-        this.taskService.addTask(this.tarea);
+        tarea.usuario = user;
+        if (this.controlRepit.value > 1) {
+          let a = this.controlRepit.value;
+          do {// Agrega tareas hasta que se cumpla el número de dias requerido
+            this.taskService.addTask(tarea);
+            tarea.fecha = moment(tarea.fecha).add(1, 'day').toDate();
+          }while (a-- > 1);
+        } else {
+          this.taskService.addTask(tarea);
+        }
       });
-      this.tarea = new Tarea();
+/*       this.tarea = new Tarea(); */
       this.resetValidators();
     } else {
       this.snackBar.open('Complete todos los campos obligatorios', 'Cerrar', {
@@ -48,27 +58,40 @@ export class TaksFormComponent implements OnInit {
     }
   }
 
+  getTarea() {
+    const tarea = new Tarea();
+    tarea.descripcion = this.controlDescrip.value;
+    tarea.tipo = this.controlTipo.value;
+    tarea.subtipo = this.controlSubtipo.value;
+    tarea.fecha = this.controlFecha.value;
+    return tarea;
+  }
+
   checkStatus(): boolean {
-    return this.control3.status === 'VALID'
-    && this.control5.status === 'VALID'
-    && this.control6.status === 'VALID';
+    return this.controlTipo.status === 'VALID'
+    && this.controlFecha.status === 'VALID'
+    && this.controlUsuarios.status === 'VALID'
+    && this.controlRepit.status === 'VALID';
   }
 
   resetValidators() {
-    this.control3.reset('');
-    this.control5.reset('');
-    this.control6.reset('');
+    this.controlTipo.reset('');
+    this.controlFecha.reset('');
+    this.controlUsuarios.reset('');
+    this.controlRepit.setValue(1);
+    this.controlSubtipo.reset('');
   }
 
   getUsersID(): string[] {
     const ids = [];
-    this.control6.value.forEach(usuario => {
+    this.controlUsuarios.value.forEach(usuario => {
       ids.push(usuario.empleado);
     });
     return ids;
   }
 
   ngOnInit() {
+    this.controlRepit.setValue(1);
     this.getUsuarios();
   }
 

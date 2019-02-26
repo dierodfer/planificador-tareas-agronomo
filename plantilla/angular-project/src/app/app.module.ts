@@ -28,6 +28,7 @@ import { TaksFormComponent } from './components/taks-form/taks-form.component';
 import { DialogIncidentComponent } from './components/dialog-incident/dialog-incident.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
+import { GroupListComponent } from './components/group-list/group-list.component';
 
 // Material Angular
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -55,7 +56,8 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-
+import {MatListModule} from '@angular/material/list';
+import {MatBadgeModule} from '@angular/material/badge';
 
 
 
@@ -72,7 +74,8 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     TaksFormComponent,
     DialogIncidentComponent,
     HomeComponent,
-    LoginComponent
+    LoginComponent,
+    GroupListComponent
   ],
   imports: [
     BrowserModule,
@@ -90,7 +93,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     MatChipsModule, DragDropModule, MatSelectModule, MatRadioModule,
     MatSliderModule, MatSidenavModule, MatNativeDateModule, MatCardModule,
     MatDatepickerModule, MatGridListModule, MatExpansionModule, MatTooltipModule,
-    MatProgressSpinnerModule,
+    MatProgressSpinnerModule, MatListModule, MatBadgeModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   entryComponents: [
