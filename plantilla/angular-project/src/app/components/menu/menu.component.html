@@ -6,14 +6,14 @@
 <mat-card class="m-5 clickable" [routerLink]="['tareas/lista']"> 
   <mat-icon>assignment_turned_in</mat-icon> Tareas
 </mat-card>
-<!-- 
-<mat-card class="m-5 clickable" [routerLink]="['administracion']"> 
-  <mat-icon>settings</mat-icon> Administración
-</mat-card> -->
 
 <mat-card class="m-5 clickable" [routerLink]="['grupos']"> 
   <mat-icon>supervised_user_circle</mat-icon> Grupos
 </mat-card>
+
+<mat-card class="m-5 clickable" [routerLink]="['ciclo/formulario']"> 
+  <mat-icon>settings</mat-icon> Administración
+</mat-card> 
 
 <mat-card class="mx-5 mb-3 clickable logout" (click)="cerrarSesion()"> 
   <mat-icon>power_settings_new</mat-icon> Cerrar sesión

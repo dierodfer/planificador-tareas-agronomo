@@ -6,6 +6,8 @@ import {MatSnackBar} from '@angular/material';
 import { Tarea } from 'src/app/models/tarea';
 import { TaskService } from 'src/app/services/task.service';
 import * as moment from 'moment';
+import { CycleService } from 'src/app/services/cycle.service';
+import { Fase } from 'src/app/models/fase';
 
 @Component({
   selector: 'app-taks-form',
@@ -18,15 +20,17 @@ export class TaksFormComponent implements OnInit {
   controlUsuarios = new FormControl('', [Validators.required]);
   controlDescrip = new FormControl('');
   controlRepit = new FormControl('', [Validators.required, Validators.min(1), Validators.max(30)]);
-  controlSubtipo = new FormControl('');
+  controlSubtipo = new FormControl('', [Validators.required]);
 
   minDatepicker = moment().subtract(6, 'days').toDate();
   usuarios: Usuario[] = [];
+  fases: Fase[];
 
   constructor(
     private userService: UserService,
     private taskService: TaskService,
-    private snackBar: MatSnackBar) { }
+    private snackBar: MatSnackBar,
+    private fasesService: CycleService) { }
 
   getUsuarios() {
     this.userService.getUsuarios().subscribe(usuarios => this.usuarios = usuarios as Usuario[]);
@@ -68,8 +72,10 @@ export class TaksFormComponent implements OnInit {
   }
 
   checkStatus(): boolean {
+    console.log(this.controlTipo.value.tareas.length);
     return this.controlTipo.status === 'VALID'
     && this.controlFecha.status === 'VALID'
+    && (this.controlTipo.value.tareas.length > 0 ? this.controlSubtipo.status === 'VALID' : true)
     && this.controlUsuarios.status === 'VALID'
     && this.controlRepit.status === 'VALID';
   }
@@ -90,9 +96,18 @@ export class TaksFormComponent implements OnInit {
     return ids;
   }
 
+  getFases() {
+    this.fasesService.getFases().subscribe(fases => this.fases = fases as Fase[]);
+  }
+
+  seleccionaTarea(tarea) {
+    console.log(tarea);
+  }
+
   ngOnInit() {
     this.controlRepit.setValue(1);
     this.getUsuarios();
+    this.getFases();
   }
 
 }

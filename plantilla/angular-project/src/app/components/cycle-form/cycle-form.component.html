@@ -1,0 +1,28 @@
+<div class="offset-md-2 col-md-8">
+  <button mat-icon-button class="float-right" matTooltip="Desbloquear y editar" *ngIf="!editable" (click)="toggleEdit()"><mat-icon>lock</mat-icon></button>
+  <button mat-icon-button class="float-right" matTooltip="Bloquear y guardar" *ngIf="editable" (click)="submit()"><mat-icon>lock_open</mat-icon></button>
+  
+  <ng-container #fasesContainer *ngFor="let fase of fases; let last = last; let first = first;">
+    <h5 class="py-3">{{fase.nombre}}  
+      <button mat-icon-button matTooltip="Crear tarea" *ngIf="editable" (click)="addTarea(fase,1)"><mat-icon>queue</mat-icon></button>
+      <button mat-icon-button matTooltip="Eliminar fase" *ngIf="!first  && ( fases.length > 1) && editable" (click)="removeFase(fase)" ><mat-icon>delete</mat-icon></button>
+      <button mat-icon-button matTooltip="Añadir fase" *ngIf="last && editable" (click)="addFase()"><mat-icon>add</mat-icon></button>
+    </h5>   
+    <ng-container *ngFor="let tarea of fase.tareas">
+      <mat-form-field class="w-50"  *ngIf="editable">
+            <input matInput [(ngModel)]="tarea.nombre">
+      </mat-form-field>
+      <p *ngIf="!editable">{{tarea.nombre}}</p>
+      <button mat-icon-button *ngIf="editable" matTooltip="Crear sub-tareas" (click)="addTarea(tarea,2)"><mat-icon>queue</mat-icon></button>
+      <button mat-icon-button *ngIf="editable" matTooltip="Eliminar tarea" (click)="removeTarea(fase, tarea)"><mat-icon>close</mat-icon></button>
+      <ng-container *ngFor="let subtarea of tarea.tareas">
+          <mat-form-field class="ml-4 w-50" *ngIf="editable">
+                <input matInput [(ngModel)]="subtarea.nombre">
+          </mat-form-field>
+          <p class="ml-4" *ngIf="!editable">{{subtarea.nombre}}</p>
+          <!-- <button mat-icon-button *ngIf="editable" matTooltip="Crear sub-tareas"><mat-icon>queue</mat-icon></button> -->
+          <button mat-icon-button *ngIf="editable" matTooltip="Eliminar sub-tarea" (click)="removeTarea(tarea, subtarea)"><mat-icon>close</mat-icon></button>
+      </ng-container>
+    </ng-container>
+  </ng-container> 
+</div>

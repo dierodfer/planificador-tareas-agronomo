@@ -27,18 +27,6 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Apellidos </th>
           <td mat-cell *matCellDef="let element"> {{element.apellidos}} </td>
       </ng-container>
-
-  <!-- 
-      <ng-container matColumnDef="acciones">
-          <th mat-header-cell *matHeaderCellDef>  </th>
-          <td mat-cell *matCellDef="let element">               
-            <a mat-mini-fab color="primary" (click)="getTareas(element.empleado)">
-              <mat-icon aria-label="ver tareas">calendar_view_day</mat-icon>
-            </a>  
-          </td>
-      </ng-container>  -->
-    
-<!--       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr> -->
       <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="getTareas(row.empleado)" class="clickable"></tr>
     </table>
   </div>
@@ -47,8 +35,8 @@
       <div class="row pb-3">      
         <div class="col-9 pt-2">Tareas de {{userSelected.nombre}} {{userSelected.apellidos}}</div>
         <div class="col-3">
-          <button mat-button *ngIf="filtro" (click)="limpiarFiltro()">Limpiar</button>
-          <button mat-icon-button class="float-right" (click)="picker.open()"><mat-icon>date_range</mat-icon></button>
+          <button mat-button *ngIf="filtro" matTooltip="Limpia el filtro" (click)="limpiarFiltro()">Limpiar</button>
+          <button mat-icon-button matTooltip="Filtra tareas por fecha" class="float-right" (click)="picker.open()"><mat-icon>date_range</mat-icon></button>
           <mat-form-field class="d-none">
               <input matInput [matDatepicker]="picker" (dateChange)="dateChange($event)">
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>

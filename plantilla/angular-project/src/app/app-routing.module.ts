@@ -9,6 +9,7 @@ import { TaksFormComponent } from './components/taks-form/taks-form.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { GroupListComponent } from './components/group-list/group-list.component';
+import { CycleFormComponent } from './components/cycle-form/cycle-form.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,7 @@ const routes: Routes = [
           { path: 'tareas/formulario', component: TaksFormComponent},
           { path: 'notificaciones', component: NotificationComponent},
           { path: 'grupos', component: GroupListComponent},
+          { path: 'ciclo/formulario', component: CycleFormComponent},
         ]
   },
   { path: 'login', component: LoginComponent},

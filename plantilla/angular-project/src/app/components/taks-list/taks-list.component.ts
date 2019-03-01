@@ -95,7 +95,7 @@ export class TaksListComponent implements OnInit {
     this.taskService.uncancelTask(id);
   }
 
-  finalizarTarea(id){
+  finalizarTarea(id) {
     this.taskService.finishTask(id);
   }
 
@@ -115,7 +115,7 @@ export class TaksListComponent implements OnInit {
 
   ngOnInit() {
     // SEGURIDAD
-   /*  this.cookieService.check('sessionId'); */
+/*     this.cookieService.get('rol'); */
     this.getUsuarios();
     /* this.getTareas(userId); */
   }

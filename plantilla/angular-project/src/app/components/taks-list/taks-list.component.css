@@ -8,6 +8,15 @@
     box-shadow: 0px 2px 5px #666;
 }
 
+.mat-expansion-panel-header-description {
+    position: absolute;
+    right: 52px;
+}
+
+.mat-expansion-panel-header-title {
+    margin-right: 7rem!important;
+}
+
 .addIcon{
     transform: scale(1.5);
 }

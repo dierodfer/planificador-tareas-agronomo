@@ -58,6 +58,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatListModule} from '@angular/material/list';
 import {MatBadgeModule} from '@angular/material/badge';
+import { CycleFormComponent } from './components/cycle-form/cycle-form.component';
 
 
 
@@ -75,7 +76,8 @@ import {MatBadgeModule} from '@angular/material/badge';
     DialogIncidentComponent,
     HomeComponent,
     LoginComponent,
-    GroupListComponent
+    GroupListComponent,
+    CycleFormComponent
   ],
   imports: [
     BrowserModule,

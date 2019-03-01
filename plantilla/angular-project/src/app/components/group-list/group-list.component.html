@@ -1,0 +1,16 @@
+<!-- <button mat-button (click)="getUserByGroup()">text</button> -->
+<div class="col-6">  
+  <mat-expansion-panel *ngFor="let grupo of grupos">
+    <mat-expansion-panel-header>
+      {{grupo.nombre}} ({{grupo.coordinador}})
+    </mat-expansion-panel-header>
+    <mat-nav-list>
+       <mat-list-item *ngFor="let refUser of grupo.usuarios"> 
+        <mat-icon mat-list-icon>account_circle</mat-icon>
+        <h4 mat-line>Usuario</h4>
+
+<!--         <p mat-line> {{print()}}</p> -->
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-expansion-panel>
+</div>
