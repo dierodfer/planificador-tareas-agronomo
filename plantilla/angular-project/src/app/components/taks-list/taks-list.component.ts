@@ -19,11 +19,13 @@ export class TaksListComponent implements OnInit {
   dataSource: MatTableDataSource<Usuario>;
 /*@ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort; */
+  @ViewChild('rol') rolButton;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA, TAB];
   filters: string[] = [];
   tareas: Tarea[] = [];
   userSelected: Usuario;
   filtro = false;
+  rol = 'coordinador';
 
   constructor(
     private taskService: TaskService,
@@ -103,6 +105,10 @@ export class TaksListComponent implements OnInit {
     this.taskService.unfinishedTask(id);
   }
 
+  eliminarTarea(id) {
+    this.taskService.deleteTask(id);
+  }
+
   dateChange(event) {
     this.filtro = true;
     this.taskService.getTaskByUserAndDate(this.userSelected.empleado, event.value).subscribe(tareas => this.tareas = tareas as Tarea[]);
@@ -111,6 +117,14 @@ export class TaksListComponent implements OnInit {
   limpiarFiltro() {
     this.filtro = false;
     this.taskService.getTaskByUser(this.userSelected.empleado).subscribe(tareas => this.tareas = tareas as Tarea[]);
+  }
+
+  toggleView() {
+    this.rol = this.rolButton.value;
+  }
+
+  isCoordinador() {
+    return this.rol === 'coordinador';
   }
 
   ngOnInit() {

@@ -112,4 +112,12 @@ export class TaskService {
       });
     });
   }
+
+  deleteTask(id: string) {
+    this.db.collection('tareas').doc(id).delete().then(() => {
+      this.snackBar.open('La tarea se ha borrado correctamente', 'Cerrar', {
+        duration: 4000,
+      });
+    });
+  }
 }

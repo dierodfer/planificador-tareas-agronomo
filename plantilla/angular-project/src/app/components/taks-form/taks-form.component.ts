@@ -65,8 +65,8 @@ export class TaksFormComponent implements OnInit {
   getTarea() {
     const tarea = new Tarea();
     tarea.descripcion = this.controlDescrip.value;
-    tarea.tipo = this.controlTipo.value;
-    tarea.subtipo = this.controlSubtipo.value;
+    tarea.tipo = this.controlTipo.value.nombre;
+    tarea.subtipo = this.controlSubtipo.value.nombre;
     tarea.fecha = this.controlFecha.value;
     return tarea;
   }
@@ -86,6 +86,7 @@ export class TaksFormComponent implements OnInit {
     this.controlUsuarios.reset('');
     this.controlRepit.setValue(1);
     this.controlSubtipo.reset('');
+    this.controlDescrip.reset('');
   }
 
   getUsersID(): string[] {
