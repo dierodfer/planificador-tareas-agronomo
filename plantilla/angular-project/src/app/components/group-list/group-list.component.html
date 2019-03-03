@@ -1,16 +1,42 @@
 <!-- <button mat-button (click)="getUserByGroup()">text</button> -->
-<div class="col-6">  
-  <mat-expansion-panel *ngFor="let grupo of grupos">
-    <mat-expansion-panel-header>
-      {{grupo.nombre}} ({{grupo.coordinador}})
-    </mat-expansion-panel-header>
-    <mat-nav-list>
-       <mat-list-item *ngFor="let refUser of grupo.usuarios"> 
-        <mat-icon mat-list-icon>account_circle</mat-icon>
-        <h4 mat-line>Usuario</h4>
-
-<!--         <p mat-line> {{print()}}</p> -->
-      </mat-list-item>
-    </mat-nav-list>
-  </mat-expansion-panel>
+<div class="px-3">
+<div class="card-columns">
+    <mat-card class="card" *ngFor="let grupo of grupos">
+        <button mat-icon-button (click)="deleteGrupo(grupo)"  matTooltip="Eliminar Grupo" class="float-right mr-3"><mat-icon>delete</mat-icon></button>
+        <button mat-icon-button (click)="toggleAddUser(grupo.id)" *ngIf="!newUser[grupo.id] && !editName[grupo.id]" matTooltip="Añadir nuevo miembro"  class="float-right"><mat-icon>person_add</mat-icon></button>
+        <button mat-icon-button (click)="toggleAddUser(grupo.id)" *ngIf="newUser[grupo.id]" matTooltip="Cancelar añadir nuevo miembro" class="float-right"><mat-icon>person_add_disabled</mat-icon></button>
+        <button mat-icon-button (click)="toggleEditName(grupo.id)" *ngIf="!newUser[grupo.id] && !editName[grupo.id]" matTooltip="Editar nombre del grupo" class="float-right"><mat-icon>edit</mat-icon></button>
+        <button mat-icon-button (click)="updateNombre(grupo.id)" *ngIf="editName[grupo.id]" matTooltip="Guardar cambios" class="float-right"><mat-icon>check</mat-icon></button>
+        <mat-card-header>
+            <mat-card-title *ngIf="editName[grupo.id]">
+              <mat-form-field>
+                  <input matInput [value]="grupo.nombre" [formControl]="control" required>
+              </mat-form-field>
+            </mat-card-title>
+            <mat-card-title *ngIf="!editName[grupo.id]">{{grupo.nombre}}</mat-card-title>
+            <mat-card-subtitle>({{findUser(grupo.coordinador).nombre}})</mat-card-subtitle>
+        </mat-card-header>
+        <mat-nav-list>
+            <mat-list-item (click)="openUserDialog(findUser(id))" *ngFor="let id of grupo.usuarios;"> 
+              <mat-icon mat-list-icon>account_circle</mat-icon>
+              <h4 mat-line>{{findUser(id).nombre}}, {{findUser(id).apellidos}}</h4>
+              <button mat-icon-button (click)="deleteUser(grupo,id)" *ngIf="!newUser[grupo.id]" class="float-right"><mat-icon>close</mat-icon></button>
+            </mat-list-item>
+            <mat-list-item *ngIf="newUser[grupo.id]">
+              <mat-icon mat-list-icon>account_circle</mat-icon>
+              <mat-form-field mat-line>
+                  <mat-select placeholder="Nuevo usuario" [formControl]="control" required>
+                        <mat-option *ngFor="let usuario of getTrabajadores(grupo)" [value]="usuario.empleado">
+                          {{usuario.nombre}}, {{usuario.apellidos}}
+                        </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="control.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
+              </mat-form-field>
+              <button mat-icon-button matSuffix (click)="addUser(grupo,control.value)" matTooltip="Click para guardar"><mat-icon>add_circle_outline</mat-icon></button>
+            </mat-list-item>
+        </mat-nav-list>
+    </mat-card>
+  </div>
 </div>
+
+<button class="float-button" (click)="addGrupo()" matTooltip="Nuevo Grupo" mat-mini-fab color="primary"> <mat-icon class="addIcon">group_add</mat-icon></button>

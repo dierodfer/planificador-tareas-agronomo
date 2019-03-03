@@ -59,6 +59,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatListModule} from '@angular/material/list';
 import {MatBadgeModule} from '@angular/material/badge';
 import { CycleFormComponent } from './components/cycle-form/cycle-form.component';
+import { DialogUserComponent } from './components/dialog-user/dialog-user.component';
 
 
 
@@ -77,7 +78,8 @@ import { CycleFormComponent } from './components/cycle-form/cycle-form.component
     HomeComponent,
     LoginComponent,
     GroupListComponent,
-    CycleFormComponent
+    CycleFormComponent,
+    DialogUserComponent
   ],
   imports: [
     BrowserModule,
@@ -100,7 +102,8 @@ import { CycleFormComponent } from './components/cycle-form/cycle-form.component
   ],
   entryComponents: [
     ModalComponent,
-    DialogIncidentComponent
+    DialogIncidentComponent,
+    DialogUserComponent
   ],
   providers: [MessagingService, AsyncPipe, CookieService],
   bootstrap: [AppComponent]

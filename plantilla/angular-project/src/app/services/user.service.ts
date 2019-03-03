@@ -18,10 +18,20 @@ export class UserService {
     return this.db.collection('usuarios').doc(id).valueChanges();
   }
 
-  getUsuarios(orderBy?: string) {
-     return this.db.collection('usuarios' ,
-     ref => ref.orderBy(orderBy ? orderBy : 'nombre')
-     ).valueChanges();
+  getUsuarios() {
+     return this.db.collection('usuarios').valueChanges();
+  }
+
+  getCoordinators() {
+    return this.db.collection('usuarios' ,
+    ref => ref.where('rol', '==' , 'COORDINADOR')
+    ).valueChanges();
+  }
+
+  getWorkers() {
+    return this.db.collection('usuarios' ,
+    ref => ref.where('rol', '==' , 'TRABAJADOR')
+    ).valueChanges();
   }
 
   addUsuario(usuario: Usuario) {

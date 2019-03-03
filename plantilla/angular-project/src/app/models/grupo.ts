@@ -1,10 +1,12 @@
-import { Usuario } from './usuario';
-import { DocumentReference } from '@angular/fire/firestore';
 
 export class Grupo {
     id: string;
     nombre: string;
-    usuarios: DocumentReference[];
+    usuarios: string[];
     coordinador: string;
-    constructor() {}
+    constructor(nombre, coordinador) {
+        this.coordinador = coordinador;
+        this.nombre = nombre;
+        this.usuarios = [];
+    }
 }

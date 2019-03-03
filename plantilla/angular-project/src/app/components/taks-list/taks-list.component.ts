@@ -17,8 +17,6 @@ export class TaksListComponent implements OnInit {
 
   displayedColumns: string[] = ['nombre'];
   dataSource: MatTableDataSource<Usuario>;
-/*@ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort; */
   @ViewChild('rol') rolButton;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA, TAB];
   filters: string[] = [];
@@ -42,8 +40,6 @@ export class TaksListComponent implements OnInit {
     this.usuarioService.getUsuarios().subscribe(
       usuarios => {
         this.dataSource = new MatTableDataSource(usuarios as Usuario[]);
-/*         this.dataSource.paginator = this.paginator; */
-/*         this.dataSource.sort = this.sort; */
       });
     }
 

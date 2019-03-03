@@ -38,17 +38,17 @@
 
   <mat-accordion class="col-sm-8 pt-4"  *ngIf="userSelected" 
   [ngClass]="{'offset-sm-2': !isCoordinador()}">
-      <div class="row pb-3">      
-        <div class="col-9 pt-2">Tareas de {{userSelected.nombre}} {{userSelected.apellidos}}</div>
-        <div class="col-3">
-          <button mat-button *ngIf="filtro" matTooltip="Limpia el filtro" (click)="limpiarFiltro()">Limpiar</button>
-          <button mat-icon-button matTooltip="Filtra tareas por fecha" class="float-right" (click)="picker.open()"><mat-icon>date_range</mat-icon></button>
+      <div class=" pb-3">      
+   
+          <p>Tareas de {{userSelected.nombre}} {{userSelected.apellidos}}
+            <button mat-icon-button matTooltip="Filtra tareas por fecha" class="float-right" (click)="picker.open()"><mat-icon>date_range</mat-icon></button>
+            <button mat-button *ngIf="filtro" matTooltip="Limpia el filtro" class="float-right" (click)="limpiarFiltro()">Limpiar</button>
+          </p>
           <mat-form-field class="d-none">
               <input matInput [matDatepicker]="picker" (dateChange)="dateChange($event)">
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker touchUi #picker></mat-datepicker>
           </mat-form-field>
-        </div>
       </div>
       <mat-expansion-panel *ngFor="let tarea of tareas">
         <mat-expansion-panel-header class="py-5">
@@ -70,4 +70,4 @@
       </mat-expansion-panel>
   </mat-accordion>
 </div>
-<button class="float-button" mat-mini-fab [routerLink]="[ '../../tareas/formulario' ]" color="primary"> <mat-icon class="addIcon">add</mat-icon></button>
+<button class="float-button" *ngIf="isCoordinador()" mat-mini-fab [routerLink]="[ '../../tareas/formulario' ]" color="primary"> <mat-icon class="addIcon">add</mat-icon></button>
