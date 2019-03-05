@@ -4,9 +4,9 @@ import { MatSnackBar } from '@angular/material';
 import { Buzon } from '../models/buzon';
 import { Notificacion } from '../models/notificacion';
 import { CookieService } from 'ngx-cookie-service';
-import { FieldPath } from '@angular/fire/firestore';
-import { firestore } from 'firebase';
 
+import * as firebase from 'firebase/app';
+import 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -30,15 +30,22 @@ export class NotificationService {
     });
   }
 
-  sendNotification(id, noti: Notificacion) {
-    this.db.collection('buzones').doc(id).update({
+  sendNotification(idBuzon, noti: Notificacion) {
+    this.db.collection('buzones').doc(idBuzon).update({
       visto: false,
-      notificaciones: firestore.FieldValue.arrayUnion({
+      notificaciones: firebase.firestore.FieldValue.arrayUnion({
         titulo: noti.titulo,
         descripcion: noti.descripcion ? noti.descripcion : '',
         leido: false,
         fecha: new Date()
       })
+    });
+  }
+
+  deleteNotification(noti: Notificacion) {
+    this.db.collection('buzones').doc(this.cookie.get('sesionId')).update({
+      visto: true,
+      notificaciones: firebase.firestore.FieldValue.arrayRemove(noti)
     });
   }
 

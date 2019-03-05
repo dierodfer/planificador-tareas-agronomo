@@ -10,6 +10,7 @@ import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { GroupListComponent } from './components/group-list/group-list.component';
 import { CycleFormComponent } from './components/cycle-form/cycle-form.component';
+import { MenuAdminComponent } from './components/menu-admin/menu-admin.component';
 
 const routes: Routes = [
   {
@@ -21,8 +22,13 @@ const routes: Routes = [
           { path: 'tareas/lista', component: TaksListComponent},
           { path: 'tareas/formulario', component: TaksFormComponent},
           { path: 'notificaciones', component: NotificationComponent},
-          { path: 'grupos', component: GroupListComponent},
-          { path: 'ciclo/formulario', component: CycleFormComponent},
+          { path: 'admin',
+            component: MenuAdminComponent,
+            children: [
+                  { path: 'grupos', component: GroupListComponent},
+                  { path: 'fases', component: CycleFormComponent},
+                ]
+          }
         ]
   },
   { path: 'login', component: LoginComponent},

@@ -1,12 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { TaskService } from '../../services/task.service';
 import { UserService } from '../../services/user.service';
-import {MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
+import {MatTableDataSource, MatDialog, MatDialogConfig, MatDialogRef} from '@angular/material';
 import {Usuario} from '../../models/usuario';
 import {Tarea} from '../../models/tarea';
 import {COMMA, ENTER, TAB} from '@angular/cdk/keycodes';
-import {MatChipInputEvent} from '@angular/material';
 import { CookieService } from 'ngx-cookie-service';
+import { Grupo } from 'src/app/models/grupo';
+import { GroupService } from 'src/app/services/group.service';
+import { DialogDeleteComponent } from '../dialog-delete/dialog-delete.component';
 
 @Component({
   selector: 'app-taks-list',
@@ -15,74 +17,38 @@ import { CookieService } from 'ngx-cookie-service';
 })
 export class TaksListComponent implements OnInit {
 
-  displayedColumns: string[] = ['nombre'];
-  dataSource: MatTableDataSource<Usuario>;
   @ViewChild('rol') rolButton;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA, TAB];
-  filters: string[] = [];
   tareas: Tarea[] = [];
   userSelected: Usuario;
+  grupoSelected: Grupo;
   filtro = false;
   rol = 'coordinador';
+  usuarios: Usuario[] = [];
+  misGrupos: Grupo[];
+  deleteDialog: MatDialogRef<DialogDeleteComponent>;
 
   constructor(
     private taskService: TaskService,
     private usuarioService: UserService,
-    private cookieService: CookieService) { }
+    private cookie: CookieService,
+    private dialog: MatDialog,
+    private grupoService: GroupService) { }
+
+  getMisGrupos() {
+    this.filtro = false;
+    this.grupoService.getGroupsByCoordinator(this.cookie.get('sesionId')).subscribe(grupos => this.misGrupos = grupos as Grupo[]);
+  }
 
   getTareas(userId) {
     this.filtro = false;
-    this.userSelected = this.dataSource.data.find(usuario => usuario.empleado === userId);
+    this.userSelected = this.usuarios.find(usuario => usuario.empleado === userId);
     this.taskService.getTaskByUser(userId).subscribe(tareas => this.tareas = tareas as Tarea[]);
   }
 
-  getUsuarios() {
-    this.usuarioService.getUsuarios().subscribe(
-      usuarios => {
-        this.dataSource = new MatTableDataSource(usuarios as Usuario[]);
-      });
-    }
-
-  addFilter(event: MatChipInputEvent): void {
-    const input = event.input;
-    const value = event.value.trim().toLowerCase();
-
-    // Añade el filtro y comprueba que no existe
-    if ((value || '').trim() && this.filters.indexOf(value) === -1) {
-      this.dataSource.data = this.dataSource.data.filter(usuario =>
-        usuario.nombre.toLowerCase().indexOf(value) > -1 ||
-        usuario.apellidos.toLowerCase().indexOf(value) > -1 ||
-        usuario.empleado.toString().indexOf(value) > -1 ||
-        usuario.rol.toLowerCase().indexOf(value) > -1 ||
-        usuario.genero.toLowerCase().indexOf(value) > -1);
-      this.filters.push(value);
-    }
-
-    // Resetea el valor del input
-    if (input) {
-      input.value = '';
-    }
-  }
-
-  removeFilter(valor: string): void {
-    const index = this.filters.indexOf(valor);
-
-    if (index >= 0) {
-      this.filters.splice(index, 1);
-      this.usuarioService.getUsuarios().subscribe(
-        usuarios => {
-          this.dataSource.data = usuarios as Usuario[];
-          this.filters.forEach(filtro =>
-            this.dataSource.data = this.dataSource.data.filter(
-              usuario =>
-              usuario.nombre.toLowerCase().indexOf(filtro) > -1  ||
-              usuario.apellidos.toLowerCase().indexOf(filtro) > -1 ||
-              usuario.empleado.toString().indexOf(filtro) > -1 ||
-              usuario.rol.toLowerCase().indexOf(filtro) > -1 ||
-              usuario.genero.toLowerCase().indexOf(filtro) > -1 )
-          );
-        });
-    }
+  getUsuarios(grupo: Grupo) {
+    this.usuarios = [];
+    grupo.usuarios.forEach(id => this.usuarioService.getUserById(id).forEach(usuario => this.usuarios.push(usuario as Usuario)));
   }
 
   cancelarTarea(id) {
@@ -102,7 +68,14 @@ export class TaksListComponent implements OnInit {
   }
 
   eliminarTarea(id) {
-    this.taskService.deleteTask(id);
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {detalles: 'Se eliminará de forma permanente.'};
+    this.deleteDialog = this.dialog.open(DialogDeleteComponent, dialogConfig);
+    this.deleteDialog.afterClosed().subscribe(confirmado => {
+      if (confirmado) {
+        this.taskService.deleteTask(id);
+      }
+    });
   }
 
   dateChange(event) {
@@ -126,7 +99,8 @@ export class TaksListComponent implements OnInit {
   ngOnInit() {
     // SEGURIDAD
 /*     this.cookieService.get('rol'); */
-    this.getUsuarios();
+ /*    this.getUsuarios(); */
+     this.getMisGrupos();
     /* this.getTareas(userId); */
   }
 

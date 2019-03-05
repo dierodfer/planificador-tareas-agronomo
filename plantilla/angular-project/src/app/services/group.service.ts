@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { firestore } from 'firebase';
 import { Grupo } from '../models/grupo';
+
+import * as firebase from 'firebase/app';
+import 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -15,18 +17,18 @@ export class GroupService {
   }
 
   getGroupsByCoordinator(id: string) {
-    return this.db.collection('grupos', ref => ref.orderBy('nombre').where('coodinador', '==' , id)).valueChanges();
+    return this.db.collection('grupos', ref => ref.orderBy('nombre').where('coordinador', '==' , id)).valueChanges();
   }
 
   deleteUserToGroup(idGroup, idUser) {
     this.db.collection('grupos').doc(idGroup).update({
-      usuarios: firestore.FieldValue.arrayRemove(idUser)
+      usuarios: firebase.firestore.FieldValue.arrayRemove(idUser)
     });
   }
 
   addUserToGroup(idGroup, idUser) {
     this.db.collection('grupos').doc(idGroup).update({
-      usuarios: firestore.FieldValue.arrayUnion(idUser)
+      usuarios: firebase.firestore.FieldValue.arrayUnion(idUser)
     });
   }
 

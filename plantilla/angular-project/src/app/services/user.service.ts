@@ -3,6 +3,7 @@ import { AngularFirestore} from '@angular/fire/firestore';
 import { Usuario } from '../models/usuario';
 import {MatSnackBar} from '@angular/material';
 import { NotificationService } from './notification.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,8 @@ export class UserService {
 
   constructor(private db: AngularFirestore,
     public snackBar: MatSnackBar,
-    private notificacionService: NotificationService) { }
+    private notificacionService: NotificationService,
+    private cookie: CookieService) { }
 
   getUserById(id) {
     return this.db.collection('usuarios').doc(id).valueChanges();
@@ -32,6 +34,10 @@ export class UserService {
     return this.db.collection('usuarios' ,
     ref => ref.where('rol', '==' , 'TRABAJADOR')
     ).valueChanges();
+  }
+
+  getMyUser() {
+    return this.db.collection('usuarios').doc(this.cookie.get('sesionId')).valueChanges();
   }
 
   addUsuario(usuario: Usuario) {

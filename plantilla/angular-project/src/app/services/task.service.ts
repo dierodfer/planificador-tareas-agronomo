@@ -32,23 +32,6 @@ export class TaskService {
     ).valueChanges();
   }
 
-  /* updateTarea(tarea: Tarea) {
-    this.db.collection('tareas').doc(tarea.id).set({
-      id: tarea.id,
-      nombre: tarea.nombre,
-      descripcion: tarea.descripcion ? tarea.descripcion : '',
-      tipo: tarea.tipo,
-      subtipo: tarea.subtipo ? tarea.subtipo : '',
-      usuario: tarea.usuario,
-      fecha: tarea.fecha,
-      cancelada: false
-    }).then(() => {
-    this.snackBar.open('La tarea se ha guardado correctamente', 'Cerrar', {
-      duration: 4000,
-      });
-    });
-  } */
-
   addTask(tarea: Tarea) {
     tarea.id = Math.random().toString().substring(2); // ARREGLAR
     this.db.collection('tareas').doc(tarea.id).set({

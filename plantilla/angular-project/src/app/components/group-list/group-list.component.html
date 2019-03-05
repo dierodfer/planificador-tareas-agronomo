@@ -17,9 +17,9 @@
             <mat-card-subtitle>({{findUser(grupo.coordinador).nombre}})</mat-card-subtitle>
         </mat-card-header>
         <mat-nav-list>
-            <mat-list-item (click)="openUserDialog(findUser(id))" *ngFor="let id of grupo.usuarios;"> 
-              <mat-icon mat-list-icon>account_circle</mat-icon>
-              <h4 mat-line>{{findUser(id).nombre}}, {{findUser(id).apellidos}}</h4>
+            <mat-list-item *ngFor="let id of grupo.usuarios;"> 
+              <mat-icon (click)="openUserDialog(findUser(id))" mat-list-icon>account_circle</mat-icon>
+              <h4 (click)="openUserDialog(findUser(id))" mat-line>{{findUser(id).nombre}}, {{findUser(id).apellidos}}</h4>
               <button mat-icon-button (click)="deleteUser(grupo,id)" *ngIf="!newUser[grupo.id]" class="float-right"><mat-icon>close</mat-icon></button>
             </mat-list-item>
             <mat-list-item *ngIf="newUser[grupo.id]">

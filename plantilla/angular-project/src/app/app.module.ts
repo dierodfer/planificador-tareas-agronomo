@@ -16,7 +16,7 @@ import { AsyncPipe } from '../../node_modules/@angular/common';
 // Cookies
 import { CookieService } from 'ngx-cookie-service';
 
-// Componentes Applicacion
+// Componentes 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { UserListComponent } from './components/user-list/user-list.component';
@@ -29,6 +29,10 @@ import { DialogIncidentComponent } from './components/dialog-incident/dialog-inc
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { GroupListComponent } from './components/group-list/group-list.component';
+import { CycleFormComponent } from './components/cycle-form/cycle-form.component';
+import { DialogUserComponent } from './components/dialog-user/dialog-user.component';
+import { DialogDeleteComponent } from './components/dialog-delete/dialog-delete.component';
+import { MenuAdminComponent } from './components/menu-admin/menu-admin.component';
 
 // Material Angular
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -58,8 +62,8 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatListModule} from '@angular/material/list';
 import {MatBadgeModule} from '@angular/material/badge';
-import { CycleFormComponent } from './components/cycle-form/cycle-form.component';
-import { DialogUserComponent } from './components/dialog-user/dialog-user.component';
+import {MatTabsModule} from '@angular/material/tabs';
+
 
 
 
@@ -79,7 +83,9 @@ import { DialogUserComponent } from './components/dialog-user/dialog-user.compon
     LoginComponent,
     GroupListComponent,
     CycleFormComponent,
-    DialogUserComponent
+    DialogUserComponent,
+    DialogDeleteComponent,
+    MenuAdminComponent
   ],
   imports: [
     BrowserModule,
@@ -97,13 +103,14 @@ import { DialogUserComponent } from './components/dialog-user/dialog-user.compon
     MatChipsModule, DragDropModule, MatSelectModule, MatRadioModule,
     MatSliderModule, MatSidenavModule, MatNativeDateModule, MatCardModule,
     MatDatepickerModule, MatGridListModule, MatExpansionModule, MatTooltipModule,
-    MatProgressSpinnerModule, MatListModule, MatBadgeModule,
+    MatProgressSpinnerModule, MatListModule, MatBadgeModule, MatTabsModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   entryComponents: [
     ModalComponent,
     DialogIncidentComponent,
-    DialogUserComponent
+    DialogUserComponent,
+    DialogDeleteComponent
   ],
   providers: [MessagingService, AsyncPipe, CookieService],
   bootstrap: [AppComponent]

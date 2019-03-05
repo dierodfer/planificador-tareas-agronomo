@@ -4,8 +4,10 @@ import { GroupService } from 'src/app/services/group.service';
 import { UserService } from 'src/app/services/user.service';
 import { Usuario } from 'src/app/models/usuario';
 import { FormControl, Validators } from '@angular/forms';
-import { MatDialog, MatDialogConfig } from '@angular/material';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
 import { DialogUserComponent } from '../dialog-user/dialog-user.component';
+import { CookieService } from 'ngx-cookie-service';
+import { DialogDeleteComponent } from '../dialog-delete/dialog-delete.component';
 
 @Component({
   selector: 'app-group-list',
@@ -20,10 +22,12 @@ export class GroupListComponent implements OnInit {
   usuarios: Usuario[];
   newUser = {};
   editName = {};
+  deleteDialog: MatDialogRef<DialogDeleteComponent>;
 
   constructor(private grupoService: GroupService,
     private usuarioService: UserService,
-    private dialog: MatDialog) {}
+    private dialog: MatDialog,
+    private cookie: CookieService) {}
 
   findUser(id) {
     return this.usuarios.find(user => id === user.empleado);
@@ -32,10 +36,6 @@ export class GroupListComponent implements OnInit {
   getTrabajadores(grupo: Grupo) {
     return this.usuarios.filter(user => 'TRABAJADOR' === user.rol
     && !grupo.usuarios.some(usuario => usuario === user.empleado));
-  }
-
-  print(trabajador) {
-    console.log(trabajador);
   }
 
   toggleEditName(groupId) {
@@ -80,13 +80,23 @@ export class GroupListComponent implements OnInit {
   }
 
   addGrupo() {
-    this.grupoService.addGroup(new Grupo('Nuevo Grupo', '10'));
+    this.grupoService.addGroup(new Grupo('Nuevo Grupo', this.cookie.get('sesionId')));
   }
 
   deleteGrupo(grupo: Grupo) {
-    this.grupoService.deleteGroup(grupo.id);
+    if (grupo.usuarios.length > 0){
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.data = {detalles: 'El grupo: ' + grupo.nombre + ' de eliminará de forma permanente.'};
+      this.deleteDialog = this.dialog.open(DialogDeleteComponent, dialogConfig);
+      this.deleteDialog.afterClosed().subscribe(confirmado => {
+        if (confirmado) {
+          this.grupoService.deleteGroup(grupo.id);
+        }
+      });
+    } else {
+      this.grupoService.deleteGroup(grupo.id);
+    }
   }
-
 
   ngOnInit() {
     this.getUsuarios();

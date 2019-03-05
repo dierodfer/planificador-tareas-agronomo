@@ -9,31 +9,14 @@
           </mat-button-toggle>
         </mat-button-toggle-group>
   </div>
-  <div class="col-sm-4" *ngIf="isCoordinador()">
-  <mat-form-field class="w-100">
-    <mat-label>Filtros..</mat-label>
-    <mat-icon matSuffix>search</mat-icon>
-    <mat-chip-list #chipList>
-      <mat-chip *ngFor="let filter of filters" (removed)="removeFilter(filter)">
-        {{filter}}
-        <mat-icon matChipRemove>cancel</mat-icon>
-      </mat-chip>
-      <input placeholder="Pulse enter para añadir filtro"
-            [matChipInputFor]="chipList"
-            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-            [matChipInputAddOnBlur]="true"
-            (matChipInputTokenEnd)="addFilter($event)">
+  <div class="col-sm-4 pt-5 mt-5" *ngIf="isCoordinador()">
+    <mat-chip-list>
+      <mat-chip (click)="getUsuarios(grupo)" selected="false" selectable=true *ngFor="let grupo of misGrupos">{{grupo.nombre}}</mat-chip>
     </mat-chip-list>
-  </mat-form-field>
-
-  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z2 w-100">
-    
-      <ng-container matColumnDef="nombre">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
-        <td mat-cell *matCellDef="let element"> {{element.nombre}}, {{element.apellidos}}</td>
-      </ng-container>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="getTareas(row.empleado)" class="clickable"></tr>
-    </table>
+<br>
+    <mat-chip-list class="mat-chip-list-stacked">
+      <mat-chip (click)="getTareas(usuario.empleado)" *ngFor="let usuario of usuarios">{{usuario.nombre}}, {{usuario.apellidos}}</mat-chip>
+    </mat-chip-list>
   </div>
 
   <mat-accordion class="col-sm-8 pt-4"  *ngIf="userSelected" 
@@ -50,6 +33,7 @@
               <mat-datepicker touchUi #picker></mat-datepicker>
           </mat-form-field>
       </div>
+      <p class="text-muted text-center pt-5 mt-5" *ngIf="tareas.length == 0">Tareas no encontradas<br><mat-icon>cloud_off</mat-icon> Compruebe conexión</p>
       <mat-expansion-panel *ngFor="let tarea of tareas">
         <mat-expansion-panel-header class="py-5">
           <mat-panel-title> 

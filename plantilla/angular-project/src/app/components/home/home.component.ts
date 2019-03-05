@@ -38,8 +38,8 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-/*     this.messagingService.requestPermission(this.cookieService.get('sesionId')); */
-/*     this.messagingService.receiveMessage(); */
+     this.messagingService.requestPermission(this.cookieService.get('sesionId')); 
+     this.messagingService.receiveMessage();
     this.notificacionService.getMyBuzon().subscribe(
       (buzon: Buzon) => {
         this.nuevasNoti = buzon.visto;

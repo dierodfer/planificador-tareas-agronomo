@@ -20,3 +20,7 @@
 .addIcon{
     transform: scale(1.5);
 }
+
+mat-chip{
+    height: 45px;
+}

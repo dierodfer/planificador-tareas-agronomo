@@ -2,8 +2,10 @@
 <div mat-dialog-content>
   <mat-form-field class="w-100">
     <mat-select placeholder="Tipo de incidencia" [(formControl)]="control1" required>
-        <mat-option value="Infección">Infección</mat-option>
-        <mat-option value="Problemas">Problemas</mat-option>
+        <mat-option value="Anomalía">Anomalía</mat-option>
+        <mat-option value="Enfermedad">Enfermedad</mat-option>
+        <mat-option value="Avería">Avería</mat-option>
+        <mat-option value="Roturas">Roturas</mat-option>
         <mat-option value="Otro">Otro...</mat-option>
     </mat-select>
     <mat-error *ngIf="control1.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
@@ -17,7 +19,7 @@
       <mat-error *ngIf="control3.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
   </mat-form-field>
   <mat-form-field class="w-50">
-      <input matInput [value]="control4.value"  placeholder="Autor" disabled>
+      <input matInput [value]="control4.value.nombre"  placeholder="Autor" disabled>
   </mat-form-field>
   <mat-form-field class="w-100">
   <mat-select placeholder="Invernadero" [(formControl)]="controlInver" required>

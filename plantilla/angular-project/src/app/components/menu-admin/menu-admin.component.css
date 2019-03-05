@@ -1,0 +1,13 @@
+@media only screen and (max-width: 976px) {
+    .card-columns{
+        -webkit-column-count: 2 !important;
+        column-count: 2 !important;
+    }
+  }
+
+@media only screen and (max-width:690px) {
+    .card-columns{
+        -webkit-column-count: 1 !important;
+        column-count: 1 !important;
+    }
+  }

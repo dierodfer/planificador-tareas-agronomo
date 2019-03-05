@@ -5,7 +5,7 @@ import { MatDialogRef, MatSnackBar } from '@angular/material';
 import {Incidencia} from '../../models/incidencia';
 import { IncidentService } from 'src/app/services/incident.service';
 import { Zona } from 'src/app/models/zona';
-import { CookieService } from 'ngx-cookie-service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-dialog-incident',
@@ -25,20 +25,14 @@ export class DialogIncidentComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<DialogIncidentComponent>,
     private incidenciaService: IncidentService,
     private snackBar: MatSnackBar,
-    private cookie: CookieService) {
+    private usuarioService: UserService) {
     this.control3.setValue(moment().format('D/M/YYYY, h:mm:ss a'));
-    this.control4.setValue('ANA RODRIGUEZ');
+    usuarioService.getMyUser().forEach(user => this.control4.setValue(user));
   }
 
   submit() {
     if (this.checkStatus()) {
-      const incidencia = new Incidencia();
-      incidencia.autor = this.cookie.get('sesionId');
-      incidencia.fecha = moment().toDate();
-      incidencia.tipo = this.control1.value;
-      incidencia.descripcion = this.control2.value;
-      incidencia.zona = new Zona(this.controlInver.value, this.controlSector.value, this.controlTabla.value, this.controlPlanta.value);
-      this.incidenciaService.addIncident(incidencia);
+      this.incidenciaService.addIncident(this.getIncidencia());
       this.close();
     } else {
       this.snackBar.open('Complete todos los campos obligatorios', 'Cerrar', {
@@ -46,6 +40,16 @@ export class DialogIncidentComponent implements OnInit {
         panelClass: 'bg-danger',
       });
     }
+  }
+
+  getIncidencia() {
+    const incidencia = new Incidencia();
+    incidencia.autor = this.control4.value;
+    incidencia.fecha = moment().toDate();
+    incidencia.tipo = this.control1.value;
+    incidencia.descripcion = this.control2.value;
+    incidencia.zona = new Zona(this.controlInver.value, this.controlSector.value, this.controlTabla.value, this.controlPlanta.value);
+    return incidencia;
   }
 
   checkStatus(): boolean {

@@ -4,6 +4,8 @@ import { NotificationService } from 'src/app/services/notification.service';
 import { Buzon } from 'src/app/models/buzon';
 import { Notificacion } from 'src/app/models/notificacion';
 import { CookieService } from 'ngx-cookie-service';
+import { DialogDeleteComponent } from '../dialog-delete/dialog-delete.component';
+import { MatDialogRef, MatDialogConfig, MatDialog } from '@angular/material';
 
 @Component({
   selector: 'app-notification',
@@ -14,17 +16,36 @@ export class NotificationComponent implements OnInit {
 
   buzon: Buzon;
   notificaciones: Notification[];
+  deleteDialog: MatDialogRef<DialogDeleteComponent>;
 
-  constructor(private mesageService: MessagingService,
+  constructor(private messagingService: MessagingService,
     private notificacionService: NotificationService,
-    private cookie: CookieService) { }
+    private cookie: CookieService,
+    private dialog: MatDialog) { }
 
-  deleteAllNotificacion(){
-    this.notificacionService.createBuzon(this.cookie.get('sesionId'));
+  deleteAllNotificacion() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {detalles: 'El buzón se vaciará por completo.'};
+    this.deleteDialog = this.dialog.open(DialogDeleteComponent, dialogConfig);
+    this.deleteDialog.afterClosed().subscribe(confirmado => {
+      if (confirmado) {
+        this.notificacionService.createBuzon(this.cookie.get('sesionId'));
+      }
+    });
+  }
+
+  deleteNotificacion(noti: Notificacion) {
+    this.notificacionService.deleteNotification(noti);
+  }
+
+  enviarAdmin() {
+    this.messagingService.sendMessage('Notificacion Externa', 'Esto es una Notificacion Externa', '0');
+    this.notificacionService.sendNotification('0', new Notificacion('Esto es una Notificacion Interna', 'Notificacion Interna'));
   }
 
   enviar() {
-    this.notificacionService.sendNotification('112', new Notificacion('descripcion123', 'titulo123'));
+    this.notificacionService.sendNotification(this.cookie.get('sesionId'),
+    new Notificacion('Esto es una descripción', 'Titulo Notificación'));
   }
 
   ngOnInit() {

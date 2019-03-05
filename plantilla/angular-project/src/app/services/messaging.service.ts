@@ -8,6 +8,12 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {MatSnackBar} from '@angular/material';
 import {environment} from '../../environments/environment';
 
+export class Token {
+  token: string;
+  constructor() {
+  }
+}
+
 
 
 @Injectable()
@@ -16,7 +22,6 @@ export class MessagingService {
 
   currentMessage = new BehaviorSubject(null);
   private keyServer = environment.keyServer;
-  token;
 
   constructor(
     private http: HttpClient,
@@ -45,7 +50,6 @@ export class MessagingService {
         this.angularFireStore.collection('fcmTokens').doc(userId).set({
           token : token
         });
-        this.token = token;
       });
   }
 
@@ -80,13 +84,13 @@ export class MessagingService {
   }
 
   sendMessage(titulo, cuerpo, userId) {
-/*     this.userService. */
-        /* this.angularFireStore.collection('fcmTokens').doc(userId).ref;*/
-    const body = this.getBody(titulo, cuerpo, this.token);
-
-/*     console.log(JSON.stringify(body)); */
-    const headers = this.getHeaders();
-    this.http.post('https://fcm.googleapis.com/fcm/send', body, {headers}).subscribe();
+    this.angularFireStore.collection('fcmTokens').doc(userId).valueChanges().forEach(
+      data => {
+        const body = this.getBody(titulo, cuerpo, (data as Token).token);
+        const headers = this.getHeaders();
+        this.http.post('https://fcm.googleapis.com/fcm/send', body, {headers}).subscribe();
+      }
+    );
   }
 
   private getBody(titulo, cuerpo, token) {
@@ -96,7 +100,7 @@ export class MessagingService {
         'body': cuerpo,
         'icon': 'https://angular-222712.firebaseapp.com/favicon.ico'
       },
-      'to': this.token
+      'to': token
     };
   }
 

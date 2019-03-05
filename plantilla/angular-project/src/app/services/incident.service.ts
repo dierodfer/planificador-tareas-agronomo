@@ -21,26 +21,21 @@ export class IncidentService {
   }
 
   addIncident(incidencia: Incidencia) {
-    incidencia.id = Math.random().toString().substring(2); // ARREGLAR
-    this.db.collection('incidencias').doc(incidencia.id).set({
-      id: incidencia.id,
-      descripcion: incidencia.descripcion ? incidencia.descripcion : '',
-      tipo: incidencia.tipo,
-      autor: incidencia.autor,
-      fecha: incidencia.fecha,
-      zona: [incidencia.zona.invernadero, incidencia.zona.sector, incidencia.zona.tabla, incidencia.zona.numero_planta]
-    }).then(() => {
+    incidencia.id = Math.random().toString().substring(2);
+    const copia = JSON.parse(JSON.stringify(incidencia));
+    this.db.collection('incidencias').doc(incidencia.id).set(copia).then(() => {
       const titulo = 'Nueva Incidencia - ' + incidencia.tipo;
-      const cuerpo = 'Autor: ' + incidencia.autor + ', en el invernadero ' + incidencia.zona.invernadero
+      const cuerpo = 'Autor: ' + incidencia.autor.nombre + ', ' + incidencia.autor.apellidos
+      + ', en el invernadero ' + incidencia.zona.invernadero
       + (incidencia.zona.sector ? ', en el sector: ' + incidencia.zona.sector : '')
       + (incidencia.zona.tabla ? ', en la tabla: ' + incidencia.zona.tabla : '')
       + (incidencia.zona.numero_planta ? ', en el número: ' + incidencia.zona.numero_planta : '');
 
-      this.messagingService.sendMessage(titulo, cuerpo, '326'); // OPTIMIZAR
+      // Envia notiicacion Push e Interna
+      this.messagingService.sendMessage(titulo, cuerpo, '0');
       this.noficacionService.sendNotification('0', new Notificacion(cuerpo, titulo));
       this.snackBar.open('La incidencia se ha enviado correctamente y el ADMIN a sido notificado', 'Cerrar', {
         duration: 10000,
-        panelClass: 'bg-warning'
       });
     });
   }
