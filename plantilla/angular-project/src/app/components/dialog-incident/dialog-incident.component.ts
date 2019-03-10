@@ -18,6 +18,7 @@ export class DialogIncidentComponent implements OnInit {
   control3 = new FormControl('', [Validators.required]);
   control4 = new FormControl('', [Validators.required]);
   controlInver = new FormControl('', [Validators.required]);
+  controlPrioridad = new FormControl('', [Validators.required]);
   controlSector = new FormControl('');
   controlTabla = new FormControl('');
   controlPlanta = new FormControl('');
@@ -28,6 +29,7 @@ export class DialogIncidentComponent implements OnInit {
     private usuarioService: UserService) {
     this.control3.setValue(moment().format('D/M/YYYY, h:mm:ss a'));
     usuarioService.getMyUser().forEach(user => this.control4.setValue(user));
+    this.controlPrioridad.setValue('Media');
   }
 
   submit() {
@@ -45,8 +47,10 @@ export class DialogIncidentComponent implements OnInit {
   getIncidencia() {
     const incidencia = new Incidencia();
     incidencia.autor = this.control4.value;
-    incidencia.fecha = moment().toDate();
+    incidencia.fechaCreacion = moment().toDate();
     incidencia.tipo = this.control1.value;
+    incidencia.estado = 'Pendiente';
+    incidencia.prioridad = this.controlPrioridad.value;
     incidencia.descripcion = this.control2.value;
     incidencia.zona = new Zona(this.controlInver.value, this.controlSector.value, this.controlTabla.value, this.controlPlanta.value);
     return incidencia;

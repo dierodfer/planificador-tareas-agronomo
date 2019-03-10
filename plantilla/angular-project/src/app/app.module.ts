@@ -48,7 +48,6 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatChipsModule} from '@angular/material/chips';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {MatSelectModule} from '@angular/material/select';
-import { ListaDraggableComponent } from './components/lista-draggable/lista-draggable.component';
 import {MatSliderModule} from '@angular/material/slider';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { NotificationComponent } from './components/notification/notification.component';
@@ -63,7 +62,8 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatListModule} from '@angular/material/list';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatTabsModule} from '@angular/material/tabs';
-
+import { IncidentsListComponent } from './components/incidents-list/incidents-list.component';
+import { DialogIncidentDetailsComponent } from './components/dialog-incident-details/dialog-incident-details.component';
 
 
 
@@ -74,7 +74,6 @@ import {MatTabsModule} from '@angular/material/tabs';
     UserFormComponent,
     MenuComponent,
     ModalComponent,
-    ListaDraggableComponent,
     NotificationComponent,
     TaksListComponent,
     TaksFormComponent,
@@ -85,7 +84,9 @@ import {MatTabsModule} from '@angular/material/tabs';
     CycleFormComponent,
     DialogUserComponent,
     DialogDeleteComponent,
-    MenuAdminComponent
+    MenuAdminComponent,
+    IncidentsListComponent,
+    DialogIncidentDetailsComponent,
   ],
   imports: [
     BrowserModule,
@@ -110,7 +111,8 @@ import {MatTabsModule} from '@angular/material/tabs';
     ModalComponent,
     DialogIncidentComponent,
     DialogUserComponent,
-    DialogDeleteComponent
+    DialogDeleteComponent,
+    DialogIncidentDetailsComponent
   ],
   providers: [MessagingService, AsyncPipe, CookieService],
   bootstrap: [AppComponent]

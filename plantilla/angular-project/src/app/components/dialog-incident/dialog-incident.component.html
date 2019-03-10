@@ -46,6 +46,20 @@
   <mat-form-field class="w-50" *ngIf="controlInver.value">
       <input matInput placeholder="Número de planta (opcional)" type="number" [(formControl)]="controlPlanta">
   </mat-form-field>
+  <section>
+    <label>Prioridad:</label>
+    <mat-radio-group [(formControl)]="controlPrioridad">
+      <mat-radio-button class="p-2" value="Baja">
+        Baja
+      </mat-radio-button>
+      <mat-radio-button class="p-2" value="Media">
+        Media
+      </mat-radio-button>
+      <mat-radio-button class="p-2" value="Alta">
+        Alta
+      </mat-radio-button>
+    </mat-radio-group>
+  </section>
 </div>
 <div mat-dialog-actions class="float-right">
     <button mat-button (click)="submit()">Enviar</button>

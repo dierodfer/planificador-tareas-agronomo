@@ -12,6 +12,8 @@ import * as moment from 'moment';
 })
 export class TaskService {
 
+  lastTarea: Tarea;
+
   constructor(private db: AngularFirestore,
     public snackBar: MatSnackBar,
     private notificacionService: NotificationService) { }
@@ -43,16 +45,15 @@ export class TaskService {
       fecha: tarea.fecha,
       cancelada: false
     }).then(() => {
+    // Comprueba que la fecha de la tarea es hoy (eliminando el tiempo) y envia notificacion a los usuarios afectado
+    if (moment(tarea.fecha).startOf('day').diff(moment().startOf('day')) === 0) {
+      this.notificacionService.sendNotification(tarea.usuario, new Notificacion(
+        'Se le ha asignado nueva tarea para realizar hoy: ' + tarea.tipo + (tarea.subtipo ? tarea.subtipo : ''),
+        'Nueva Tarea'));
+    }
     this.snackBar.open('La tarea se ha guardado correctamente', 'Cerrar', {
       duration: 4000,
       });
-      // Comprueba que la fecha de la tarea es hoy (solo fechas) y envia notificacion a los usuarios afectados
-      if (moment(tarea.fecha).startOf('day').diff(moment().startOf('day')) === 0) {
-       this.notificacionService.sendNotification(tarea.usuario,
-        new Notificacion(
-        'Se le ha asignado nueva tarea para HOY: ' + tarea.tipo + tarea.subtipo ? tarea.subtipo : '',
-        'Nueva Tarea'));
-      }
     });
   }
 

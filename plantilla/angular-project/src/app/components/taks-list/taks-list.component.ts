@@ -24,7 +24,7 @@ export class TaksListComponent implements OnInit {
   grupoSelected: Grupo;
   filtro = false;
   rol = 'coordinador';
-  usuarios: Usuario[] = [];
+  usuarios: Usuario[];
   misGrupos: Grupo[];
   deleteDialog: MatDialogRef<DialogDeleteComponent>;
 

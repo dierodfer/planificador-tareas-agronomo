@@ -1,24 +1,34 @@
 <mat-sidenav-container class="example-container" fullscreen>
-    
   <mat-sidenav #sidenav mode="over" (click)="sidenav.toggle()"> 
     <app-menu></app-menu>
   </mat-sidenav>
 
   <mat-sidenav-content>
-      <div class="p-3 fixed-top bg-white">
-          <button mat-button (click)="sidenav.toggle()"><mat-icon>menu</mat-icon></button>
-          <small>v1.1.5</small>
-          <button mat-button class="float-right" (click)="openNotifications()">
+      <div class="fixed-top bg-white"
+      [ngClass]="{
+        'bg-white': (isOnline() | async),
+        'bg-red text-white': !(isOnline() | async)
+      }"
+      >
+          <button mat-button class="py-3" (click)="sidenav.toggle()"><mat-icon>vertical_split</mat-icon></button>
+          <small>v1.2.0</small>
+
+          <button mat-button class="py-3 mr-3 float-right" (click)="openNotifications()">
             <mat-icon *ngIf="nuevasNoti">notifications</mat-icon> 
             <mat-icon *ngIf="!nuevasNoti" class="shake">notifications_active</mat-icon>
           </button>
-          <button mat-button class="float-right" (click)="openIncidenceDialog()">
+          <button mat-button class="py-3 float-right" (click)="openIncidenceDialog()">
             <mat-icon>warning</mat-icon>
+          </button>
+          <button mat-button class="py-3 float-right" (click)="openMyUserDialog()">
+            <mat-icon>account_circle</mat-icon>
           </button>
       </div>
       <div style="margin-top: 92px;">
         <router-outlet></router-outlet>
       </div>
+      <button mat-mini-fab class="float-connection" color="warn" matTooltip="Esta trabajando en modo 'SIN CONEXION'" *ngIf="!(isOnline() | async)"><mat-icon>sync_problem</mat-icon></button>
   </mat-sidenav-content>
 </mat-sidenav-container>
+
 

@@ -9,18 +9,20 @@
           </mat-button-toggle>
         </mat-button-toggle-group>
   </div>
-  <div class="col-sm-4 pt-5 mt-5" *ngIf="isCoordinador()">
+  <div class="col-md-4 pt-5 mt-5" *ngIf="isCoordinador()">
     <mat-chip-list>
       <mat-chip (click)="getUsuarios(grupo)" selected="false" selectable=true *ngFor="let grupo of misGrupos">{{grupo.nombre}}</mat-chip>
     </mat-chip-list>
-<br>
+  <br>
+  <p class="text-muted text-center pt-5 mt-5" *ngIf="!usuarios">Seleccione grupo</p>
+  <p class="text-muted text-center pt-5 mt-5" *ngIf="usuarios && usuarios.length == 0">Este grupo no contiene usuarios</p>
     <mat-chip-list class="mat-chip-list-stacked">
       <mat-chip (click)="getTareas(usuario.empleado)" *ngFor="let usuario of usuarios">{{usuario.nombre}}, {{usuario.apellidos}}</mat-chip>
     </mat-chip-list>
   </div>
 
-  <mat-accordion class="col-sm-8 pt-4"  *ngIf="userSelected" 
-  [ngClass]="{'offset-sm-2': !isCoordinador()}">
+  <mat-accordion class="col-md-8 pt-4"  *ngIf="userSelected" 
+  [ngClass]="{'offset-md-2': !isCoordinador()}">
       <div class=" pb-3">      
    
           <p>Tareas de {{userSelected.nombre}} {{userSelected.apellidos}}
@@ -33,7 +35,7 @@
               <mat-datepicker touchUi #picker></mat-datepicker>
           </mat-form-field>
       </div>
-      <p class="text-muted text-center pt-5 mt-5" *ngIf="tareas.length == 0">Tareas no encontradas<br><mat-icon>cloud_off</mat-icon> Compruebe conexión</p>
+      <p class="text-muted text-center pt-5 mt-5" *ngIf="tareas.length == 0">No tiene tareas asignadas</p>
       <mat-expansion-panel *ngFor="let tarea of tareas">
         <mat-expansion-panel-header class="py-5">
           <mat-panel-title> 

@@ -17,7 +17,25 @@ export class IncidentService {
     private noficacionService: NotificationService) { }
 
   getIncidents() {
-    return this.db.collection('incidencias', ref => ref.orderBy('fecha')).valueChanges();
+    return this.db.collection('incidencias', ref => ref.orderBy('fechaCreacion', 'desc')).valueChanges();
+  }
+
+  getIncidentsByState(order: string, state: string) {
+    return this.db.collection('incidencias', ref => ref.orderBy(order , 'desc').where('estado', '==', state)).valueChanges();
+  }
+
+  updateAtendida(id: string) {
+    this.db.collection('incidencias').doc(id).update({
+      estado: 'Atendida',
+      fechaAtendida: new Date().toJSON()
+    });
+  }
+
+  updateResuelta(id: string) {
+    this.db.collection('incidencias').doc(id).update({
+      estado: 'Resuelta',
+      fechaResuelta: new Date().toJSON()
+    });
   }
 
   addIncident(incidencia: Incidencia) {

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { MessagingService } from './services/messaging.service';
-import { CookieService } from 'ngx-cookie-service';
+import { ConnectionService } from './services/connection.service';
+
 
 
 @Component({
@@ -10,9 +10,9 @@ import { CookieService } from 'ngx-cookie-service';
 })
 export class AppComponent implements OnInit {
 
-  constructor() { }
+  constructor(private connect: ConnectionService) { }
 
   ngOnInit() {
-
+    this.connect.init();
   }
 }

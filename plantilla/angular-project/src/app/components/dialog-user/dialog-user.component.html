@@ -1,9 +1,9 @@
 <h2 mat-dialog-title>Usuario</h2>
 <mat-dialog-content>
-    <p>{{usuario.nombre}},{{usuario.apellidos}}</p>
-    <p>Nº de empleado/a: {{usuario.empleado}}</p>
-    <p>Rol: {{usuario.rol}}</p>
-    <p>{{usuario.genero}}</p>
+    <p><b>Nombre completo:</b> {{usuario.nombre}}, {{usuario.apellidos}}</p>
+    <p><b>Nº de empleado/a:</b>  {{usuario.empleado}}</p>
+    <p><b>Rol:</b>  {{usuario.rol | lowercase}}</p>
+    <p><b>Sexo:</b>   {{usuario.genero | lowercase}}</p>
 </mat-dialog-content>
 <!-- <mat-dialog-actions>
  <button mat-button mat-dialog-close>Cerrar</button>

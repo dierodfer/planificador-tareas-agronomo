@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { DialogIncidentComponent } from '../dialog-incident/dialog-incident.component';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatDialogConfig } from '@angular/material';
 import { Usuario } from 'src/app/models/usuario';
 import { MessagingService } from 'src/app/services/messaging.service';
 import { CookieService } from 'ngx-cookie-service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { Buzon } from 'src/app/models/buzon';
 import { Router } from '@angular/router';
+import { ConnectionService } from 'src/app/services/connection.service';
+import { DialogUserComponent } from '../dialog-user/dialog-user.component';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-home',
@@ -15,21 +18,25 @@ import { Router } from '@angular/router';
 })
 export class HomeComponent implements OnInit {
 
-  usuario: Usuario;
-
   nuevasNoti: Boolean;
-  idBuzon: string;
+  miUsuario: Usuario;
 
   constructor(
     private dialog: MatDialog,
     private messagingService: MessagingService,
-    private cookieService: CookieService,
+    private cookie: CookieService,
     private notificacionService: NotificationService,
-    private router: Router
+    private router: Router,
+    private connect: ConnectionService,
+    private usuarioService: UserService
     ) { }
 
   openIncidenceDialog() {
     this.dialog.open(DialogIncidentComponent);
+  }
+
+  isOnline() {
+    return this.connect.isOnline();
   }
 
   openNotifications() {
@@ -37,15 +44,36 @@ export class HomeComponent implements OnInit {
     this.router.navigate(['inicio', 'notificaciones']);
   }
 
-  ngOnInit() {
-     this.messagingService.requestPermission(this.cookieService.get('sesionId')); 
-     this.messagingService.receiveMessage();
+  openMyUserDialog() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = this.miUsuario;
+    console.log(this.miUsuario);
+    this.dialog.open(DialogUserComponent, dialogConfig);
+  }
+
+  getMyBuzon() {
     this.notificacionService.getMyBuzon().subscribe(
       (buzon: Buzon) => {
         this.nuevasNoti = buzon.visto;
-      }
+    });
+  }
+
+  getMyUser() {
+    this.usuarioService.getMyUser().subscribe(
+      user => this.miUsuario = user as Usuario
     );
-/*     this.message = this.messagingService.currentMessage; */
+  }
+
+  ngOnInit() {
+    this.getMyBuzon();
+    this.getMyUser();
+    const sesionId = this.cookie.get('sesionId');
+    if (sesionId !== null) {
+      this.messagingService.requestPermission(sesionId);
+      this.messagingService.receiveMessage();
+    }
+
+/*   this.message = this.messagingService.currentMessage; */
   }
 
 }

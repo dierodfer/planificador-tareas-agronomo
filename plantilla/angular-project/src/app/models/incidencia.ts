@@ -5,8 +5,12 @@ export class Incidencia {
     id: string;
     descripcion: string;
     autor: Usuario;
-    fecha: Date;
+    fechaCreacion: Date;
+    fechaAtendida: Date;
+    fechaResuelta: Date;
     tipo: string;
     zona: Zona;
+    estado: string;
+    prioridad: string;
     constructor() {}
 }

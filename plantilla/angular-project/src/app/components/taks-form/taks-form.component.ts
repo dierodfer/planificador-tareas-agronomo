@@ -38,21 +38,23 @@ export class TaksFormComponent implements OnInit {
 
   submit() {
      if (this.checkStatus()) {
-      const tarea = this.getTarea();
-      const userIds = this.getUsersID();
-      userIds.forEach(user => {
-        tarea.usuario = user;
+      this.controlUsuarios.value.forEach(user => {
+        const tarea = this.getTarea();
+        tarea.usuario = user.empleado;
         if (this.controlRepit.value > 1) {
           let a = this.controlRepit.value;
+  /*         let fecha = tarea.fecha; */
           do {// Agrega tareas hasta que se cumpla el número de dias requerido
-            this.taskService.addTask(tarea);
-            tarea.fecha = moment(tarea.fecha).add(1, 'day').toDate();
+            const copy = this.getTarea();
+            copy.fecha = moment(copy.fecha).add(a, 'day').toDate();
+            copy.usuario = user.empleado;
+            this.taskService.addTask(copy);
+           /*  fecha = moment(fecha).add(a, 'day').toDate(); */
           }while (a-- > 1);
         } else {
           this.taskService.addTask(tarea);
         }
       });
-/*       this.tarea = new Tarea(); */
       this.resetValidators();
     } else {
       this.snackBar.open('Complete todos los campos obligatorios', 'Cerrar', {
@@ -63,16 +65,15 @@ export class TaksFormComponent implements OnInit {
   }
 
   getTarea() {
-    const tarea = new Tarea();
-    tarea.descripcion = this.controlDescrip.value;
-    tarea.tipo = this.controlTipo.value.nombre;
-    tarea.subtipo = this.controlSubtipo.value.nombre;
-    tarea.fecha = this.controlFecha.value;
-    return tarea;
+    const res = new Tarea();
+    res.descripcion = this.controlDescrip.value;
+    res.tipo = this.controlTipo.value.nombre;
+    res.subtipo = this.controlSubtipo.value.nombre;
+    res.fecha = this.controlFecha.value;
+    return res;
   }
 
   checkStatus(): boolean {
-    console.log(this.controlTipo.value.tareas.length);
     return this.controlTipo.status === 'VALID'
     && this.controlFecha.status === 'VALID'
     && (this.controlTipo.value.tareas.length > 0 ? this.controlSubtipo.status === 'VALID' : true)

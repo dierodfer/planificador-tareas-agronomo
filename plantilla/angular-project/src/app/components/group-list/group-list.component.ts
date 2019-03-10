@@ -84,9 +84,9 @@ export class GroupListComponent implements OnInit {
   }
 
   deleteGrupo(grupo: Grupo) {
-    if (grupo.usuarios.length > 0){
+    if (grupo.usuarios.length > 0) {
       const dialogConfig = new MatDialogConfig();
-      dialogConfig.data = {detalles: 'El grupo: ' + grupo.nombre + ' de eliminará de forma permanente.'};
+      dialogConfig.data = {detalles: 'Nota: ' + grupo.nombre + ', contiene ' + grupo.usuarios.length + ' usuarios.'};
       this.deleteDialog = this.dialog.open(DialogDeleteComponent, dialogConfig);
       this.deleteDialog.afterClosed().subscribe(confirmado => {
         if (confirmado) {

@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { UserFormComponent } from './components/user-form/user-form.component';
 import { UserListComponent } from './components/user-list/user-list.component';
-import { ListaDraggableComponent } from './components/lista-draggable/lista-draggable.component';
 import { NotificationComponent } from './components/notification/notification.component';
 import { TaksListComponent } from './components/taks-list/taks-list.component';
 import { TaksFormComponent } from './components/taks-form/taks-form.component';
@@ -11,6 +10,7 @@ import { LoginComponent } from './components/login/login.component';
 import { GroupListComponent } from './components/group-list/group-list.component';
 import { CycleFormComponent } from './components/cycle-form/cycle-form.component';
 import { MenuAdminComponent } from './components/menu-admin/menu-admin.component';
+import { IncidentsListComponent } from './components/incidents-list/incidents-list.component';
 
 const routes: Routes = [
   {
@@ -25,6 +25,7 @@ const routes: Routes = [
           { path: 'admin',
             component: MenuAdminComponent,
             children: [
+                  { path: 'incidencias', component: IncidentsListComponent},
                   { path: 'grupos', component: GroupListComponent},
                   { path: 'fases', component: CycleFormComponent},
                 ]
@@ -32,9 +33,8 @@ const routes: Routes = [
         ]
   },
   { path: 'login', component: LoginComponent},
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
-/*   { path: 'not-found', component: NotFoundComponent },
-  { path: '**', redirectTo: 'not-found'} */
+/*   { path: '', redirectTo: '/login', pathMatch: 'full' }, */
+  { path: '**', redirectTo: 'login'}
 ];
 
 

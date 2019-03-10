@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ListaDraggableComponent } from './lista-draggable.component';
+import { IncidentsListComponent } from './incidents-list.component';
 
-describe('ListaDraggableComponent', () => {
-  let component: ListaDraggableComponent;
-  let fixture: ComponentFixture<ListaDraggableComponent>;
+describe('IncidentsListComponent', () => {
+  let component: IncidentsListComponent;
+  let fixture: ComponentFixture<IncidentsListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ListaDraggableComponent ]
+      declarations: [ IncidentsListComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ListaDraggableComponent);
+    fixture = TestBed.createComponent(IncidentsListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

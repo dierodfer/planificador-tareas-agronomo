@@ -11,3 +11,7 @@
         column-count: 1 !important;
     }
   }
+
+.card{
+  cursor: pointer;
+}

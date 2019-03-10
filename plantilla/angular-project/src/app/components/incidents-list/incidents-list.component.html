@@ -1,0 +1,161 @@
+
+<!-- <mat-form-field class="w-100">
+  <mat-label>Filtros..</mat-label>
+  <mat-icon matSuffix>search</mat-icon>
+  <mat-chip-list #chipList>
+    <mat-chip *ngFor="let filter of filters" [selectable]="selectable"
+             [removable]="removable" (removed)="removeFilter(filter)">
+      {{filter}}
+      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+    </mat-chip>
+    <input placeholder="Pulse enter para añadir filtro"
+           [matChipInputFor]="chipList"
+           [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+           [matChipInputAddOnBlur]="addOnBlur"
+           (matChipInputTokenEnd)="addFilter($event)">
+  </mat-chip-list>
+</mat-form-field>
+ -->
+<h4 class="text-warning pl-3">Pendientes</h4>
+<div class="table-responsive">
+<table mat-table [dataSource]="dataSourcePendientes" matSort #tableSort="matSort" class="mat-elevation-z6 w-100">
+
+    <ng-container matColumnDef="fecha">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de creación </th>
+        <td mat-cell *matCellDef="let element"> {{element.fechaCreacion | date:'dd/MM/yyyy HH:mm:ss'}} </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="prioridad">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Prioridad </th>
+      <td mat-cell *matCellDef="let element"><mat-icon [ngClass]="{
+        'text-danger': element.prioridad == 'Alta',
+        'text-warning': element.prioridad == 'Media','text-muted': element.prioridad == 'Baja'}">warning</mat-icon> {{element.prioridad}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="tipo">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </th>
+        <td mat-cell *matCellDef="let element"> {{element.tipo}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="zona">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Lugar </th>
+        <td mat-cell *matCellDef="let element"> {{element.zona}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="autor">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Autor </th>
+        <td mat-cell *matCellDef="let element"> <button class="btn btn-link" (click)="openUserDialog(element.autor)">{{element.autor.nombre}}</button> </td>
+    </ng-container>
+
+    <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef>  </th>
+        <td mat-cell *matCellDef="let element">               
+          <a   matTooltip="Mostrar detalles" (click)="openIncidentDialog(element)" mat-mini-fab color="primary">
+            <mat-icon>zoom_in</mat-icon>
+          </a>
+          <a matTooltip="Marcar como atendida"  (click)="incidenciaAtendida(element)" mat-mini-fab color="primary">
+            <mat-icon>check</mat-icon>
+          </a>
+        </td>
+      </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <mat-paginator #paginator [pageSizeOptions]="[ 10, 25, 50]" showFirstLastButtons></mat-paginator>
+</div>
+
+<h4 class="text-secondary pt-3 pl-3">Atendidas</h4>
+<div class="table-responsive">
+    <table mat-table [dataSource]="dataSourceAtendidas" matSort #tableSort2="matSort" class="mat-elevation-z6 w-100">
+    
+        <ng-container matColumnDef="fecha">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de atención </th>
+            <td mat-cell *matCellDef="let element"> {{element.fechaAtendida | date:'dd/MM/yyyy HH:mm:ss'}} </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="prioridad">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Prioridad </th>
+          <td mat-cell *matCellDef="let element"><mat-icon  [ngClass]="{
+            'text-danger': element.prioridad == 'Alta',
+            'text-warning': element.prioridad == 'Media','text-muted': element.prioridad == 'Baja'}">warning</mat-icon> {{element.prioridad}} </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="tipo">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </th>
+            <td mat-cell *matCellDef="let element"> {{element.tipo}} </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="zona">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Lugar </th>
+            <td mat-cell *matCellDef="let element"> {{element.zona}} </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="autor">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Autor </th>
+            <td mat-cell *matCellDef="let element"> <button class="btn btn-link" (click)="openUserDialog(element.autor)">{{element.autor.nombre}}</button> </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="acciones">
+            <th mat-header-cell *matHeaderCellDef>  </th>
+            <td mat-cell *matCellDef="let element">               
+              <a   matTooltip="Mostrar detalles" (click)="openIncidentDialog(element)" mat-mini-fab color="primary">
+                <mat-icon>zoom_in</mat-icon>
+              </a>
+              <a matTooltip="Marcar como resuelta" (click)="incidenciaResuelta(element)" mat-mini-fab color="primary">
+                <mat-icon>done_all</mat-icon>
+              </a>  
+            </td>
+          </ng-container>
+      
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      <mat-paginator #paginator2 [pageSizeOptions]="[ 10, 25, 50]" showFirstLastButtons></mat-paginator>
+</div>
+
+<h4 class="text-success pt-3 pl-3">Resueltas</h4>
+<div class="table-responsive">
+    <table mat-table [dataSource]="dataSourceResueltas" matSort #tableSort3="matSort" class="mat-elevation-z6 w-100">
+    
+        <ng-container matColumnDef="fecha">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de resolución </th>
+            <td mat-cell *matCellDef="let element"> {{element.fechaResuelta | date:'dd/MM/yyyy HH:mm:ss'}} </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="prioridad">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Prioridad </th>
+          <td mat-cell *matCellDef="let element"><mat-icon [ngClass]="{
+            'text-danger': element.prioridad == 'Alta',
+            'text-warning': element.prioridad == 'Media','text-muted': element.prioridad == 'Baja'}">warning</mat-icon> {{element.prioridad}} </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="tipo">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </th>
+            <td mat-cell *matCellDef="let element"> {{element.tipo}} </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="zona">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Lugar </th>
+            <td mat-cell *matCellDef="let element"> {{element.zona}} </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="autor">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Autor </th>
+            <td mat-cell *matCellDef="let element"> <button class="btn btn-link" (click)="openUserDialog(element.autor)">{{element.autor.nombre}}</button> </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="acciones">
+            <th mat-header-cell *matHeaderCellDef>  </th>
+            <td mat-cell *matCellDef="let element">               
+              <a matTooltip="Mostrar detalles" (click)="openIncidentDialog(element)" mat-mini-fab color="primary">
+                <mat-icon>zoom_in</mat-icon>
+              </a> 
+            </td>
+          </ng-container>
+      
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      <mat-paginator #paginator3 [pageSizeOptions]="[ 10, 25, 50]" showFirstLastButtons></mat-paginator>
+</div>

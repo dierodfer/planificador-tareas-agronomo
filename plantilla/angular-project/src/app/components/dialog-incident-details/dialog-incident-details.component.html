@@ -1,0 +1,14 @@
+<h2 mat-dialog-title>Usuario</h2>
+<mat-dialog-content>
+    <p><b>Nombre completo:</b> {{incidencia.tipo}} - {{incidencia.apellidos}}</p>
+    <p><b>Estado:</b> {{incidencia.estado}}</p>
+    <p><b>Fecha creación:</b>  {{incidencia.fechaCreacion}}</p>
+    <p><b>Fecha atendida:</b>   {{incidencia.fechaAtendida ? incidencia.fechaAtendida : 'Aun no ha sido atendida'}}</p>
+    <p><b>Fecha resuelta:</b>   {{incidencia.fechaResuelta ? incidencia.fechaResuelta : 'Aun no ha sido resuelta'}}</p>
+    <p><b>Nombre completo:</b> {{incidencia.autor.nombre}}, {{incidencia.autor.apellidos}}</p>
+    <p><b>Nº de empleado/a:</b>  {{incidencia.autor.empleado}}</p>
+    <p><b>Rol:</b>  {{incidencia.autor.rol | lowercase}}</p>
+    <p><b>Sexo:</b>   {{incidencia.autor.genero | lowercase}}</p>
+    <p><b>Zona:</b> {{incidencia.zona}}</p>
+
+  </mat-dialog-content>
