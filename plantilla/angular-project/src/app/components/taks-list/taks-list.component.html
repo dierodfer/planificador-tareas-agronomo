@@ -16,14 +16,35 @@
   <br>
   <p class="text-muted text-center pt-5 mt-5" *ngIf="!usuarios">Seleccione grupo</p>
   <p class="text-muted text-center pt-5 mt-5" *ngIf="usuarios && usuarios.length == 0">Este grupo no contiene usuarios</p>
-    <mat-chip-list class="mat-chip-list-stacked">
+    <mat-chip-list class="mat-chip-list-stacked" *ngIf="grupoSelected">
+      <mat-chip (click)="getTareas(grupoSelected.coordinador)">{{grupoSelected.coordinador}}</mat-chip>
       <mat-chip (click)="getTareas(usuario.empleado)" *ngFor="let usuario of usuarios">{{usuario.nombre}}, {{usuario.apellidos}}</mat-chip>
     </mat-chip-list>
   </div>
 
-  <mat-accordion class="col-md-8 pt-4"  *ngIf="userSelected" 
-  [ngClass]="{'offset-md-2': !isCoordinador()}">
-      <div class=" pb-3">      
+  <mat-accordion class="col-md-8 pt-4" multi="true" [ngClass]="{'offset-md-2': !isCoordinador()}">
+    <div class="pb-3" *ngIf="tareasGrupales.length > 0">
+        <p>Tareas de Grupo</p>
+        <mat-expansion-panel class="bg-grupal-extend" *ngFor="let tarea of tareasGrupales">
+            <mat-expansion-panel-header class="py-5">
+              <mat-panel-title> 
+                <mat-icon *ngIf="tarea.finalizada" class="text-success">check_circle</mat-icon>
+                <mat-icon *ngIf="tarea.cancelada"  class="text-danger">block</mat-icon>
+                {{tarea.tipo}}{{tarea.subtipo ? ' - '+tarea.subtipo : '' }}
+              </mat-panel-title>
+              <mat-panel-description>
+                {{tarea.fecha| date}}
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <p>{{tarea.descripcion ? 'Detalles: '+tarea.descripcion : ''}}</p>
+            <button *ngIf="!tarea.cancelada && !tarea.finalizada" class="mx-2" mat-raised-button color="primary" (click)="finalizarTarea(tarea.id)"><mat-icon>check_circle</mat-icon> Finalizar</button>
+            <button *ngIf="!tarea.cancelada && tarea.finalizada" class="mx-2" mat-button (click)="activarTarea(tarea.id)">Activar de nuevo</button>
+            <button *ngIf="!tarea.cancelada && !tarea.finalizada" class="mx-2" mat-raised-button color="warn" (click)="cancelarTarea(tarea.id)"><mat-icon>block</mat-icon> Cancelar</button>
+            <button *ngIf="tarea.cancelada  && !tarea.finalizada" class="mx-2" mat-button (click)="descancelarTarea(tarea.id)">Descancelar</button>
+            <button *ngIf="!tarea.cancelada && !tarea.finalizada && isCoordinador()" class="float-right" mat-mini-fab color="warn" (click)="eliminarTarea(tarea.id)"><mat-icon>delete</mat-icon></button>
+        </mat-expansion-panel>
+    </div>  
+    <div class=" pb-3" *ngIf="userSelected">      
    
           <p>Tareas de {{userSelected.nombre}} {{userSelected.apellidos}}
             <button mat-icon-button matTooltip="Filtra tareas por fecha" class="float-right" (click)="picker.open()"><mat-icon>date_range</mat-icon></button>
@@ -44,7 +65,7 @@
             {{tarea.tipo}}{{tarea.subtipo ? ' - '+tarea.subtipo : '' }}
           </mat-panel-title>
           <mat-panel-description>
-            {{tarea.fecha.toDate() | date}}
+            {{tarea.fecha | date}}
           </mat-panel-description>
         </mat-expansion-panel-header>
         <p>{{tarea.descripcion ? 'Detalles:'+tarea.descripcion : ''}}</p>
@@ -56,4 +77,4 @@
       </mat-expansion-panel>
   </mat-accordion>
 </div>
-<button class="float-button" *ngIf="isCoordinador()" mat-mini-fab [routerLink]="[ '../../tareas/formulario' ]" color="primary"> <mat-icon class="addIcon">add</mat-icon></button>
+<button class="float-button"matTooltip="Añadir tareas" *ngIf="isCoordinador()" mat-mini-fab [routerLink]="[ '../../tareas/formulario' ]" color="primary"> <mat-icon class="addIcon">add</mat-icon></button>

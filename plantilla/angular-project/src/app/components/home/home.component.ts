@@ -47,7 +47,6 @@ export class HomeComponent implements OnInit {
   openMyUserDialog() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = this.miUsuario;
-    console.log(this.miUsuario);
     this.dialog.open(DialogUserComponent, dialogConfig);
   }
 

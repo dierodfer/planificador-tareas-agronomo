@@ -1,4 +1,14 @@
 <div class="offset-md-3 col-md-6">
+
+    <mat-radio-group [(formControl)]="controlGrupal">
+        <mat-radio-button class="p-2" [value]="true">Grupal</mat-radio-button>
+        <mat-radio-button class="p-2" [value]="false">Individual</mat-radio-button>
+    </mat-radio-group>
+
+    <button mat-icon-button matTooltip="" class="float-right text-muted">
+      <mat-icon>info</mat-icon>
+    </button>
+
     <mat-form-field class="w-100">
       <mat-select placeholder="Tipo de tarea" [formControl]="controlTipo" required>
           <mat-optgroup *ngFor="let fase of fases" [label]="fase.nombre" [disabled]="false">
@@ -19,7 +29,7 @@
       <mat-error *ngIf="controlSubtipo.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
     </mat-form-field>
 
-    <mat-form-field class="w-100">
+    <mat-form-field class="w-100" *ngIf="!controlGrupal.value">
       <mat-select placeholder="Elige los usuarios de la tarea" [formControl]="controlUsuarios" multiple required>
         <mat-select-trigger>
           {{controlUsuarios.value[0] ? controlUsuarios.value[0].nombre+','+controlUsuarios.value[0].apellidos : ''}}
@@ -32,22 +42,30 @@
       <mat-error *ngIf="controlUsuarios.hasError('required')">Debe añadir al menos a <strong>1</strong> trabajador</mat-error>
     </mat-form-field>
 
-    <mat-form-field class="w-50">
+    <mat-radio-group [(formControl)]="controlGrupo" *ngIf="controlGrupal.value" >
+      <mat-hint>Seleccione grupo *</mat-hint><br>
+      <mat-hint *ngIf="misGrupos.length == 0">No administra ningun grupo</mat-hint>
+      <mat-radio-button class="p-2" *ngFor="let grupo of misGrupos" [value]="grupo">{{grupo.nombre}}</mat-radio-button>
+    </mat-radio-group><br>
+
+    <mat-form-field class="w-50" *ngIf="!controlGrupal.value">
       <input matInput [min]="minDatepicker" [formControl]="controlFecha" [matDatepicker]="picker" placeholder="Fecha de comienzo" required>
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker touchUi #picker></mat-datepicker>
       <mat-error *ngIf="controlFecha.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
     </mat-form-field>
-
-    <mat-form-field class="w-50">
-      <input matInput placeholder="Duración en días" type="number" [formControl]="controlRepit" required>
+    
+    <mat-form-field class="w-50" *ngIf="!controlGrupal.value">
+      <input matInput placeholder="Duración en días" type="number" [value]="controlRepit.value" disabled>
+      <button mat-icon-button matSuffix class="mr-2" (click)="addRepit()"><mat-icon class="big-icon">add</mat-icon></button>
+      <button mat-icon-button matSuffix class="mr-2" (click)="subRepit()"><mat-icon class="big-icon">remove</mat-icon></button>
       <mat-error *ngIf="controlFecha.hasError('required')">Campo <strong>obligatorio</strong>, con rango de 1 a 30 dias máximo</mat-error>
-    </mat-form-field>
+    </mat-form-field> 
 
     <mat-form-field class="w-100">
       <textarea matInput placeholder="Descripción (opcional)" rows="2" [formControl]="controlDescrip"></textarea>
     </mat-form-field>
  
     <br>
-    <a mat-raised-button class="my-3" color="accent" (click)="submit()"><mat-icon>add</mat-icon> Añadir/actualizar</a>
   </div>
+  <button class="float-button bg-success" matTooltip="Guardar tareas" (click)="submit()" mat-mini-fab color="primary"> <mat-icon class="addIcon">save</mat-icon></button>

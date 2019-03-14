@@ -24,3 +24,7 @@
 mat-chip{
     height: 45px;
 }
+
+.bg-grupal-extend{
+    background-color: #b0dbff9e;
+}

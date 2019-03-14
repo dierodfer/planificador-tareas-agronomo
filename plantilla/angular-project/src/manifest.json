@@ -1,7 +1,7 @@
 {
   "name": "Planificador de tareas",
-  "short_name": "Tareas",
-  "theme_color": "#fccb8f",
+  "short_name": "Planificador Tareas",
+  "theme_color": "#b0dbff9e",
   "background_color": "#fafafa",
   "display": "standalone",
   "scope": "/",

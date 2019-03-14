@@ -25,7 +25,10 @@ export class NotificationComponent implements OnInit {
 
   deleteAllNotificacion() {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = {detalles: 'El buzón se vaciará por completo.'};
+    dialogConfig.data = {
+      detalles: 'El buzón se vaciará por completo.',
+      titulo: '¿Seguro desea eliminar?'
+    };
     this.deleteDialog = this.dialog.open(DialogDeleteComponent, dialogConfig);
     this.deleteDialog.afterClosed().subscribe(confirmado => {
       if (confirmado) {

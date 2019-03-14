@@ -1,7 +1,7 @@
 
 <div class="p-3 card-columns text-center">
-  <mat-card class="card" [routerLink]="[ 'grupos' ]">Administrar Grupos</mat-card>
-  <mat-card class="card" [routerLink]="[ 'fases' ]">Administrar Fases/Tareas</mat-card>
-  <mat-card class="card" [routerLink]="[ 'incidencias' ]">Administrar Incidencias</mat-card>
+  <mat-card class="card" (click)="click($event)" [routerLink]="[ 'grupos' ]">Administrar Grupos</mat-card>
+  <mat-card class="card" (click)="click($event)" [routerLink]="[ 'fases' ]">Administrar Fases/Tareas</mat-card>
+  <mat-card class="card" (click)="click($event)" [routerLink]="[ 'incidencias' ]">Administrar Incidencias</mat-card>
 </div>
 <router-outlet></router-outlet>

@@ -3,7 +3,9 @@ export class Tarea {
     descripcion: string;
     orden: string;
     fecha: Date;
-    usuario: string;
+    fechaFinalizacion: Date;
+    responsable: string;
+    grupal: boolean;
     tipo: string;
     subtipo: string;
     cancelada: boolean;

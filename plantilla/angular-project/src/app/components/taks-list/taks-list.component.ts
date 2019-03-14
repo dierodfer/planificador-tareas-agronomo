@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { TaskService } from '../../services/task.service';
 import { UserService } from '../../services/user.service';
-import {MatTableDataSource, MatDialog, MatDialogConfig, MatDialogRef} from '@angular/material';
+import { MatDialog, MatDialogConfig, MatDialogRef} from '@angular/material';
 import {Usuario} from '../../models/usuario';
 import {Tarea} from '../../models/tarea';
 import {COMMA, ENTER, TAB} from '@angular/cdk/keycodes';
@@ -20,8 +20,9 @@ export class TaksListComponent implements OnInit {
   @ViewChild('rol') rolButton;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA, TAB];
   tareas: Tarea[] = [];
-  userSelected: Usuario;
+  tareasGrupales: Tarea[] = [];
   grupoSelected: Grupo;
+  userSelected: Usuario;
   filtro = false;
   rol = 'coordinador';
   usuarios: Usuario[];
@@ -46,8 +47,19 @@ export class TaksListComponent implements OnInit {
     this.taskService.getTaskByUser(userId).subscribe(tareas => this.tareas = tareas as Tarea[]);
   }
 
+  getTareasGrupales(grupoId) {
+    this.filtro = false;
+    this.taskService.getTaskByGroup(grupoId).subscribe(tareas => this.tareasGrupales = tareas as Tarea[]);
+  }
+
   getUsuarios(grupo: Grupo) {
     this.usuarios = [];
+    if (!this.grupoSelected || this.grupoSelected.id !== grupo.id) {
+      this.tareas = [];
+      this.userSelected = undefined;
+      this.grupoSelected = grupo;
+    }
+    this.getTareasGrupales(grupo.id);
     grupo.usuarios.forEach(id => this.usuarioService.getUserById(id).forEach(usuario => this.usuarios.push(usuario as Usuario)));
   }
 
@@ -69,7 +81,10 @@ export class TaksListComponent implements OnInit {
 
   eliminarTarea(id) {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = {detalles: 'Se eliminará de forma permanente.'};
+    dialogConfig.data = {
+      detalles: 'Se eliminará de forma permanente.',
+      titulo: '¿Seguro desea eliminar?'
+    };
     this.deleteDialog = this.dialog.open(DialogDeleteComponent, dialogConfig);
     this.deleteDialog.afterClosed().subscribe(confirmado => {
       if (confirmado) {

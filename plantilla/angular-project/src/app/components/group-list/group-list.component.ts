@@ -86,7 +86,10 @@ export class GroupListComponent implements OnInit {
   deleteGrupo(grupo: Grupo) {
     if (grupo.usuarios.length > 0) {
       const dialogConfig = new MatDialogConfig();
-      dialogConfig.data = {detalles: 'Nota: ' + grupo.nombre + ', contiene ' + grupo.usuarios.length + ' usuarios.'};
+      dialogConfig.data = {
+        detalles: 'Nota: ' + grupo.nombre + ', contiene ' + grupo.usuarios.length + ' usuarios.',
+        titulo: '¿Seguro desea eliminar?'
+      };
       this.deleteDialog = this.dialog.open(DialogDeleteComponent, dialogConfig);
       this.deleteDialog.afterClosed().subscribe(confirmado => {
         if (confirmado) {

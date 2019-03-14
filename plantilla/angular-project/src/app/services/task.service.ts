@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material';
 import { Tarea } from '../models/tarea';
 import { NotificationService } from './notification.service';
 import { Notificacion } from '../models/notificacion';
-
+import { MessagingService } from './messaging.service';
 import * as moment from 'moment';
 
 @Injectable({
@@ -12,11 +12,10 @@ import * as moment from 'moment';
 })
 export class TaskService {
 
-  lastTarea: Tarea;
-
   constructor(private db: AngularFirestore,
     public snackBar: MatSnackBar,
-    private notificacionService: NotificationService) { }
+    private notificacionService: NotificationService,
+    private messaging: MessagingService) { }
 
   getTasks() {
     return this.db.collection('tareas').valueChanges();
@@ -24,32 +23,32 @@ export class TaskService {
 
   getTaskByUser(userId: string) {
     return this.db.collection('tareas' , ref =>
-    ref.orderBy('fecha').where('usuario', '==', userId)
+    ref.orderBy('fecha').where('responsable', '==', userId).where('grupal', '==', false)
+    ).valueChanges();
+  }
+
+  getTaskByGroup(groupId: string) {
+    return this.db.collection('tareas' , ref =>
+    ref.where('responsable', '==' , groupId).where('grupal', '==', true)
     ).valueChanges();
   }
 
   getTaskByUserAndDate(userId: string, date: Date ) {
     return this.db.collection('tareas' , ref =>
-    ref.where('usuario', '==', userId).where('fecha', '==', date)
+    ref.where('responsable', '==', userId).where('grupal', '==', false).where('fecha', '==', date)
     ).valueChanges();
   }
 
   addTask(tarea: Tarea) {
     tarea.id = Math.random().toString().substring(2); // ARREGLAR
-    this.db.collection('tareas').doc(tarea.id).set({
-      id: tarea.id,
-      descripcion: tarea.descripcion ? tarea.descripcion : '',
-      tipo: tarea.tipo,
-      subtipo: tarea.subtipo ? tarea.subtipo : '',
-      usuario: tarea.usuario,
-      fecha: tarea.fecha,
-      cancelada: false
-    }).then(() => {
-    // Comprueba que la fecha de la tarea es hoy (eliminando el tiempo) y envia notificacion a los usuarios afectado
-    if (moment(tarea.fecha).startOf('day').diff(moment().startOf('day')) === 0) {
-      this.notificacionService.sendNotification(tarea.usuario, new Notificacion(
-        'Se le ha asignado nueva tarea para realizar hoy: ' + tarea.tipo + (tarea.subtipo ? tarea.subtipo : ''),
-        'Nueva Tarea'));
+    const json =  JSON.parse(JSON.stringify(tarea));
+    this.db.collection('tareas').doc(tarea.id).set(json).then(() => {
+    // Comprueba que no es tarea grupal y la fecha de la tarea es hoy (eliminando el tiempo) 
+    // y envia notificacion interna y push a los usuarios afectado
+    if (!tarea.grupal && moment(tarea.fecha).startOf('day').diff(moment().startOf('day')) === 0) {
+      const body = 'Se le ha asignado nueva tarea para realizar hoy: ' + tarea.tipo + (tarea.subtipo ? tarea.subtipo : '');
+      this.notificacionService.sendNotification(tarea.responsable, new Notificacion(body, 'Nueva Tarea'));
+      this.messaging.sendMessage('Nueva Tarea', body, tarea.responsable);
     }
     this.snackBar.open('La tarea se ha guardado correctamente', 'Cerrar', {
       duration: 4000,
