@@ -4,6 +4,6 @@ export class Usuario {
     apellidos: string;
     rol: string;
     genero: string;
-    ban: boolean;
+    baneado: boolean;
     constructor() {}
 }

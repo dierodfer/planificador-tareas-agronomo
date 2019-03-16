@@ -1,0 +1,12 @@
+.big-icon{
+    transform: scale(1.2);
+  }
+  
+.float-button{
+    width: 55px;
+    height: 55px;
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    box-shadow: 0px 2px 5px #666;
+}

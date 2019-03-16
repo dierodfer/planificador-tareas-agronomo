@@ -41,7 +41,7 @@ export class TaksFormComponent implements OnInit {
     private cookie: CookieService) { }
 
   getUsuarios() {
-    this.userService.getUsuarios().subscribe(usuarios => this.usuarios = usuarios as Usuario[]);
+    this.userService.getAllUsers().subscribe(usuarios => this.usuarios = usuarios as Usuario[]);
   }
 
   submit() {

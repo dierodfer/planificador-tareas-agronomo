@@ -11,16 +11,16 @@
       }"
       >
           <button mat-button class="py-3" (click)="sidenav.toggle()"><mat-icon>vertical_split</mat-icon></button>
-          <small>v1.2.1</small>
+          <small>v1.2.2</small>
 
-          <button mat-button class="py-3 mr-3 float-right" (click)="openNotifications()">
+          <button matTooltip="Notificaciones" mat-button class="py-3 mr-3 float-right" (click)="openNotifications()">
             <mat-icon *ngIf="nuevasNoti">notifications</mat-icon> 
             <mat-icon *ngIf="!nuevasNoti" class="shake">notifications_active</mat-icon>
           </button>
-          <button mat-button class="py-3 float-right" (click)="openIncidenceDialog()">
+          <button mat-button matTooltip="Nueva Incidencia" class="py-3 float-right" (click)="openIncidenceDialog()">
             <mat-icon>warning</mat-icon>
           </button>
-          <button mat-button class="py-3 float-right" (click)="openMyUserDialog()">
+          <button mat-button matTooltip="Mi perfil" class="py-3 float-right" (click)="openMyUserDialog()">
             <mat-icon>account_circle</mat-icon>
           </button>
       </div>

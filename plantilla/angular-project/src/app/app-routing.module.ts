@@ -17,7 +17,8 @@ const routes: Routes = [
     path: 'inicio',
     component: HomeComponent,
     children: [
-          { path: 'usuarios/formulario', component: UserFormComponent},
+          { path: 'usuarios/formulario', redirectTo: 'usuarios/formulario/'},
+          { path: 'usuarios/formulario/:id', component: UserFormComponent},
           { path: 'usuarios/lista', component: UserListComponent},
           { path: 'tareas/lista', component: TaksListComponent},
           { path: 'tareas/formulario', component: TaksFormComponent},

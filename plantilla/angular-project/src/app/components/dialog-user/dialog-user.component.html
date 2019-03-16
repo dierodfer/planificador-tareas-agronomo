@@ -1,4 +1,7 @@
-<h2 mat-dialog-title>Usuario</h2>
+<h2 mat-dialog-title [ngClass]="{'text-danger': usuario.baneado}">Usuario
+<mat-icon class="float-right" matTooltip="Bloqueado" *ngIf="usuario.baneado">block</mat-icon>
+</h2>
+
 <mat-dialog-content>
     <p><b>Nombre completo:</b> {{usuario.nombre}}, {{usuario.apellidos}}</p>
     <p><b>Nº de empleado/a:</b>  {{usuario.empleado}}</p>

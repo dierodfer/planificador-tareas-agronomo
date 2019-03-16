@@ -15,3 +15,7 @@ a.mat-mini-fab.mat-warn:hover {
 .addIcon{
     transform: scale(1.5);
 }
+
+.bg-active{
+    background-color: #b0dbff9e;
+}

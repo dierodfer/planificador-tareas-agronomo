@@ -35,7 +35,8 @@ export class GroupListComponent implements OnInit {
 
   getTrabajadores(grupo: Grupo) {
     return this.usuarios.filter(user => 'TRABAJADOR' === user.rol
-    && !grupo.usuarios.some(usuario => usuario === user.empleado));
+    && !grupo.usuarios.some(usuario => usuario === user.empleado)
+    && user.baneado === false);
   }
 
   toggleEditName(groupId) {
@@ -72,7 +73,7 @@ export class GroupListComponent implements OnInit {
   }
 
   getUsuarios() {
-    this.usuarioService.getUsuarios().subscribe(user => this.usuarios = user as Usuario[]);
+    this.usuarioService.getAllUsers().subscribe(user => this.usuarios = user as Usuario[]);
   }
 
   getGrupos() {

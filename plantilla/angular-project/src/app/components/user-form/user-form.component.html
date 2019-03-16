@@ -1,36 +1,33 @@
 <div class="offset-md-3 col-md-6">
   <mat-form-field class="w-100">
-    <input matInput placeholder="nombre" [formControl]="control1" [(ngModel)]="usuario.nombre" required>
-    <mat-error *ngIf="control1.hasError('required')">Campo obligatorio</mat-error>
+    <input matInput placeholder="Nombre" [formControl]="controlNombre" required>
+    <mat-error *ngIf="controlNombre.hasError('required')">Campo obligatorio</mat-error>
   </mat-form-field>
   <mat-form-field class="w-100">
-    <input matInput placeholder="apellidos"  [formControl]="control2" [(ngModel)]="usuario.apellidos" required>
-    <mat-error *ngIf="control2.hasError('required')">Campo obligatorio</mat-error>
+    <input matInput placeholder="Apellidos"  [formControl]="controlApellidos" required>
+    <mat-error *ngIf="controlApellidos.hasError('required')">Campo obligatorio</mat-error>
     
   </mat-form-field>
   <mat-form-field class="w-100">
-    <mat-select placeholder="rol" [formControl]="control3" [(value)]="usuario.rol" required>
-        <mat-option>Ninguno</mat-option>
+    <mat-select placeholder="Rol" [formControl]="controlRol" required [disabled]="editar">
         <mat-option value="TRABAJADOR">Trabajador</mat-option>
         <mat-option value="COORDINADOR">Coordinador</mat-option>
-        <mat-option value="ADMIN">Administrador</mat-option>
+        <mat-option *ngIf="controlRol.value == 'ADMIN'" value="ADMIN">Administrador</mat-option>
     </mat-select>
-    <mat-error *ngIf="control3.hasError('required')">Campo obligatorio</mat-error>
+    <mat-error *ngIf="controlRol.hasError('required')">Campo obligatorio</mat-error>
   </mat-form-field>
   <mat-form-field class="w-100">  
-    <input matInput placeholder="nº de empleado" [formControl]="control4" [(ngModel)]="usuario.empleado" required>
-    <mat-error *ngIf="control4.hasError('required')">Campo obligatorio</mat-error>
+    <input type="number" matInput placeholder="Nº de empleado" [formControl]="controlEmpleado" [attr.disabled]="editar" required>
+    <mat-error *ngIf="controlEmpleado.hasError('required')">Campo obligatorio</mat-error>
   </mat-form-field>
-  <mat-radio-group class="w-100" [formControl]="control5" [(ngModel)]="usuario.genero">
+  <mat-radio-group class="w-100" [formControl]="controlGenero">
     <label class="pt-3 pr-2">Género:</label>
-    <mat-radio-button class="pr-2" color="primary" value="MUJER">Mujer</mat-radio-button>
-    <mat-radio-button color="primary" value="HOMBRE">Hombre</mat-radio-button>
+    <mat-radio-button class="pr-2"  value="MUJER">Mujer</mat-radio-button>
+    <mat-radio-button  value="HOMBRE">Hombre</mat-radio-button>
   </mat-radio-group>
-  <br>
-  <label class="pt-3">Edad:</label>
-  <mat-slider class="w-100" [max]="50" [min]="0" color="primary" thumbLabel [tickInterval]="5">
-</mat-slider>
-<br>
-  <a mat-raised-button class="my-3" color="accent" (click)="addUsuario()"><mat-icon>add_circle_outline</mat-icon> Añadir/actualizar</a>
-
+  <!-- <mat-label class="pt-3">Edad:</mat-label>
+  <mat-slider class="w-100" [max]="50" [min]="0" color="primary" thumbLabel [tickInterval]="5"></mat-slider> -->
 </div>
+
+<button class="float-button bg-success" *ngIf="editar" matTooltip="Guardar Usuario" (click)="updateUsuario()" mat-mini-fab color="primary"> <mat-icon class="big-icon">save</mat-icon></button>
+<button class="float-button bg-success" *ngIf="!editar" matTooltip="Guardar Usuario" (click)="addUsuario()" mat-mini-fab color="primary"> <mat-icon class="big-icon">save</mat-icon></button>

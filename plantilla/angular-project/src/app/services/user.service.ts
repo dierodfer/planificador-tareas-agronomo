@@ -20,8 +20,20 @@ export class UserService {
     return this.db.collection('usuarios').doc(id).valueChanges();
   }
 
-  getUsuarios() {
-     return this.db.collection('usuarios').valueChanges();
+  getAllUsers() {
+    return this.db.collection('usuarios').valueChanges();
+  }
+
+  getNoBannedUsers() {
+    return this.db.collection('usuarios',
+    ref => ref.where('baneado', '==' , false)
+    ).valueChanges();
+  }
+
+  getBannedUsers() {
+    return this.db.collection('usuarios',
+    ref => ref.where('baneado', '==' , true)
+    ).valueChanges();
   }
 
   getCoordinators() {
@@ -46,12 +58,37 @@ export class UserService {
       nombre: usuario.nombre,
       apellidos: usuario.apellidos,
       rol: usuario.rol,
-      genero: usuario.genero
+      genero: usuario.genero,
+      baneado: false
     }).then(() => {
-        this.snackBar.open('El usuario se ha guardado correctamente', 'Cerrar', {
+        this.snackBar.open('El usuario se ha guardado', 'Cerrar', {
           duration: 4000,
         });
         this.notificacionService.createBuzon(usuario.empleado);
+    });
+  }
+
+  updateUsuario(usuario: Usuario) {
+    this.db.collection('usuarios').doc(usuario.empleado).update({
+      nombre: usuario.nombre,
+      apellidos: usuario.apellidos,
+      genero: usuario.genero,
+    }).then(() => {
+        this.snackBar.open('El usuario se ha actualizado', 'Cerrar', {
+          duration: 4000,
+        });
+    });
+  }
+
+  blockUser(empleado: string){
+    this.db.collection('usuarios').doc(empleado).update({
+      baneado: true
+    });
+  }
+
+  unblockUser(empleado: string) {
+    this.db.collection('usuarios').doc(empleado).update({
+      baneado: false
     });
   }
 

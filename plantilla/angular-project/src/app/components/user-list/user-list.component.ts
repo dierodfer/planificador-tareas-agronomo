@@ -1,11 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { UserService } from '../../services/user.service';
-import {MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
+import {MatPaginator, MatTableDataSource, MatSort, MatDialogConfig } from '@angular/material';
 import {Usuario} from '../../models/usuario';
 import {ModalComponent} from '../../components/modal/modal.component';
 import {COMMA, ENTER, TAB} from '@angular/cdk/keycodes';
 import {MatChipInputEvent} from '@angular/material';
 import {MatDialog} from '@angular/material';
+import { DialogUserComponent } from '../dialog-user/dialog-user.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-list',
@@ -14,31 +16,50 @@ import {MatDialog} from '@angular/material';
 })
 export class UserListComponent implements OnInit {
 
-  displayedColumns: string[] = ['nombre', 'apellidos', 'empleado', 'genero', 'rol', 'acciones'];
+  displayedColumns: string[] = ['nombre', 'empleado', 'genero', 'rol', 'acciones'];
   dataSource: MatTableDataSource<Usuario>;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  dataSource2: MatTableDataSource<Usuario>;
+  @ViewChild('paginator') paginator: MatPaginator;
+  @ViewChild('paginator2') paginator2: MatPaginator;
+  @ViewChild('sort') sort: MatSort;
+  @ViewChild('sort2') sort2: MatSort;
   visible = true;
   selectable = true;
   removable = true;
   addOnBlur = true;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA, TAB];
   filters: string[] = [];
+  bloqueados = false;
 
-  constructor(private userService: UserService,
-    private dialog: MatDialog) { }
+  constructor(private usuarioService: UserService,
+    private dialog: MatDialog,
+    private router: Router) { }
 
   getUsuarios() {
-  this.userService.getUsuarios().subscribe(
-    usuarios => {
-      this.dataSource = new MatTableDataSource(usuarios as Usuario[]);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
+    this.usuarioService.getNoBannedUsers().subscribe(
+      usuarios => {
+        this.dataSource = new MatTableDataSource(usuarios as Usuario[]);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
     });
   }
 
-  eliminarUsuario(id: number) {
-    this.userService.deleteUsuario(id.toString());
+  getUsuariosBloqueados() {
+    this.usuarioService.getBannedUsers().subscribe(
+      usuarios => {
+        this.dataSource2 = new MatTableDataSource(usuarios as Usuario[]);
+        this.dataSource2.paginator = this.paginator2;
+        this.dataSource2.sort = this.sort2;
+      });
+  }
+
+  showUsuariosBloqueados() {
+    this.bloqueados = !this.bloqueados;
+    this.getUsuariosBloqueados();
+  }
+
+  editarUsuario(id) {
+    this.router.navigate(['inicio/usuarios/formulario/', id]);
   }
 
   addFilter(event: MatChipInputEvent): void {
@@ -67,7 +88,7 @@ export class UserListComponent implements OnInit {
 
     if (index >= 0) {
       this.filters.splice(index, 1);
-      this.userService.getUsuarios().subscribe(
+      this.usuarioService.getNoBannedUsers().subscribe(
         usuarios => {
           this.dataSource.data = usuarios as Usuario[];
           this.filters.forEach(filtro =>
@@ -83,8 +104,18 @@ export class UserListComponent implements OnInit {
     }
   }
 
-  openModal() {
-    this.dialog.open(ModalComponent);
+  bloquearUsuario(empleado) {
+    this.usuarioService.blockUser(empleado);
+  }
+
+  desbloquearUsuario(empleado) {
+    this.usuarioService.unblockUser(empleado);
+  }
+
+  openDialogUser(user) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = user;
+    this.dialog.open(DialogUserComponent, dialogConfig)
   }
 
   ngOnInit() {

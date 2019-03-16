@@ -1,5 +1,3 @@
-<button class="float-button" mat-mini-fab [routerLink]="[ '../../usuarios/formulario' ]" color="primary"> <mat-icon class="addIcon">add</mat-icon> </button>
-<!-- <button mat-button color="accent" (click)="openModal()">Open Modal</button>-->
 <mat-form-field class="w-100">
   <mat-label>Filtros..</mat-label>
   <mat-icon matSuffix>search</mat-icon>
@@ -17,12 +15,11 @@
   </mat-chip-list>
 </mat-form-field>
 
-<div class="table-responsive">
-<table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z6 w-100">
+<table mat-table [dataSource]="dataSource" matSort #sort="matSort" class="mat-elevation-z6 w-100">
   
     <ng-container matColumnDef="nombre">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
-      <td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre completo </th>
+      <td mat-cell *matCellDef="let element"> {{element.nombre}}, {{element.apellidos}} </td>
     </ng-container>
   
     <ng-container matColumnDef="empleado">
@@ -40,25 +37,73 @@
         <td mat-cell *matCellDef="let element"> {{element.rol}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="apellidos">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Apellidos </th>
-        <td mat-cell *matCellDef="let element"> {{element.apellidos}} </td>
-    </ng-container>
-
     <ng-container matColumnDef="acciones">
         <th mat-header-cell *matHeaderCellDef>  </th>
         <td mat-cell *matCellDef="let element">               
-          <a mat-mini-fab color="warn" (click)="eliminarUsuario(element.empleado)">
+<!--      <a mat-icon-button color="warn" (click)="eliminarUsuario(element.empleado)">
             <mat-icon aria-label="Eliminar permanentemente">delete_forever</mat-icon>
+          </a>  --> 
+          <a mat-icon-button matTooltip="Mostar usuario" (click)="openDialogUser(element)">
+            <mat-icon>zoom_in</mat-icon>
+          </a>
+          <a mat-icon-button color="primary" matTooltip="Editar usuario" (click)="editarUsuario(element.empleado)">
+            <mat-icon>edit</mat-icon>
           </a> 
+          <a mat-icon-button *ngIf="!element.baneado && element.rol != 'ADMIN'" color="warn" matTooltip="Bloquear usuario" (click)="bloquearUsuario(element.empleado)">
+            <mat-icon>lock</mat-icon>
+          </a> 
+
         </td>
       </ng-container>
   
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
-  <mat-paginator [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons></mat-paginator>
-</div>
+  <mat-paginator #paginator [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons></mat-paginator>
 
- <!--  {{(items | async)?.length}} -->
+
+
+  <button mat-button class="p-2 m-1" color="warn" (click)="showUsuariosBloqueados()">Usuarios bloqueados<mat-icon>lock</mat-icon></button>
+  <table *ngIf="bloqueados" mat-table [dataSource]="dataSource2" matSort #sort2="matSort" class="mat-elevation-z6 w-100">
+    
+      <ng-container matColumnDef="nombre">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre completo </th>
+        <td mat-cell *matCellDef="let element"> {{element.nombre}}, {{element.apellidos}} </td>
+      </ng-container>
+    
+      <ng-container matColumnDef="empleado">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Nº Empleado </th>
+        <td mat-cell *matCellDef="let element"> {{element.empleado}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="genero">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Genero </th>
+          <td mat-cell *matCellDef="let element"> {{element.genero}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="rol">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Rol </th>
+          <td mat-cell *matCellDef="let element"> {{element.rol}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef>  </th>
+          <td mat-cell *matCellDef="let element">               
+  <!--      <a mat-icon-button color="warn" (click)="eliminarUsuario(element.empleado)">
+              <mat-icon aria-label="Eliminar permanentemente">delete_forever</mat-icon>
+            </a>  -->
+            <a mat-icon-button matTooltip="Mostar usuario" (click)="openDialogUser(element)">
+              <mat-icon>zoom_in</mat-icon>
+            </a> 
+            <a mat-icon-button *ngIf="element.baneado" color="primary" matTooltip="Desbloquear usuario" (click)="desbloquearUsuario(element.empleado)">
+              <mat-icon>lock_open</mat-icon>
+            </a> 
+          </td>
+        </ng-container>
+    
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator *ngIf="bloqueados" #paginator2 [pageSizeOptions]="[5, 10, 25, 50]" showFirstLastButtons></mat-paginator>
    
+<button class="float-button" mat-mini-fab [routerLink]="[ '../../usuarios/formulario' ]" color="primary"> <mat-icon class="addIcon">add</mat-icon> </button>
