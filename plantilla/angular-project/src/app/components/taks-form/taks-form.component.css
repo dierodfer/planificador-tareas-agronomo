@@ -7,16 +7,18 @@
   transform: scale(1.6);
 }
 
-.float-button{
+.button-left, .button-right{
   width: 55px;
   height: 55px;
-/*     background: #db4437; */
   position: fixed;
   bottom: 30px;
-  right: 30px;
   box-shadow: 0px 2px 5px #666;
 }
 
-.addIcon{
-  transform: scale(1.5);
+.button-right{
+  right: 30px;
+}
+
+.button-left{
+  left: 30px;
 }

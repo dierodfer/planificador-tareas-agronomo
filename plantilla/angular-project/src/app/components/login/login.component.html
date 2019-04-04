@@ -8,5 +8,6 @@
     <mat-spinner matSuffix *ngIf="loading" [diameter]="30"></mat-spinner>
     <button mat-icon-button matSuffix *ngIf="!loading" (click)="login()" matTooltip="Click para acceder"><mat-icon>arrow_forward</mat-icon></button>
     <mat-hint class="text-danger" *ngIf="error">Número de empleado <strong>inválido</strong></mat-hint>
+    <mat-hint class="text-danger" *ngIf="errorBloqueado">Este empleado está <strong>bloqueado</strong></mat-hint>
   </mat-form-field>
 </div>

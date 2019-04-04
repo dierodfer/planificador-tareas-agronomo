@@ -1,25 +1,11 @@
-<!-- <mat-hint class="text-center">Si no se rellena el token, enviará una notificación a sí mismo</mat-hint> <br>
-<mat-form-field class="w-25">
-  <input matInput placeholder="Título" [(ngModel)]="titulo">
-</mat-form-field>
-<mat-form-field class="w-25">
-  <input matInput placeholder="Cuerpo del mensaje" [(ngModel)]="cuerpo">
-</mat-form-field>
-<mat-form-field class="pl-4 w-25">
-  <input matInput placeholder="token" [(ngModel)]="empleado" disabled>
-</mat-form-field>
-<br>
-<button mat-button (click)="send()">Enviar <mat-icon matSuffix>send</mat-icon></button>
-<button mat-button disabled>Registrar dispositivo</button>-->
-
-
 <div class="offset-md-3 col-md-6">
   <button mat-button (click)="enviar()">Enviar nuevo ejemplo</button>
   <button mat-button (click)="enviarAdmin()">Enviar notificación PUSH e INTERNA a administrador</button>
   <button mat-button (click)="deleteAllNotificacion()">Limpiar todos</button>
 
   <mat-card *ngFor="let noti of notificaciones" class="my-2">
-     <button mat-icon-button class="float-right" (click)="deleteNotificacion(noti)"><mat-icon>close</mat-icon></button>
+    <mat-icon *ngIf="!noti.leido" class="new text-warning">new_releases</mat-icon>
+    <button mat-icon-button class="float-right" (click)="deleteNotificacion(noti)"><mat-icon>close</mat-icon></button>
     <mat-card-content>
       <mat-card-subtitle>{{noti.titulo}}<span class="float-right">{{noti.fecha.toDate() | date:'d/M/yyyy H:mm:ss'}}</span></mat-card-subtitle>
       <p>{{noti.descripcion}}</p>

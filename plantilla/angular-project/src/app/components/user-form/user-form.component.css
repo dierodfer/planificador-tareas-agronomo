@@ -1,12 +1,19 @@
 .big-icon{
-    transform: scale(1.2);
-  }
-  
-.float-button{
-    width: 55px;
-    height: 55px;
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    box-shadow: 0px 2px 5px #666;
+    transform: scale(1.4);
+}
+
+.button-left, .button-right{
+  width: 55px;
+  height: 55px;
+  position: fixed;
+  bottom: 30px;
+  box-shadow: 0px 2px 5px #666;
+}
+
+.button-right{
+  right: 30px;
+}
+
+.button-left{
+  left: 30px;
 }

@@ -5,6 +5,7 @@ import {FormControl, Validators} from '@angular/forms';
 import {MatSnackBar} from '@angular/material';
 import { switchMap } from 'rxjs/operators';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-user-form',
@@ -24,7 +25,8 @@ export class UserFormComponent implements OnInit {
     private userService: UserService,
     private snackBar: MatSnackBar,
     private route: ActivatedRoute,
-    private router: Router) {
+    private router: Router,
+    private _location: Location) {
       this.controlGenero.setValue('MUJER');
     }
 
@@ -90,6 +92,10 @@ export class UserFormComponent implements OnInit {
         this.controlRol.setValue(usuario.rol);
       });
     }
+  }
+
+  goBack() {
+    this._location.back();
   }
 
   ngOnInit() {

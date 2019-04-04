@@ -17,6 +17,7 @@ export class LoginComponent implements OnInit {
   valid = false;
   loading = false;
   error = false;
+  errorBloqueado = false;
 
   constructor(private usuarioService: UserService,
     public snackBar: MatSnackBar,
@@ -29,21 +30,27 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.loading = true;
+    this.resetErrors();
     if (this.control.status === 'VALID') {
-      this.usuarioService.getUserById(this.control.value).subscribe((user) => {
-        if (user !== undefined) {
+      this.usuarioService.getUserById(this.control.value).subscribe((user: Usuario) => {
+        if (user !== undefined && !user.baneado) {
           this.cookieService.set( 'sesionId', (user as Usuario).empleado );
+          this.cookieService.set( 'rol', (user as Usuario).rol );
           this.goHome();
         } else {
-          this.error = true;
+          this.errorBloqueado = true;
           this.loading = false;
         }
-      }
-    );
+      });
     } else {
       this.loading = false;
       this.error = true;
     }
+  }
+
+  resetErrors() {
+    this.errorBloqueado = false;
+    this.error = false;
   }
 
   ngOnInit() {

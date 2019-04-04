@@ -12,6 +12,10 @@ export class GroupService {
 
   constructor(private db: AngularFirestore) { }
 
+  getGroupById(id: string) {
+    return this.db.collection('grupos').doc(id).valueChanges();
+  }
+
   getGroups() {
     return this.db.collection('grupos', ref => ref.orderBy('nombre')).valueChanges();
   }

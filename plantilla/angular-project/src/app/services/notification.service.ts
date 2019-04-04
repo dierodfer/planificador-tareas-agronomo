@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { MatSnackBar } from '@angular/material';
 import { Buzon } from '../models/buzon';
 import { Notificacion } from '../models/notificacion';
 import { CookieService } from 'ngx-cookie-service';
 
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
+import { first } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -17,11 +17,24 @@ export class NotificationService {
 
   constructor(
     private db: AngularFirestore,
-    public snackBar: MatSnackBar,
     private cookie: CookieService) { }
 
   getMyBuzon() {
     return this.db.collection('buzones').doc(this.cookie.get('sesionId')).valueChanges();
+  }
+
+  toggleMyNotifications() {
+    this.getMyBuzon().pipe(first()).forEach((buzon: Buzon) => {
+      buzon.notificaciones.forEach((notification: Notificacion) => {
+        if (!notification.leido) {
+          this.deleteNotification(notification);
+          notification.leido = true;
+          this.sendNotification(this.cookie.get('sesionId'), notification);
+        }
+      });
+    }).then(() => {
+      this.toggleBuzon();
+    });
   }
 
   toggleBuzon() {
@@ -36,8 +49,8 @@ export class NotificationService {
       notificaciones: firebase.firestore.FieldValue.arrayUnion({
         titulo: noti.titulo,
         descripcion: noti.descripcion ? noti.descripcion : '',
-        leido: false,
-        fecha: new Date()
+        leido: noti.leido,
+        fecha: noti.fecha
       })
     });
   }

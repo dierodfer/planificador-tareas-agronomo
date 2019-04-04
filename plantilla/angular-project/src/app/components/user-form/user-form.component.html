@@ -29,5 +29,6 @@
   <mat-slider class="w-100" [max]="50" [min]="0" color="primary" thumbLabel [tickInterval]="5"></mat-slider> -->
 </div>
 
-<button class="float-button bg-success" *ngIf="editar" matTooltip="Guardar Usuario" (click)="updateUsuario()" mat-mini-fab color="primary"> <mat-icon class="big-icon">save</mat-icon></button>
-<button class="float-button bg-success" *ngIf="!editar" matTooltip="Guardar Usuario" (click)="addUsuario()" mat-mini-fab color="primary"> <mat-icon class="big-icon">save</mat-icon></button>
+<button class="button-right  bg-success" *ngIf="editar" matTooltip="Guardar Usuario" (click)="updateUsuario()" mat-mini-fab color="primary"> <mat-icon class="big-icon">save</mat-icon></button>
+<button class="button-right  bg-success" *ngIf="!editar" matTooltip="Guardar Usuario" (click)="addUsuario()" mat-mini-fab color="primary"> <mat-icon class="big-icon">save</mat-icon></button>
+<button class="button-left bg-info" matTooltip="Volver" (click)="goBack()" mat-mini-fab color="primary"> <mat-icon class="big-icon">arrow_back</mat-icon></button>

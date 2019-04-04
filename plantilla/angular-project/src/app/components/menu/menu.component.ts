@@ -15,6 +15,7 @@ export class MenuComponent implements OnInit {
 
   cerrarSesion() {
     this.cookieService.set('sesionId', 'null');
+    this.cookieService.set('rol', 'null');
     this.router.navigate(['login']);
   }
 

@@ -5,7 +5,7 @@
         <mat-radio-button class="p-2" [value]="false">Individual</mat-radio-button>
     </mat-radio-group>
 
-    <button mat-icon-button matTooltip="" class="float-right text-muted">
+    <button mat-icon-button matTooltip="Para poder crear tareas antes debe tener a su cargo algún grupo. Los usuarios marcados en rojo son usuarios bloqueados." class="float-right text-muted">
       <mat-icon>info</mat-icon>
     </button>
 
@@ -29,43 +29,54 @@
       <mat-error *ngIf="controlSubtipo.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
     </mat-form-field>
 
-    <mat-form-field class="w-100" *ngIf="!controlGrupal.value">
-      <mat-select placeholder="Elige los usuarios de la tarea" [formControl]="controlUsuarios" multiple required>
-        <mat-select-trigger>
-          {{controlUsuarios.value[0] ? controlUsuarios.value[0].nombre+','+controlUsuarios.value[0].apellidos : ''}}
-          <span *ngIf="controlUsuarios.value?.length > 1" class="example-additional-selection">
-            (+{{controlUsuarios.value.length - 1}} {{controlUsuarios.value?.length === 2 ? 'persona' : 'personas'}})
-          </span>
-        </mat-select-trigger>
-        <mat-option *ngFor="let usuario of usuarios" [value]="usuario">{{usuario.nombre}},{{usuario.apellidos}}-{{usuario.empleado}}</mat-option>
-      </mat-select>
-      <mat-error *ngIf="controlUsuarios.hasError('required')">Debe añadir al menos a <strong>1</strong> trabajador</mat-error>
-    </mat-form-field>
-
-    <mat-radio-group [(formControl)]="controlGrupo" *ngIf="controlGrupal.value" >
-      <mat-hint>Seleccione grupo *</mat-hint><br>
-      <mat-hint *ngIf="misGrupos.length == 0">No administra ningun grupo</mat-hint>
-      <mat-radio-button class="p-2" *ngFor="let grupo of misGrupos" [value]="grupo">{{grupo.nombre}}</mat-radio-button>
-    </mat-radio-group><br>
-
     <mat-form-field class="w-50" *ngIf="!controlGrupal.value">
-      <input matInput [min]="minDatepicker" [formControl]="controlFecha" [matDatepicker]="picker" placeholder="Fecha de comienzo" required>
+      <input matInput [min]="minDatepicker" [formControl]="controlFecha" [matDatepicker]="picker" placeholder="Fecha de comienzo" required (dateChange)="dateChange($event)">
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker touchUi #picker></mat-datepicker>
       <mat-error *ngIf="controlFecha.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
     </mat-form-field>
-    
+
     <mat-form-field class="w-50" *ngIf="!controlGrupal.value">
+        <input matInput [min]="minDateFinishpicker" [formControl]="controlFechaEstimacion" [matDatepicker]="picker" placeholder="Fecha de finalización(opcional)">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker touchUi #picker></mat-datepicker>
+        <mat-error *ngIf="controlFecha.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="w-100" *ngIf="!controlGrupal.value">
       <input matInput placeholder="Duración en días" type="number" [value]="controlRepit.value" disabled>
       <button mat-icon-button matSuffix class="mr-2" (click)="addRepit()"><mat-icon class="big-icon">add</mat-icon></button>
       <button mat-icon-button matSuffix class="mr-2" (click)="subRepit()"><mat-icon class="big-icon">remove</mat-icon></button>
       <mat-error *ngIf="controlFecha.hasError('required')">Campo <strong>obligatorio</strong>, con rango de 1 a 30 dias máximo</mat-error>
     </mat-form-field> 
 
-    <mat-form-field class="w-100">
+    <mat-radio-group class="w-100" [formControl]="controlGrupo">
+        <mat-hint>Seleccione grupo *</mat-hint><br>
+        <ng-container *ngFor="let grupo of misGrupos">
+          <mat-radio-button *ngIf="controlGrupal.value" class="p-2" [value]="grupo" >{{grupo.nombre}}</mat-radio-button>
+          <mat-radio-button *ngIf="!controlGrupal.value" class="p-2" [value]="grupo" (click)="getUsariosPorGrupo(grupo)">{{grupo.nombre}}</mat-radio-button>
+        </ng-container>
+        <mat-hint *ngIf="misGrupos.length == 0">No administra ningun grupo</mat-hint>
+    </mat-radio-group>
+
+    <mat-form-field class="w-100" *ngIf="!controlGrupal.value && usuarios.length > 0">
+      <mat-select placeholder="Elige los usuarios para la tarea" [formControl]="controlUsuarios" multiple required>
+        <mat-select-trigger>
+          {{controlUsuarios.value[0] ? controlUsuarios.value[0].nombre+','+controlUsuarios.value[0].apellidos : ''}}
+          <span *ngIf="controlUsuarios.value?.length > 1" class="example-additional-selection">
+            (+{{controlUsuarios.value.length - 1}} {{controlUsuarios.value?.length === 2 ? 'persona' : 'personas'}})
+          </span>
+        </mat-select-trigger>
+        <mat-option *ngFor="let usuario of usuarios" [ngClass]="{'text-danger': usuario.baneado}" [value]="usuario">{{usuario.nombre}},{{usuario.apellidos}} - {{usuario.rol | lowercase}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="controlUsuarios.hasError('required')">Debe añadir al menos a <strong>1</strong> trabajador</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="w-100 pb-5">
       <textarea matInput placeholder="Descripción (opcional)" rows="2" [formControl]="controlDescrip"></textarea>
     </mat-form-field>
  
     <br>
   </div>
-  <button class="float-button bg-success" matTooltip="Guardar tareas" (click)="submit()" mat-mini-fab color="primary"> <mat-icon class="addIcon">save</mat-icon></button>
+  <button class="button-right bg-success" matTooltip="Guardar tareas" (click)="submit()" mat-mini-fab color="primary"> <mat-icon class="big-icon">save</mat-icon></button>
+  <button class="button-left bg-info" matTooltip="Volver" (click)="goBack()" mat-mini-fab color="primary"> <mat-icon class="big-icon">arrow_back</mat-icon></button>

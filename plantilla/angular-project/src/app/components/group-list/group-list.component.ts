@@ -45,7 +45,7 @@ export class GroupListComponent implements OnInit {
 
   updateNombre(groupId) {
     if (this.control.value.length > 0) {
-      this.grupoService.updateNameGroup(groupId, this.control.value);
+      this.grupoService.updateNameGroup(groupId, this.control.value.trim());
     }
     this.editName[groupId] = !this.editName[groupId];
     this.control.reset('');
@@ -80,6 +80,10 @@ export class GroupListComponent implements OnInit {
     this.grupoService.getGroups().subscribe(grupos => this.grupos = grupos as Grupo[]);
   }
 
+  getMisGrupos() {
+    this.grupoService.getGroupsByCoordinator(this.cookie.get('sesionId')).subscribe(grupos => this.grupos = grupos as Grupo[]);
+  }
+
   addGrupo() {
     this.grupoService.addGroup(new Grupo('Nuevo Grupo', this.cookie.get('sesionId')));
   }
@@ -88,7 +92,8 @@ export class GroupListComponent implements OnInit {
     if (grupo.usuarios.length > 0) {
       const dialogConfig = new MatDialogConfig();
       dialogConfig.data = {
-        detalles: 'Nota: ' + grupo.nombre + ', contiene ' + grupo.usuarios.length + ' usuarios.',
+        detalles: 'Nota: ' + grupo.nombre + ', contiene ' + grupo.usuarios.length + ' usuarios.' +
+         ' Si contiene tareas grupales estas se borradas.',
         titulo: '¿Seguro desea eliminar?'
       };
       this.deleteDialog = this.dialog.open(DialogDeleteComponent, dialogConfig);
@@ -103,8 +108,10 @@ export class GroupListComponent implements OnInit {
   }
 
   ngOnInit() {
+    // Detención de rol
+    //    this.getGrupos();
     this.getUsuarios();
-    this.getGrupos();
+    this.getMisGrupos();
   }
 
 }

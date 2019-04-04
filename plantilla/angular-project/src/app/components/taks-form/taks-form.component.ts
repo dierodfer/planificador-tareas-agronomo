@@ -11,6 +11,7 @@ import { Fase } from 'src/app/models/fase';
 import { GroupService } from 'src/app/services/group.service';
 import { CookieService } from 'ngx-cookie-service';
 import { Grupo } from 'src/app/models/grupo';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-taks-form',
@@ -26,22 +27,30 @@ export class TaksFormComponent implements OnInit {
   controlSubtipo = new FormControl('', [Validators.required]);
   controlGrupal = new FormControl('');
   controlGrupo = new FormControl('', [Validators.required]);
+  controlFechaEstimacion = new FormControl('', [Validators.required]);
 
   minDatepicker = moment().subtract(6, 'days').toDate();
+  minDateFinishpicker = moment().subtract(6, 'days').toDate();
   usuarios: Usuario[] = [];
   fases: Fase[];
-  misGrupos: Grupo[];
+  misGrupos: Grupo[] = [];
 
   constructor(
-    private userService: UserService,
+    private usuarioService: UserService,
     private taskService: TaskService,
     private snackBar: MatSnackBar,
     private fasesService: CycleService,
     private groupService: GroupService,
-    private cookie: CookieService) { }
+    private cookie: CookieService,
+    private _location: Location) { }
 
   getUsuarios() {
-    this.userService.getAllUsers().subscribe(usuarios => this.usuarios = usuarios as Usuario[]);
+    this.usuarioService.getAllUsers().subscribe(usuarios => this.usuarios = usuarios as Usuario[]);
+  }
+
+  getUsariosPorGrupo(grupo: Grupo) {
+    this.usuarios = [];
+    grupo.usuarios.forEach(id => this.usuarioService.getUserById(id).forEach(usuario => this.usuarios.push(usuario as Usuario)));
   }
 
   submit() {
@@ -53,19 +62,19 @@ export class TaksFormComponent implements OnInit {
       } else {
         // Cuando es una tarea individual
         this.controlUsuarios.value.forEach(user => {
-          if (this.controlRepit.value > 1) {
+/*           if (this.controlRepit.value > 1) {
             let a = this.controlRepit.value - 1;
             do {// Agrega tareas hasta que se cumpla el número de dias requerido
               const copy = this.getTarea();
               copy.responsable = user.empleado;
               this.taskService.addTask(copy);
-              copy.fecha = moment(copy.fecha).add(a, 'day').toDate();
+              copy.fechaComienzo = moment(copy.fechaComienzo).add(a, 'day').toDate();
             }while (a-- > 0);
-          } else {
+          } else { */
             const tarea = this.getTarea();
             tarea.responsable = user.empleado;
             this.taskService.addTask(tarea);
-          }
+        /*   } */
         });
       }
       this.resetValidators();
@@ -82,11 +91,20 @@ export class TaksFormComponent implements OnInit {
     res.tipo = this.controlTipo.value.nombre;
     res.subtipo = this.controlSubtipo.value.nombre;
     res.grupal = this.controlGrupal.value;
-    res.descripcion = this.controlDescrip.value;
+    res.grupo = this.controlGrupo.value.id;
+    res.descripcion = this.controlDescrip.value.trim();
+    res.finalizada = false;
+    res.cancelada = false;
     if (this.controlGrupal.value) {
-      res.responsable = this.controlGrupo.value.id;
+      res.responsable = this.controlGrupo.value.coordinador;
     } else {
-      res.fecha = this.controlFecha.value;
+      res.fechaComienzo = this.controlFecha.value;
+    }
+    // Se calcula fecha de estimacion
+    if (this.controlRepit.value > 1) {
+      res.fechaEstimacion =  moment(res.fechaComienzo).add(this.controlRepit.value - 1, 'day').toDate();
+    } else {
+      res.fechaEstimacion = res.fechaComienzo;
     }
     return res;
   }
@@ -138,12 +156,19 @@ export class TaksFormComponent implements OnInit {
     this.controlRepit.setValue(this.controlRepit.value + 1);
   }
 
+  goBack() {
+    this._location.back();
+  }
 
+  dateChange(event) {
+    this.minDateFinishpicker = event.value;
+  }
 
   ngOnInit() {
     this.controlGrupal.setValue(false);
     this.controlRepit.setValue(1);
-    this.getUsuarios();
+    // Solo para admin
+    // this.getUsuarios();
     this.getFases();
     this.getMyGroups();
   }

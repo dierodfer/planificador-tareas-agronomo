@@ -4,14 +4,12 @@
   </mat-sidenav>
 
   <mat-sidenav-content>
-      <div class="fixed-top bg-white"
-      [ngClass]="{
+      <div class="fixed-top bg-white" [ngClass]="{
         'bg-white': (isOnline() | async),
         'bg-red text-white': !(isOnline() | async)
-      }"
-      >
+      }">
           <button mat-button class="py-3" (click)="sidenav.toggle()"><mat-icon>vertical_split</mat-icon></button>
-          <small>v1.2.2</small>
+          <small>v1.2.3</small>
 
           <button matTooltip="Notificaciones" mat-button class="py-3 mr-3 float-right" (click)="openNotifications()">
             <mat-icon *ngIf="nuevasNoti">notifications</mat-icon> 
@@ -24,11 +22,9 @@
             <mat-icon>account_circle</mat-icon>
           </button>
       </div>
-      <div style="margin-top: 92px;">
+      <div style="margin-top: 92px;" class="pb-5 mb-3">
         <router-outlet></router-outlet>
       </div>
       <button mat-mini-fab class="float-connection" color="warn" matTooltip="Esta trabajando en modo 'SIN CONEXION'" *ngIf="!(isOnline() | async)"><mat-icon>sync_problem</mat-icon></button>
   </mat-sidenav-content>
 </mat-sidenav-container>
-
-

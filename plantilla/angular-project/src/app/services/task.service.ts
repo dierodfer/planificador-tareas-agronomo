@@ -21,21 +21,65 @@ export class TaskService {
     return this.db.collection('tareas').valueChanges();
   }
 
-  getTaskByUser(userId: string) {
+/*   getTaskByUser(userId: string) {
     return this.db.collection('tareas' , ref =>
-    ref.orderBy('fecha').where('responsable', '==', userId).where('grupal', '==', false)
+    ref.orderBy('fechaComienzo').where('responsable', '==', userId).where('grupal', '==', false)
+    ).valueChanges();
+  } */
+
+  getFinishTaskByUser(userId: string) {
+    return this.db.collection('tareas' , ref =>
+    ref.orderBy('fechaFinalizacion', 'desc').where('responsable', '==', userId)
+    .where('grupal', '==', false).where('finalizada', '==', true)
     ).valueChanges();
   }
 
-  getTaskByGroup(groupId: string) {
+  getFinishTaskByGroup(groupId: string) {
     return this.db.collection('tareas' , ref =>
-    ref.where('responsable', '==' , groupId).where('grupal', '==', true)
+    ref.where('grupo', '==', groupId)
+    .where('grupal', '==', true).where('finalizada', '==', true)
     ).valueChanges();
   }
+
+  getCancelTaskByUser(userId: string) {
+    return this.db.collection('tareas' , ref =>
+    ref.orderBy('fechaFinalizacion', 'desc').where('responsable', '==', userId)
+    .where('grupal', '==', false).where('cancelada', '==', true)
+    ).valueChanges();
+  }
+
+  getCancelTaskByGroup(groupId: string) {
+    return this.db.collection('tareas' , ref =>
+    ref.where('grupo', '==', groupId)
+    .where('grupal', '==', true).where('cancelada', '==', true)
+    ).valueChanges();
+  }
+
+  getPendingTaskByUser(userId: string) {
+    return this.db.collection('tareas' , ref =>
+    ref.orderBy('fechaComienzo').where('responsable', '==', userId)
+    .where('grupal', '==', false).where('fechaComienzo', '<=', new Date().toJSON())
+    .where('cancelada', '==', false).where('finalizada', '==', false)
+    ).valueChanges();
+  }
+
+  getPendingTaskByGroup(groupId: string) {
+    return this.db.collection('tareas' , ref =>
+    ref.where('grupo', '==', groupId).where('grupal', '==', true)
+    .where('cancelada', '==', false).where('finalizada', '==', false)
+    ).valueChanges();
+  }
+
+/*   getTaskByGroup(groupId: string) {
+    return this.db.collection('tareas' , ref =>
+    ref.where('grupo', '==' , groupId).where('grupal', '==', true)
+    .where('cancelada', '==', false).where('finalizada', '==', false)
+    ).valueChanges();
+  } */
 
   getTaskByUserAndDate(userId: string, date: Date ) {
     return this.db.collection('tareas' , ref =>
-    ref.where('responsable', '==', userId).where('grupal', '==', false).where('fecha', '==', date)
+    ref.where('responsable', '==', userId).where('grupal', '==', false).where('fechaComienzo', '==', date.toJSON())
     ).valueChanges();
   }
 
@@ -43,9 +87,9 @@ export class TaskService {
     tarea.id = Math.random().toString().substring(2); // ARREGLAR
     const json =  JSON.parse(JSON.stringify(tarea));
     this.db.collection('tareas').doc(tarea.id).set(json).then(() => {
-    // Comprueba que no es tarea grupal y la fecha de la tarea es hoy (eliminando el tiempo) 
+    // Comprueba que no es tarea grupal y la fecha de la tarea es hoy (eliminando el tiempo)
     // y envia notificacion interna y push a los usuarios afectado
-    if (!tarea.grupal && moment(tarea.fecha).startOf('day').diff(moment().startOf('day')) === 0) {
+    if (!tarea.grupal && moment(tarea.fechaComienzo).startOf('day').diff(moment().startOf('day')) === 0) {
       const body = 'Se le ha asignado nueva tarea para realizar hoy: ' + tarea.tipo + (tarea.subtipo ? tarea.subtipo : '');
       this.notificacionService.sendNotification(tarea.responsable, new Notificacion(body, 'Nueva Tarea'));
       this.messaging.sendMessage('Nueva Tarea', body, tarea.responsable);
@@ -58,7 +102,8 @@ export class TaskService {
 
   cancelTask(id: string) {
     this.db.collection('tareas').doc(id).update({
-        cancelada: true
+        cancelada: true,
+        fechaFinalizacion: new Date().toJSON()
     }).then(() => {
         this.snackBar.open('La tarea se ha cancelado correctamente', 'Cerrar', {
           duration: 4000,
@@ -68,7 +113,8 @@ export class TaskService {
 
   uncancelTask(id: string) {
     this.db.collection('tareas').doc(id).update({
-      cancelada: false
+      cancelada: false,
+      fechaFinalizacion: ''
     }).then(() => {
       this.snackBar.open('La tarea se ha vuelto a activar', 'Cerrar', {
         duration: 4000,
@@ -78,7 +124,8 @@ export class TaskService {
 
   finishTask(id: string) {
     this.db.collection('tareas').doc(id).update({
-      finalizada: true
+      finalizada: true,
+      fechaFinalizacion: new Date().toJSON()
     }).then(() => {
       this.snackBar.open('La tarea se ha marcado como finalizada', 'Cerrar', {
         duration: 4000,
@@ -88,7 +135,8 @@ export class TaskService {
 
   unfinishedTask(id: string) {
     this.db.collection('tareas').doc(id).update({
-      finalizada: false
+      finalizada: false,
+      fechaFinalizacion: ''
     }).then(() => {
       this.snackBar.open('La tarea se ha marcado como NO finalizada', 'Cerrar', {
         duration: 4000,
