@@ -1,13 +1,17 @@
- 
-<mat-card class="m-5 clickable" [routerLink]="['usuarios/lista']"> 
-  <mat-icon>assignment_ind</mat-icon> Usuarios
+
+<mat-card class="mx-5 my-4 clickable" [routerLink]="['/']"> 
+  <mat-icon>equalizer</mat-icon> Resumen
 </mat-card>
 
-<mat-card class="m-5 clickable" [routerLink]="['tareas/lista']"> 
+<mat-card class="mx-5 my-4 clickable" [routerLink]="['tareas/lista']"> 
   <mat-icon>assignment_turned_in</mat-icon> Tareas
 </mat-card>
 
-<mat-card class="m-5 clickable" [routerLink]="['admin']"> 
+<mat-card  *ngIf="isCoordinador()" class="mx-5 my-4 clickable" [routerLink]="['incidencias']"> 
+    <mat-icon>warning</mat-icon> Incidencias
+</mat-card> 
+
+<mat-card  *ngIf="isCoordinador()" class="mx-5 my-4 clickable" [routerLink]="['admin']"> 
   <mat-icon>settings</mat-icon> Administración
 </mat-card> 
 

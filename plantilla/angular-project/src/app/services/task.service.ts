@@ -83,6 +83,18 @@ export class TaskService {
     ).valueChanges();
   }
 
+  updateDateEstimated(tareaId, fecha) {
+    this.db.collection('tareas').doc(tareaId).update({
+      fechaEstimacion: fecha.toJSON()
+    });
+  }
+
+  updateDateStart(tareaId, fecha) {
+    this.db.collection('tareas').doc(tareaId).update({
+      fechaComienzo: fecha.toJSON()
+    });
+  }
+
   addTask(tarea: Tarea) {
     tarea.id = Math.random().toString().substring(2); // ARREGLAR
     const json =  JSON.parse(JSON.stringify(tarea));
@@ -105,7 +117,7 @@ export class TaskService {
         cancelada: true,
         fechaFinalizacion: new Date().toJSON()
     }).then(() => {
-        this.snackBar.open('La tarea se ha cancelado correctamente', 'Cerrar', {
+        this.snackBar.open('La tarea se ha iterrumpido correctamente', 'Cerrar', {
           duration: 4000,
         });
     });
@@ -127,7 +139,7 @@ export class TaskService {
       finalizada: true,
       fechaFinalizacion: new Date().toJSON()
     }).then(() => {
-      this.snackBar.open('La tarea se ha marcado como finalizada', 'Cerrar', {
+      this.snackBar.open('La tarea se ha finalizado correctamente', 'Cerrar', {
         duration: 4000,
       });
     });

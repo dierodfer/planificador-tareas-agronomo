@@ -45,7 +45,7 @@ export class UserFormComponent implements OnInit {
   updateUsuario() {
     if (this.checkStatus()) {
       this.userService.addUsuario(this.getUsuario());
-      this.router.navigate(['inicio/usuarios/lista']);
+      this.router.navigate(['inicio/admin/usuarios/lista']);
     } else {
       this.snackBar.open('Debe rellenar todos los campos obligatorios', 'Cerrar', {
         duration: 3000,

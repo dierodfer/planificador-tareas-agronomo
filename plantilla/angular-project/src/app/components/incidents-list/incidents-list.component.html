@@ -39,7 +39,15 @@
 
     <ng-container matColumnDef="zona">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Lugar </th>
-        <td mat-cell *matCellDef="let element"> {{element.zona}} </td>
+        <td mat-cell *matCellDef="let element">
+          <button class="btn btn-link" [matMenuTriggerFor]="menu">Localización</button>
+          <mat-menu class="p-4" #menu="matMenu">
+            <p *ngIf="element.zona.invernadero"><b>Invernadero:</b> {{element.zona.invernadero}}</p>
+            <p *ngIf="element.zona.sector"><b>Sector:</b> {{element.zona.sector}}</p>
+            <p *ngIf="element.zona.tabla"><b>Tabla:</b> {{element.zona.tabla}}</p>
+            <p *ngIf="element.zona.numero_planta"><b>Planta:</b> {{element.zona.numero_planta}}</p>
+          </mat-menu>   
+        </td>
     </ng-container>
 
     <ng-container matColumnDef="autor">
@@ -65,7 +73,7 @@
   <mat-paginator #paginator [pageSizeOptions]="[ 10, 25, 50]" showFirstLastButtons></mat-paginator>
 </div>
 
-<h4 class="text-secondary pt-3 pl-3">Atendidas</h4>
+<h4 class="text-info pt-3 pl-3">Atendidas</h4>
 <div class="table-responsive">
     <table mat-table [dataSource]="dataSourceAtendidas" matSort #tableSort2="matSort" class="mat-elevation-z6 w-100">
     
@@ -88,7 +96,15 @@
     
         <ng-container matColumnDef="zona">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Lugar </th>
-            <td mat-cell *matCellDef="let element"> {{element.zona}} </td>
+            <td mat-cell *matCellDef="let element">
+              <button class="btn btn-link" [matMenuTriggerFor]="menu">Localización</button>
+              <mat-menu class="p-4" #menu="matMenu">
+                <p *ngIf="element.zona.invernadero"><b>Invernadero:</b> {{element.zona.invernadero}}</p>
+                <p *ngIf="element.zona.sector"><b>Sector:</b> {{element.zona.sector}}</p>
+                <p *ngIf="element.zona.tabla"><b>Tabla:</b> {{element.zona.tabla}}</p>
+                <p *ngIf="element.zona.numero_planta"><b>Planta:</b> {{element.zona.numero_planta}}</p>
+              </mat-menu>   
+            </td>
         </ng-container>
     
         <ng-container matColumnDef="autor">
@@ -137,7 +153,15 @@
     
         <ng-container matColumnDef="zona">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Lugar </th>
-            <td mat-cell *matCellDef="let element"> {{element.zona}} </td>
+            <td mat-cell *matCellDef="let element">
+              <button class="btn btn-link" [matMenuTriggerFor]="menu">Localización</button>
+              <mat-menu class="p-4" #menu="matMenu">
+                <p *ngIf="element.zona.invernadero"><b>Invernadero:</b> {{element.zona.invernadero}}</p>
+                <p *ngIf="element.zona.sector"><b>Sector:</b> {{element.zona.sector}}</p>
+                <p *ngIf="element.zona.tabla"><b>Tabla:</b> {{element.zona.tabla}}</p>
+                <p *ngIf="element.zona.numero_planta"><b>Planta:</b> {{element.zona.numero_planta}}</p>
+              </mat-menu>   
+            </td>
         </ng-container>
     
         <ng-container matColumnDef="autor">

@@ -17,18 +17,18 @@ const routes: Routes = [
     path: 'inicio',
     component: HomeComponent,
     children: [
-          { path: 'usuarios/formulario', redirectTo: 'usuarios/formulario/'},
-          { path: 'usuarios/formulario/:id', component: UserFormComponent},
-          { path: 'usuarios/lista', component: UserListComponent},
           { path: 'tareas/lista', component: TaksListComponent},
           { path: 'tareas/formulario', component: TaksFormComponent},
           { path: 'notificaciones', component: NotificationComponent},
+          { path: 'incidencias', component: IncidentsListComponent},
           { path: 'admin',
             component: MenuAdminComponent,
             children: [
-                  { path: 'incidencias', component: IncidentsListComponent},
                   { path: 'grupos', component: GroupListComponent},
                   { path: 'fases', component: CycleFormComponent},
+                  { path: 'usuarios/formulario', redirectTo: 'usuarios/formulario/'},
+                  { path: 'usuarios/formulario/:id', component: UserFormComponent},
+                  { path: 'usuarios/lista', component: UserListComponent},
                 ]
           }
         ]

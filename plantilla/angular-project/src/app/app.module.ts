@@ -33,6 +33,9 @@ import { CycleFormComponent } from './components/cycle-form/cycle-form.component
 import { DialogUserComponent } from './components/dialog-user/dialog-user.component';
 import { DialogDeleteComponent } from './components/dialog-delete/dialog-delete.component';
 import { MenuAdminComponent } from './components/menu-admin/menu-admin.component';
+import { IncidentsListComponent } from './components/incidents-list/incidents-list.component';
+import { DialogIncidentDetailsComponent } from './components/dialog-incident-details/dialog-incident-details.component';
+
 
 // Material Angular
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -62,9 +65,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatListModule} from '@angular/material/list';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatTabsModule} from '@angular/material/tabs';
-import { IncidentsListComponent } from './components/incidents-list/incidents-list.component';
-import { DialogIncidentDetailsComponent } from './components/dialog-incident-details/dialog-incident-details.component';
-
+import {MatMenuModule} from '@angular/material/menu';
 
 
 @NgModule({
@@ -104,7 +105,7 @@ import { DialogIncidentDetailsComponent } from './components/dialog-incident-det
     MatChipsModule, DragDropModule, MatSelectModule, MatRadioModule,
     MatSliderModule, MatSidenavModule, MatNativeDateModule, MatCardModule,
     MatDatepickerModule, MatGridListModule, MatExpansionModule, MatTooltipModule,
-    MatProgressSpinnerModule, MatListModule, MatBadgeModule, MatTabsModule,
+    MatProgressSpinnerModule, MatListModule, MatBadgeModule, MatTabsModule, MatMenuModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   entryComponents: [

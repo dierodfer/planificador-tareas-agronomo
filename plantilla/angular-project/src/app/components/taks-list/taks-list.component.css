@@ -43,3 +43,7 @@ mat-chip{
 .bg-grey{
     background-color: #2E8B57;
 }
+
+button.float-right.mat-icon-button.ng-star-inserted:focus{
+    outline: none;
+}

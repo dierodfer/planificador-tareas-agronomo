@@ -1,10 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TaskService } from '../../services/task.service';
 import { UserService } from '../../services/user.service';
 import { MatDialog, MatDialogConfig, MatDialogRef} from '@angular/material';
 import {Usuario} from '../../models/usuario';
 import {Tarea} from '../../models/tarea';
-import {COMMA, ENTER, TAB} from '@angular/cdk/keycodes';
 import { CookieService } from 'ngx-cookie-service';
 import { Grupo } from 'src/app/models/grupo';
 import { GroupService } from 'src/app/services/group.service';
@@ -12,6 +11,8 @@ import { DialogDeleteComponent } from '../dialog-delete/dialog-delete.component'
 import { DialogUserComponent } from '../dialog-user/dialog-user.component';
 
 import * as moment from 'moment';
+import { first } from 'rxjs/operators';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-taks-list',
@@ -20,20 +21,18 @@ import * as moment from 'moment';
 })
 export class TaksListComponent implements OnInit {
 
-  @ViewChild('rol') rolButton;
-  readonly separatorKeysCodes: number[] = [ENTER, COMMA, TAB];
-  tareas: Tarea[] = [];
-  tareasGrupales: Tarea[] = [];
-  grupoSelected: Grupo;
-  userSelected: Usuario;
+  tareas: Tarea[] = []; tareasGrupales: Tarea[] = [];
+  grupoSelected: Grupo; userSelected: Usuario;
   filtro = false;
-  rol = 'coordinador';
-  usuarios: Usuario[];
-  misGrupos: Grupo[];
+  rol;
+  usuarios: Usuario[]; misGrupos: Grupo[];
   deleteDialog: MatDialogRef<DialogDeleteComponent>;
   tipoTarea: string;
+  editFechaFinalizacion = {}; editFechaComienzo = {};
   pickPendientes = false; pickCanceladas = false; pickFinalizadas = false;
   numPendientes: number; numCanceladas: number; numFinalizadas: number;
+  controlFechaComienzo = new FormControl('');
+  controlFechaFinalizacion = new FormControl('');
 
   constructor(
     private taskService: TaskService,
@@ -42,13 +41,38 @@ export class TaksListComponent implements OnInit {
     private dialog: MatDialog,
     private grupoService: GroupService) { }
 
-  getMisGrupos() {
+  getAllGrupos() {
+    this.filtro = false;
+    this.grupoService.getGroups().subscribe(grupos => this.misGrupos = grupos as Grupo[]);
+  }
+
+  getMisGruposCoordinador() {
     this.filtro = false;
     this.grupoService.getGroupsByCoordinator(this.cookie.get('sesionId')).subscribe(grupos => this.misGrupos = grupos as Grupo[]);
   }
 
+   // Busca los grupos en los que pertenece el trabajador y selecciona el primero
+   getMisGruposUsuario() {
+    this.misGrupos = [];
+    const id =  this.cookie.get('sesionId');
+    this.grupoService.getGroups().pipe(first()).forEach((grupos: Grupo[]) =>
+    grupos.forEach((grupo: Grupo) => {
+      grupo.usuarios.forEach((s) => {
+          if (s === id) {
+            this.misGrupos.push(grupo);
+          }
+        });
+      })
+    ).then( () => {
+      this.usuarioService.getMyUser().pipe(first()).forEach((user: Usuario) => {
+        this.getTareas('Pendientes', this.misGrupos[0], user);
+      });
+    });
+  }
+
   getTareas(estado, grupo: Grupo, usuario?: Usuario) {
     this.filtro = false;
+    this.grupoSelected = grupo;
     this.tipoTarea = estado;
     if (usuario) {
       this.userSelected = usuario;
@@ -81,19 +105,10 @@ export class TaksListComponent implements OnInit {
     }
   }
 
-/*   getTareasGrupales(grupoId) {
-    this.filtro = false;
-    this.taskService.getTaskByGroup(grupoId).subscribe(tareas => this.tareasGrupales = tareas as Tarea[]);
-  } */
-
   getUsuarios(grupo: Grupo) {
     if (!this.grupoSelected || this.grupoSelected.id !== grupo.id) {
       this.usuarios = [];
-      this.tareas = [];
-      this.userSelected = undefined;
-      this.grupoSelected = grupo;
-      this.getTareas('Pendientes', this.grupoSelected);
-      /* this.getTareasGrupales(grupo.id); */
+      this.getTareas('Pendientes', grupo);
       grupo.usuarios.forEach(id => this.usuarioService.getUserById(id).forEach(usuario => this.usuarios.push(usuario as Usuario)));
     }
   }
@@ -158,23 +173,46 @@ export class TaksListComponent implements OnInit {
   }
 
   diffDias(fecha) {
-    return moment(fecha).diff(moment(new Date()), 'day');
+    return moment(fecha).diff(moment().startOf('day'), 'day');
   }
 
-  toggleView() {
-    this.rol = this.rolButton.value;
+  toggleEditFechaComienzo(tarea: Tarea) {
+    this.controlFechaComienzo.setValue(tarea.fechaComienzo);
+    this.editFechaComienzo[tarea.id] = !this.editFechaComienzo[tarea.id];
+  }
+
+  toggleEditFechaFinalizacion(tarea: Tarea) {
+    this.controlFechaFinalizacion.setValue(tarea.fechaEstimacion);
+    this.editFechaFinalizacion[tarea.id] = !this.editFechaFinalizacion[tarea.id];
+  }
+
+  submitFechaComienzo(tarea: Tarea) {
+    this.taskService.updateDateStart(tarea.id, this.controlFechaComienzo.value);
+    this.editFechaComienzo[tarea.id] = !this.editFechaComienzo[tarea.id];
+  }
+
+  submitFechaFinalizacion(tarea: Tarea) {
+    this.taskService.updateDateEstimated(tarea.id, this.controlFechaFinalizacion.value);
+    this.editFechaFinalizacion[tarea.id] = !this.editFechaFinalizacion[tarea.id];
   }
 
   isCoordinador() {
-    return this.rol === 'coordinador';
+    return this.rol === 'COORDINADOR' || this.rol === 'ADMIN';
   }
 
   ngOnInit() {
-    // SEGURIDAD
-/*     this.cookieService.get('rol'); */
- /*    this.getUsuarios(); */
-     this.getMisGrupos();
-    /* this.getTareas(userId); */
+    this.rol = this.cookie.get('rol');
+    switch (this.rol) {
+      case 'TRABAJADOR':
+        this.getMisGruposUsuario();
+      break;
+      case 'COORDINADOR':
+        this.getMisGruposCoordinador();
+      break;
+      case 'ADMIN':
+        this.getAllGrupos();
+      break;
+    }
   }
 
 }

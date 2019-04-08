@@ -9,23 +9,31 @@ import { CookieService } from 'ngx-cookie-service';
 })
 export class MenuComponent implements OnInit {
 
+  rol;
+
   constructor(
     private router: Router,
-    private cookieService: CookieService) { }
+    private cookie: CookieService) { }
 
   cerrarSesion() {
-    this.cookieService.set('sesionId', 'null');
-    this.cookieService.set('rol', 'null');
-    this.router.navigate(['login']);
+    this.cookie.set('sesionId', 'null');
+    this.cookie.set('rol', 'null');
+    this.router.navigate(['/login']);
+  }
+
+  isCoordinador() {
+    return (this.rol === 'COORDINADOR') || (this.rol === 'ADMIN');
   }
 
   ngOnInit() {
-    if (this.cookieService.check('sesionId')) {
-      if (this.cookieService.get('sesionId') === 'null') {
-        this.router.navigate(['login']);
-      }
-    } else {
+    if (!this.cookie.check('sesionId') || !this.cookie.check('rol')) {
       this.router.navigate(['login']);
+    } else {
+      if (this.cookie.get('sesionId') === 'null' || this.cookie.get('rol') === null) {
+        this.router.navigate(['login']);
+      } else {
+        this.rol = this.cookie.get('rol');
+      }
     }
   }
 

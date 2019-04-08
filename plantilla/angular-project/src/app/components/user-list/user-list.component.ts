@@ -59,7 +59,7 @@ export class UserListComponent implements OnInit {
   }
 
   editarUsuario(id) {
-    this.router.navigate(['inicio/usuarios/formulario/', id]);
+    this.router.navigate(['inicio/admin/usuarios/formulario/', id]);
   }
 
   addFilter(event: MatChipInputEvent): void {

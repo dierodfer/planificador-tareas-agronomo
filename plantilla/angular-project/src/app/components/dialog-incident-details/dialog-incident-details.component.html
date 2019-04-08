@@ -11,10 +11,24 @@
     <p><b>Fecha creación:</b>  {{incidencia.fechaCreacion |  date:'dd/MM/yyyy HH:mm:ss'}}</p>
     <p><b>Fecha atendida:</b>   {{incidencia.fechaAtendida ? (incidencia.fechaAtendida | date:'dd/MM/yyyy HH:mm:ss') : 'Aun no ha sido atendida'}}</p>
     <p><b>Fecha resuelta:</b>   {{incidencia.fechaResuelta ? (incidencia.fechaResuelta | date:'dd/MM/yyyy HH:mm:ss') : 'Aun no ha sido resuelta'}}</p>
-    <p><b>Nombre autor:</b> {{incidencia.autor.nombre}}, {{incidencia.autor.apellidos}}</p>
-    <p><b>Nº de empleado/a:</b>  {{incidencia.autor.empleado}}</p>
-    <p><b>Rol:</b>  {{incidencia.autor.rol | lowercase}}</p>
-    <p><b>Sexo:</b>   {{incidencia.autor.genero | lowercase}}</p>
-    <p><b>Zona:</b> {{incidencia.zona}}</p>
+    <p><b>Autor:</b> 
+      <button class="btn btn-link" [matMenuTriggerFor]="menuUser">{{incidencia.autor.nombre}}, {{incidencia.autor.apellidos}}</button>
+      <mat-menu class="p-3" #menuUser="matMenu">
+          <p><b>Nombre completo:</b> {{incidencia.autor.nombre}}, {{incidencia.autor.apellidos}}</p>
+          <p><b>Nº de empleado/a:</b>  {{incidencia.autor.empleado}}</p>
+          <p><b>Rol:</b>  {{incidencia.autor.rol | lowercase}}</p>
+          <p><b>Sexo:</b>   {{incidencia.autor.genero | lowercase}}</p>
+      </mat-menu>
+    </p>
+    <p><b>Lugar:</b>
+      <button class="btn btn-link" [matMenuTriggerFor]="menu">Localización</button>
+      <mat-menu class="p-4" #menu="matMenu">
+        <p *ngIf="incidencia.zona.invernadero"><b>Invernadero:</b> {{incidencia.zona.invernadero}}</p>
+        <p *ngIf="incidencia.zona.sector"><b>Sector:</b> {{incidencia.zona.sector}}</p>
+        <p *ngIf="incidencia.zona.tabla"><b>Tabla:</b> {{incidencia.zona.tabla}}</p>
+        <p *ngIf="incidencia.zona.numero_planta"><b>Planta:</b> {{incidencia.zona.numero_planta}}</p>
+      </mat-menu>
+    </p>
+         
 
   </mat-dialog-content>

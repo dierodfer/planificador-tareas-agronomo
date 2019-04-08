@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Grupo } from 'src/app/models/grupo';
 import { GroupService } from 'src/app/services/group.service';
 import { UserService } from 'src/app/services/user.service';
@@ -14,7 +14,7 @@ import { DialogDeleteComponent } from '../dialog-delete/dialog-delete.component'
   templateUrl: './group-list.component.html',
   styleUrls: ['./group-list.component.css']
 })
-export class GroupListComponent implements OnInit {
+export class GroupListComponent implements OnInit, OnDestroy {
 
   control = new FormControl('', [Validators.required]);
 
@@ -23,11 +23,14 @@ export class GroupListComponent implements OnInit {
   newUser = {};
   editName = {};
   deleteDialog: MatDialogRef<DialogDeleteComponent>;
+  rol;
 
   constructor(private grupoService: GroupService,
     private usuarioService: UserService,
     private dialog: MatDialog,
-    private cookie: CookieService) {}
+    private cookie: CookieService) {
+      this.rol = this.cookie.get('rol');
+    }
 
   findUser(id) {
     return this.usuarios.find(user => id === user.empleado);
@@ -76,7 +79,7 @@ export class GroupListComponent implements OnInit {
     this.usuarioService.getAllUsers().subscribe(user => this.usuarios = user as Usuario[]);
   }
 
-  getGrupos() {
+  getAllGrupos() {
     this.grupoService.getGroups().subscribe(grupos => this.grupos = grupos as Grupo[]);
   }
 
@@ -88,13 +91,23 @@ export class GroupListComponent implements OnInit {
     this.grupoService.addGroup(new Grupo('Nuevo Grupo', this.cookie.get('sesionId')));
   }
 
+  deleteAllGroupWithoutUsers() {
+    if(this.grupos){
+      this.grupos.forEach(grupo => {
+        if (grupo.usuarios.length === 0) {
+          this.grupoService.deleteGroup(grupo.id);
+        }
+      });
+    }
+  }
+
   deleteGrupo(grupo: Grupo) {
     if (grupo.usuarios.length > 0) {
       const dialogConfig = new MatDialogConfig();
       dialogConfig.data = {
-        detalles: 'Nota: ' + grupo.nombre + ', contiene ' + grupo.usuarios.length + ' usuarios.' +
-         ' Si contiene tareas grupales estas se borradas.',
-        titulo: '¿Seguro desea eliminar?'
+        detalles: 'Nota: Contiene ' + grupo.usuarios.length + ' usuarios.' +
+         ' Si contiene tareas grupales estas se borraran, las tareas individuales persisten.',
+        titulo: '¿Seguro desea eliminar' + grupo.nombre + '?'
       };
       this.deleteDialog = this.dialog.open(DialogDeleteComponent, dialogConfig);
       this.deleteDialog.afterClosed().subscribe(confirmado => {
@@ -108,10 +121,19 @@ export class GroupListComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Detención de rol
-    //    this.getGrupos();
     this.getUsuarios();
-    this.getMisGrupos();
+    switch (this.rol) {
+      case 'COORDINADOR':
+        this.getMisGrupos();
+      break;
+      case 'ADMIN':
+        this.getAllGrupos();
+      break;
+    }
+  }
+
+  ngOnDestroy() {
+    this.deleteAllGroupWithoutUsers();
   }
 
 }

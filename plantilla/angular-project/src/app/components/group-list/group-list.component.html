@@ -1,4 +1,4 @@
-<!-- <button mat-button (click)="getUserByGroup()">text</button> -->
+<h5 class="mt-5 pt-5 text-center" *ngIf="!grupos">No administra ningún grupo, <button class="btn btn-link" (click)="addGrupo()"><mat-icon>group_add</mat-icon> Crear grupo nuevo</button></h5>
 <div class="px-3">
 <div class="card-columns">
     <mat-card class="card" *ngFor="let grupo of grupos">
