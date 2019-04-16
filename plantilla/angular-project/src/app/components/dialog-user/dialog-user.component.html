@@ -5,9 +5,6 @@
 <mat-dialog-content>
     <p><b>Nombre completo:</b> {{usuario.nombre}}, {{usuario.apellidos}}</p>
     <p><b>Nº de empleado/a:</b>  {{usuario.empleado}}</p>
-    <p><b>Rol:</b>  {{usuario.rol | lowercase}}</p>
+    <p *ngIf="isCoordinador()"><b>Rol:</b>  {{usuario.rol | lowercase}}</p>
     <p><b>Sexo:</b>   {{usuario.genero | lowercase}}</p>
 </mat-dialog-content>
-<!-- <mat-dialog-actions>
- <button mat-button mat-dialog-close>Cerrar</button>
-</mat-dialog-actions> -->

@@ -26,6 +26,7 @@ export class TaksListComponent implements OnInit {
   filtro = false;
   rol;
   usuarios: Usuario[]; misGrupos: Grupo[];
+  gruposAux: Grupo[]; usersAux: Usuario[];
   deleteDialog: MatDialogRef<DialogDeleteComponent>;
   tipoTarea: string;
   editFechaFinalizacion = {}; editFechaComienzo = {};
@@ -46,9 +47,25 @@ export class TaksListComponent implements OnInit {
     this.grupoService.getGroups().subscribe(grupos => this.misGrupos = grupos as Grupo[]);
   }
 
+  getAllGruposAux() {
+    this.grupoService.getGroups().subscribe(grupos => this.gruposAux = grupos as Grupo[]);
+  }
+
+  getAllUserAux() {
+    this.usuarioService.getAllUsers().subscribe(user => this.usersAux = user as Usuario[]);
+  }
+
   getMisGruposCoordinador() {
     this.filtro = false;
     this.grupoService.getGroupsByCoordinator(this.cookie.get('sesionId')).subscribe(grupos => this.misGrupos = grupos as Grupo[]);
+  }
+
+  findGrupo(grupoId) {
+    return this.gruposAux.find(grupo => grupo.id === grupoId);
+  }
+
+  findUsuario(userId){
+    return this.usersAux.find(user => user.empleado === userId);
   }
 
    // Busca los grupos en los que pertenece el trabajador y selecciona el primero
@@ -58,12 +75,9 @@ export class TaksListComponent implements OnInit {
     this.grupoService.getGroups().pipe(first()).forEach((grupos: Grupo[]) =>
     grupos.forEach((grupo: Grupo) => {
       grupo.usuarios.forEach((s) => {
-          if (s === id) {
-            this.misGrupos.push(grupo);
-          }
+          if (s === id) { this.misGrupos.push(grupo); }
         });
-      })
-    ).then( () => {
+      })).then( () => {
       this.usuarioService.getMyUser().pipe(first()).forEach((user: Usuario) => {
         this.getTareas('Pendientes', this.misGrupos[0], user);
       });
@@ -177,12 +191,12 @@ export class TaksListComponent implements OnInit {
   }
 
   toggleEditFechaComienzo(tarea: Tarea) {
-    this.controlFechaComienzo.setValue(tarea.fechaComienzo);
+    this.controlFechaComienzo.setValue(moment(tarea.fechaComienzo).toDate());
     this.editFechaComienzo[tarea.id] = !this.editFechaComienzo[tarea.id];
   }
 
   toggleEditFechaFinalizacion(tarea: Tarea) {
-    this.controlFechaFinalizacion.setValue(tarea.fechaEstimacion);
+    this.controlFechaFinalizacion.setValue(moment(tarea.fechaEstimacion).toDate());
     this.editFechaFinalizacion[tarea.id] = !this.editFechaFinalizacion[tarea.id];
   }
 
@@ -213,6 +227,9 @@ export class TaksListComponent implements OnInit {
         this.getAllGrupos();
       break;
     }
+    // PARCHE
+    this.getAllGruposAux();
+    this.getAllUserAux();
   }
 
 }

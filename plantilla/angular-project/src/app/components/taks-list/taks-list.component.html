@@ -13,7 +13,7 @@
     <p class="text-muted text-center pt-5 mt-5" *ngIf="!usuarios">Seleccione grupo</p>
     <p class="text-muted text-center pt-5 mt-5" *ngIf="usuarios && usuarios.length == 0">Este grupo no contiene usuarios</p>
     <mat-chip-list class="mat-chip-list-stacked" *ngIf="grupoSelected">
-      <mat-chip (click)="getTareas('Pendientes', grupoSelected)"><mat-icon>stars</mat-icon> {{grupoSelected.coordinador}}</mat-chip>
+      <mat-chip (click)="getTareas('Pendientes', grupoSelected, findUsuario(grupoSelected.coordinador))"><mat-icon>stars</mat-icon> {{findUsuario(grupoSelected.coordinador).nombre}}, {{findUsuario(grupoSelected.coordinador).apellidos}}</mat-chip>
       <mat-chip (click)="getTareas('Pendientes', grupoSelected, usuario)" [selected]="userSelected == usuario" [ngClass]="{'text-danger': usuario.baneado}" *ngFor="let usuario of usuarios"><mat-icon>account_circle</mat-icon> {{usuario.nombre}}, {{usuario.apellidos}}</mat-chip>
     </mat-chip-list>
   </div>
@@ -73,8 +73,12 @@
             <p *ngIf="tarea.fechaComienzo"><b>Fecha de comienzo:</b> {{tarea.fechaComienzo | date:'dd/MM/yyyy'}}</p>
             <p *ngIf="tarea.fechaEstimacion"><b>Fecha de finalización (estimada):</b> {{tarea.fechaEstimacion | date:'dd/MM/yyyy'}}</p>
             <p *ngIf="tarea.fechaFinalizacion"><b>Fecha de finalización (real):</b> {{tarea.fechaFinalizacion | date:'dd/MM/yyyy'}}</p>
-            <b>Reponsable:</b><a mat-button (click)="openUserDialogByGroup(tarea.responsable)"> {{tarea.responsable}}</a>
-            <b>Grupo:</b><a mat-button> {{tarea.grupo}}</a>
+            <b>Reponsable:</b><button class="btn btn-link" (click)="openUserDialog(tarea.responsable)"> {{findUsuario(tarea.responsable).nombre}}</button>
+            <b>Grupo:</b><button class="btn btn-link" [matMenuTriggerFor]="menuGrupo"> {{findGrupo(tarea.grupo).nombre}}</button>
+            <mat-menu #menuGrupo="matMenu">
+                  <span mat-menu-item><mat-icon>stars</mat-icon>{{findUsuario(findGrupo(tarea.grupo).coordinador).nombre}}, {{findUsuario(findGrupo(tarea.grupo).coordinador).apellidos}}</span>
+                  <span mat-menu-item *ngFor="let usuario of findGrupo(tarea.grupo).usuarios"><mat-icon>account_circle</mat-icon> {{findUsuario(usuario).nombre}}, {{findUsuario(usuario).apellidos}}</span>
+            </mat-menu>
             <p *ngIf="tarea.descripcion"><b>Detalles:</b> {{tarea.descripcion}}</p>
             <br> 
             <button *ngIf="!tarea.cancelada && !tarea.finalizada" class="mx-2 bg-success" mat-raised-button color="primary" (click)="finalizarTarea(tarea.id)"><mat-icon>alarm_on</mat-icon> Finalizar</button>
@@ -110,7 +114,7 @@
             <mat-icon class="text-muted" matTooltip="Tarea Retrasada" *ngIf="(tipoTarea == 'Pendientes' && diffDias(tarea.fechaEstimacion)<0)">error</mat-icon>
             <mat-icon class="mr-2" matTooltip="Contiene detalles relevantes dentro de la tarea" *ngIf="tarea.descripcion">comment</mat-icon>
             <ng-container *ngIf="tipoTarea == 'Pendientes'">
-              <span [matTooltip]="tarea.fechaEstimacion | date:'dd/MM/yyyy'" *ngIf="diffDias(tarea.fechaEstimacion)<-1" class="text-danger font-weight-bolder">Retrasada {{diffDias(tarea.fechaEstimacion)*-1}} días</span>
+              <span [matTooltip]="tarea.fechaEstimacion | date:'dd/MM/yyyy'" *ngIf="diffDias(tarea.fechaEstimacion)<0" class="text-danger font-weight-bolder">Retrasada {{diffDias(tarea.fechaEstimacion)*-1}} días</span>
               <span [matTooltip]="tarea.fechaEstimacion | date:'dd/MM/yyyy'" *ngIf="diffDias(tarea.fechaEstimacion)>1" class="font-weight-bolder">Acaba en {{diffDias(tarea.fechaEstimacion)}} días</span>
               <span [matTooltip]="tarea.fechaEstimacion | date:'dd/MM/yyyy'" *ngIf="diffDias(tarea.fechaEstimacion)==1" class="font-weight-bolder">Acaba mañana</span>
               <span [matTooltip]="tarea.fechaEstimacion | date:'dd/MM/yyyy'" *ngIf="diffDias(tarea.fechaEstimacion)==0" class="font-weight-bolder">Termina hoy</span>
@@ -126,7 +130,7 @@
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker touchUi #picker></mat-datepicker>
             </mat-form-field>
-            <button mat-icon-button class="text-muted" (click)="submitFechaComienzo(tarea)"><mat-icon>check_circle_outline</mat-icon></button>
+            <button mat-icon-button class="text-muted" matTooltip="Guardar" (click)="submitFechaComienzo(tarea)"><mat-icon>check_circle_outline</mat-icon></button>
         </p>
         <p *ngIf="!editFechaFinalizacion[tarea.id]"><b>Fecha de finalización (estimada):</b> {{tarea.fechaEstimacion | date:'dd/MM/yyyy'}}</p>
         <p *ngIf="editFechaFinalizacion[tarea.id]">
@@ -141,11 +145,15 @@
         <p *ngIf="tarea.fechaFinalizacion"><b>Fecha de finalización (real):</b> {{tarea.fechaFinalizacion | date:'dd/MM/yyyy'}}</p>
         <p>
           <b>Reponsable:</b><button class="btn btn-link" (click)="openUserDialog(tarea.responsable)"> {{userSelected.nombre}}</button>
-          <b>Grupo:</b><button class="btn btn-link"> {{tarea.grupo}}</button>
+          <b>Grupo:</b><button class="btn btn-link" [matMenuTriggerFor]="menuGrupo"> {{findGrupo(tarea.grupo).nombre}}</button>
+          <mat-menu #menuGrupo="matMenu">
+                <span mat-menu-item><mat-icon>stars</mat-icon>{{findUsuario(findGrupo(tarea.grupo).coordinador).nombre}}, {{findUsuario(findGrupo(tarea.grupo).coordinador).apellidos}}</span>
+                <span mat-menu-item *ngFor="let usuario of findGrupo(tarea.grupo).usuarios"><mat-icon>account_circle</mat-icon> {{findUsuario(usuario).nombre}}, {{findUsuario(usuario).apellidos}}</span>
+          </mat-menu>
         </p>
         <p *ngIf="tarea.descripcion"><b><mat-icon class="mr-2">comment</mat-icon>Detalles:</b> {{tarea.descripcion}}</p>
         <br>
-        <ng-container>
+        <ng-container *ngIf="!editFechaComienzo[tarea.id] && !editFechaFinalizacion[tarea.id]">
           <button *ngIf="!tarea.cancelada && !tarea.finalizada" class="mx-2 bg-success text-white" mat-raised-button (click)="finalizarTarea(tarea.id)"><mat-icon>alarm_on</mat-icon> Finalizar</button>
           <button *ngIf="!tarea.cancelada && !tarea.finalizada" class="mx-2" mat-raised-button color="warn" (click)="cancelarTarea(tarea.id)"><mat-icon>pause_circle_outline</mat-icon> Iterrumpir</button>
           <button *ngIf="!tarea.cancelada && tarea.finalizada" class="mx-2 bg-info text-white" mat-button (click)="activarTarea(tarea.id)">Volver a activar</button>

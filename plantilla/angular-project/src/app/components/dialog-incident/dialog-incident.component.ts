@@ -22,6 +22,9 @@ export class DialogIncidentComponent implements OnInit {
   controlSector = new FormControl('');
   controlTabla = new FormControl('');
   controlPlanta = new FormControl('');
+  ubicacion;
+
+  activemap = false;
 
   constructor(public dialogRef: MatDialogRef<DialogIncidentComponent>,
     private incidenciaService: IncidentService,
@@ -53,6 +56,9 @@ export class DialogIncidentComponent implements OnInit {
     incidencia.prioridad = this.controlPrioridad.value;
     incidencia.descripcion = this.control2.value;
     incidencia.zona = new Zona(this.controlInver.value, this.controlSector.value, this.controlTabla.value, this.controlPlanta.value);
+    if (this.ubicacion) {
+      incidencia.ubicacion = this.ubicacion;
+    }
     return incidencia;
   }
 
@@ -62,8 +68,23 @@ export class DialogIncidentComponent implements OnInit {
     && (this.control1.value === 'Otro' ? this.control2.status === 'VALID' : true);
   }
 
+  showMapa() {
+    this.activemap = true;
+  }
+
   close() {
     this.dialogRef.close();
+  }
+
+  deleteUbicacion() {
+    this.ubicacion = false;
+  }
+
+  actionMap(event) {
+    this.activemap = false;
+    if (event !== 'close') {
+      this.ubicacion = event;
+    }
   }
 
   ngOnInit() {

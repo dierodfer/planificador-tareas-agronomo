@@ -1,0 +1,8 @@
+<div id="map" class="map">
+    <mat-spinner class="loading d-none" diameter="50"></mat-spinner>
+</div>
+
+<a mat-raised-button class="btn-map1 bg-warning" *ngIf="!register" [href]="getURLGoogleMaps()" target="_blank" color="primary">Abrir en Google Maps</a>
+<button mat-raised-button class="btn-map1" (click)="recalcular()" *ngIf="register" color="primary">Recalcular</button>
+<button mat-raised-button class="btn-map2 bg-success" *ngIf="register && location" (click)="submit()" color="primary">Confirmar</button>
+<button mat-mini-fab matTooltip="Volver" class="btn-map3 bg-info text-white big-icon" (click)="goBack()"><mat-icon class="big-icon">arrow_back</mat-icon></button>

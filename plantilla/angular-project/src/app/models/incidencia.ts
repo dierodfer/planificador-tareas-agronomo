@@ -12,5 +12,6 @@ export class Incidencia {
     zona: Zona;
     estado: string;
     prioridad: string;
+    ubicacion;
     constructor() {}
 }

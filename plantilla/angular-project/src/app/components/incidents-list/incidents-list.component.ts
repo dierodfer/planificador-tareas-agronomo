@@ -31,6 +31,7 @@ export class IncidentsListComponent implements OnInit {
   addOnBlur = true;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA, TAB];
   filters: string[] = [];
+  activoMapa = false;
 
   constructor(private incidenciaService: IncidentService,
     private dialog: MatDialog) { }
@@ -71,6 +72,10 @@ export class IncidentsListComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = incidencia;
     this.dialog.open(DialogIncidentDetailsComponent, dialogConfig);
+  }
+
+  showMap(bool: boolean) {
+    this.activoMapa = bool;
   }
 
   ngOnInit() {

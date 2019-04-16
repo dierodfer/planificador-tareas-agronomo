@@ -66,6 +66,7 @@ import {MatListModule} from '@angular/material/list';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatMenuModule} from '@angular/material/menu';
+import { MapComponent } from './components/map/map.component';
 
 
 @NgModule({
@@ -88,6 +89,7 @@ import {MatMenuModule} from '@angular/material/menu';
     MenuAdminComponent,
     IncidentsListComponent,
     DialogIncidentDetailsComponent,
+    MapComponent,
   ],
   imports: [
     BrowserModule,
