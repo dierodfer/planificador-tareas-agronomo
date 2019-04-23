@@ -6,6 +6,8 @@ import { NotificationService } from './notification.service';
 import { Notificacion } from '../models/notificacion';
 import { MessagingService } from './messaging.service';
 import * as moment from 'moment';
+import * as firebase from 'firebase/app';
+import 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -93,6 +95,15 @@ export class TaskService {
     this.db.collection('tareas').doc(tareaId).update({
       fechaComienzo: fecha.toJSON()
     });
+  }
+
+  addComment(tareaId, comment) {
+    this.db.collection('tareas').doc(tareaId).update({
+      comentarios:  firebase.firestore.FieldValue.arrayUnion({
+          fecha: new Date().toJSON(),
+          cuerpo: comment
+        })
+      });
   }
 
   addTask(tarea: Tarea) {

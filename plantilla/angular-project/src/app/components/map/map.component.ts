@@ -17,52 +17,84 @@ import {Vector as VectorSource} from 'ol/source';
 })
 export class MapComponent implements OnInit {
 
-  location;
-  map: Map;
-  vectorLayer: VectorLayer;
-  @Output() action = new EventEmitter();
-  @Input() register;
-  @Input() coordinates;
+  location; // Ubicación en coordenadas actual del dispositivo
+  map: Map; // Mapa
+  vectorLayer: VectorLayer; // Capa de iconos(features) añadido al mapa
+  @Output() action = new EventEmitter(); // Valor que recibe el componente padre tras alguna acción
+  @Input() register; // Define el tipo de acciones que tendrá el mapa
+  @Input() coordinates; // Coordinadas recibidas del componente padre para mostrar
+  vectorSource: VectorSource;
+  view: View;
 
-  getPositionIcon() {
-    const positionFeature = new Feature();
-      positionFeature.setStyle(new Style({
-        image: new CircleStyle({
-          radius: 6,
-          fill: new Fill({
-            color: '#3399CC'
-          }),
-          stroke: new Stroke({
-            color: '#fff',
-            width: 2
+  constructor() { }
+
+  getMap() {
+    this.map = new Map({
+      target: 'map',
+      layers: [
+        // Capa principal
+        new TileLayer({
+          source: new XYZ({
+            url: 'https://tile.thunderforest.com/landscape/{z}/{x}/{y}.png?apikey=e89915a4e7ba46fd9956c3251518f304'
           })
+        }),
+        new VectorLayer({
+          source : this.vectorSource = new VectorSource({})
         })
-      }));
+      ],
+      view: this.view = new View({
+        center: fromLonLat([0 , 0]),
+        zoom: 5,
+        minZoom: 5,
+      })
+    });
   }
 
-  setView(longitude, latitude) {
-    this.addLayerLocation(longitude, latitude);
+  setLayers(longitude, latitude) {
+    this.addFeatureLocation(longitude, latitude);
     if (!this.register) {
-      this.addLayerWarning();
+      this.addFeatureWarning();
+      this.setView(this.coordinates.longitude, this.coordinates.latitude);
+    } else {
+      this.setView(longitude, latitude);
     }
-    this.map.setView(new View({
-      center: fromLonLat([longitude, latitude]),
-      zoom: 18,
-      minZoom: 5,
-    }));
     this.location = {
       longitude: longitude,
       latitude: latitude
     };
   }
 
-  getPoint(longitude, latitude) {
+  setView(longitude, latitude) {
+    this.view.setCenter(fromLonLat([longitude, latitude]));
+    this.view.setZoom(13);
+  }
+
+  addFeatureLocation(longitude, latitude) {
+    this.vectorSource.addFeature(this.getLocationIcon(longitude, latitude));
+  }
+
+  addFeatureWarning() {
+    this.vectorSource.addFeature(this.getWarningIcon());
+  }
+
+    // function that gets the location and returns it
+  getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(position => {
+        this.setLayers(position.coords.longitude, position.coords.latitude);
+      });
+    } else {
+      /* this.error = 'Su navegador no soporta geolocalizacion'; */
+    }
+  }
+
+  getLocationIcon(longitude, latitude) {
     const feature = new Feature(new Point(fromLonLat([longitude, latitude])));
-    feature.setStyle(this.getStyle());
+    feature.setStyle(this.getLocationStyle());
     return feature;
   }
 
-  getStyle() {
+  getLocationStyle() {
     return new Style({
       image: new Icon(({
         anchor: [0.5, 0.96],
@@ -71,7 +103,7 @@ export class MapComponent implements OnInit {
     });
   }
 
-  getWarning() {
+  getWarningIcon() {
     const feature = new Feature(new Point(fromLonLat([this.coordinates.longitude, this.coordinates.latitude])));
     feature.setStyle(this.getStyleWarning());
     return feature;
@@ -86,58 +118,6 @@ export class MapComponent implements OnInit {
     });
   }
 
-  addLayerLocation(longitude, latitude) {
-    this.map.removeLayer(this.vectorLayer);
-    this.map.addLayer(
-      this.vectorLayer = new VectorLayer({
-        source : new VectorSource({
-          features: [this.getPoint(longitude, latitude)]
-        })
-      })
-    );
-  }
-
-  addLayerWarning() {
-    this.map.addLayer(
-      new VectorLayer({
-        source : new VectorSource({
-          features: [this.getWarning()]
-        })
-      })
-    );
-  }
-
-  getMap() {
-    this.map = new Map({
-      target: 'map',
-      layers: [
-        // Capa principal
-        new TileLayer({
-          source: new XYZ({
-            url: 'https://tile.thunderforest.com/landscape/{z}/{x}/{y}.png?apikey=e89915a4e7ba46fd9956c3251518f304'
-          })
-        }),
-      ],
-      view: new View({
-        center: fromLonLat([0 , 0]),
-        zoom: 5,
-        minZoom: 5,
-      })
-    });
-  }
-
-  constructor() { }
-
-    // function that gets the location and returns it
-  getLocationView() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(position => {
-        this.setView(position.coords.longitude, position.coords.latitude);
-      });
-    } else {
-      /* this.error = 'Su navegador no soporta geolocalizacion'; */
-    }
-  }
   getURLGoogleMaps(): string {
     let res;
     if (this.location && this.coordinates) {
@@ -150,7 +130,20 @@ export class MapComponent implements OnInit {
   }
 
   recalcular() {
-    this.getLocationView();
+    this.vectorSource.clear();
+    this.getLocation();
+  }
+
+  miLocalizacion() {
+    if (location) {
+      this.setView(this.location.longitude, this.location.latitude);
+    } else {
+      this.getLocation();
+    }
+  }
+
+  verIncidencia() {
+    this.setView(this.coordinates.longitude, this.coordinates.latitude);
   }
 
   goBack() {
@@ -162,11 +155,8 @@ export class MapComponent implements OnInit {
   }
 
   ngOnInit() {
-    // request for location
     this.getMap();
-    this.getLocationView();
-    if (!this.register) {
-    }
+    this.getLocation();
   }
 
 }

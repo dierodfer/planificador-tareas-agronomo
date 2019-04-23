@@ -7,23 +7,22 @@
         <td mat-cell *matCellDef="let element"> {{element.fechaCreacion | date:'dd/MM/yyyy HH:mm:ss'}} </td>
     </ng-container>
   
-    <ng-container matColumnDef="prioridad">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Prioridad </th>
-      <td mat-cell *matCellDef="let element"><mat-icon [ngClass]="{
-        'text-danger': element.prioridad == 'Alta',
-        'text-warning': element.prioridad == 'Media','text-muted': element.prioridad == 'Baja'}">warning</mat-icon> {{element.prioridad}} </td>
-    </ng-container>
-
     <ng-container matColumnDef="tipo">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </th>
-        <td mat-cell *matCellDef="let element"> {{element.tipo}} </td>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Prioridad/Tipo</th>
+        <td mat-cell *matCellDef="let element">         
+          <mat-icon [matTooltip]="element.prioridad" 
+          [ngClass]="{
+          'text-danger': element.prioridad == 'Alta',
+          'text-warning': element.prioridad == 'Media',
+          'text-muted': element.prioridad == 'Baja'}">warning</mat-icon>
+          {{element.tipo}} </td>
     </ng-container>
 
     <ng-container matColumnDef="zona">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Lugar/Ubicación </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Zona/Ubicación </th>
         <td mat-cell *matCellDef="let element">
           <ng-container *ngIf="element.zona">
-            <button class="btn btn-link" [matMenuTriggerFor]="menu">Localización</button>
+            <button class="btn btn-link" [matMenuTriggerFor]="menu">Zona</button>
             <mat-menu class="p-4" #menu="matMenu">
               <p *ngIf="element.zona.invernadero"><b>Invernadero:</b> {{element.zona.invernadero}}</p>
               <p *ngIf="element.zona.sector"><b>Sector:</b> {{element.zona.sector}}</p>
@@ -31,16 +30,14 @@
               <p *ngIf="element.zona.numero_planta"><b>Planta:</b> {{element.zona.numero_planta}}</p>
             </mat-menu>
           </ng-container>
-          <span *ngIf="!element.zona">Fuera del terreno</span>
           <ng-container *ngIf="element.ubicacion">
-            <button mat-icon-button color="primary" (click)="showMap(true)"><mat-icon>pin_drop</mat-icon></button>
-            <app-map *ngIf="activoMapa" [register]=false [coordinates]="element.ubicacion" (action)="showMap(false)"></app-map>  
+            <button class="btn btn-link" (click)="showMap(true, element.ubicacion)">Ubicación</button>
           </ng-container>  
         </td>
     </ng-container>
 
     <ng-container matColumnDef="autor">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Autor </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Creada por </th>
         <td mat-cell *matCellDef="let element"> <button class="btn btn-link" (click)="openUserDialog(element.autor)">{{element.autor.nombre}}</button> </td>
     </ng-container>
 
@@ -50,19 +47,19 @@
           <a   matTooltip="Mostrar detalles" (click)="openIncidentDialog(element)" mat-icon-button color="primary">
             <mat-icon>zoom_in</mat-icon>
           </a>
-          <a matTooltip="Marcar como atendida" class="text-success"  (click)="incidenciaAtendida(element)" mat-icon-button>
+          <a matTooltip="Atender incidencia" class="text-success"  (click)="incidenciaAtendida(element)" mat-icon-button>
             <mat-icon>check</mat-icon>
           </a>
         </td>
       </ng-container>
   
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns1;"></tr>
   </table>
   <mat-paginator #paginator [pageSizeOptions]="[ 10, 25, 50]" showFirstLastButtons></mat-paginator>
 </div>
 
-<h4 class="text-info pt-3 pl-3">Atendidas</h4>
+<h4 class="text-info pt-3 pl-3">Atendidas <mat-icon matTooltip="Una incidencia ATENDIDA solo puede ser finalizada por el usuario que la atiende">info</mat-icon></h4>
 <div class="table-responsive">
     <table mat-table [dataSource]="dataSourceAtendidas" matSort #tableSort2="matSort" class="mat-elevation-z6 w-100">
     
@@ -71,23 +68,27 @@
             <td mat-cell *matCellDef="let element"> {{element.fechaAtendida | date:'dd/MM/yyyy HH:mm:ss'}} </td>
         </ng-container>
       
-        <ng-container matColumnDef="prioridad">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Prioridad </th>
-          <td mat-cell *matCellDef="let element"><mat-icon  [ngClass]="{
-            'text-danger': element.prioridad == 'Alta',
-            'text-warning': element.prioridad == 'Media','text-muted': element.prioridad == 'Baja'}">warning</mat-icon> {{element.prioridad}} </td>
-        </ng-container>
-    
         <ng-container matColumnDef="tipo">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </th>
-            <td mat-cell *matCellDef="let element"> {{element.tipo}} </td>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Prioridad/Tipo</th>
+            <td mat-cell *matCellDef="let element"> 
+              <mat-icon [matTooltip]="element.prioridad" 
+                [ngClass]="{
+                'text-danger': element.prioridad == 'Alta',
+                'text-warning': element.prioridad == 'Media',
+                'text-muted': element.prioridad == 'Baja'}">warning</mat-icon>
+                {{element.tipo}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="responsable">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Atendida por </th>
+          <td mat-cell *matCellDef="let element"> <button class="btn btn-link" (click)="openUserDialog(findUsuario(element.responsable))">{{findUsuario(element.responsable).nombre}}</button></td>
         </ng-container>
     
         <ng-container matColumnDef="zona">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Lugar/Ubicación </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Zona/Ubicación </th>
           <td mat-cell *matCellDef="let element">
             <ng-container *ngIf="element.zona">
-              <button class="btn btn-link" [matMenuTriggerFor]="menu">Localización</button>
+              <button class="btn btn-link" [matMenuTriggerFor]="menu">Zona</button>
               <mat-menu class="p-4" #menu="matMenu">
                 <p *ngIf="element.zona.invernadero"><b>Invernadero:</b> {{element.zona.invernadero}}</p>
                 <p *ngIf="element.zona.sector"><b>Sector:</b> {{element.zona.sector}}</p>
@@ -95,16 +96,14 @@
                 <p *ngIf="element.zona.numero_planta"><b>Planta:</b> {{element.zona.numero_planta}}</p>
               </mat-menu>
             </ng-container>
-            <span *ngIf="!element.zona">Fuera del terreno</span>
             <ng-container *ngIf="element.ubicacion">
-              <button mat-icon-button color="primary" (click)="showMap(true)"><mat-icon>pin_drop</mat-icon></button>
-              <app-map *ngIf="activoMapa" [register]=false [coordinates]="element.ubicacion" (action)="showMap(false)"></app-map>  
+              <button class="btn btn-link" (click)="showMap(true, element.ubicacion)">Ubicación</button>
             </ng-container>  
           </td>
         </ng-container>
     
         <ng-container matColumnDef="autor">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Autor </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Creada por </th>
             <td mat-cell *matCellDef="let element"> <button class="btn btn-link" (click)="openUserDialog(element.autor)">{{element.autor.nombre}}</button> </td>
         </ng-container>
     
@@ -114,14 +113,14 @@
               <a   matTooltip="Mostrar detalles" (click)="openIncidentDialog(element)" mat-icon-button color="primary">
                 <mat-icon>zoom_in</mat-icon>
               </a>
-              <a matTooltip="Marcar como resuelta" class="text-success" (click)="incidenciaResuelta(element)" mat-icon-button >
+              <a *ngIf="element.responsable == myId()" matTooltip="Marcar como resuelta" class="text-success" (click)="incidenciaResuelta(element)" mat-icon-button >
                 <mat-icon>done_all</mat-icon>
               </a>  
             </td>
           </ng-container>
       
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
       </table>
       <mat-paginator #paginator2 [pageSizeOptions]="[ 10, 25, 50]" showFirstLastButtons></mat-paginator>
 </div>
@@ -134,24 +133,28 @@
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de resolución </th>
             <td mat-cell *matCellDef="let element"> {{element.fechaResuelta | date:'dd/MM/yyyy HH:mm:ss'}} </td>
         </ng-container>
-      
-        <ng-container matColumnDef="prioridad">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Prioridad </th>
-          <td mat-cell *matCellDef="let element"><mat-icon [ngClass]="{
-            'text-danger': element.prioridad == 'Alta',
-            'text-warning': element.prioridad == 'Media','text-muted': element.prioridad == 'Baja'}">warning</mat-icon> {{element.prioridad}} </td>
-        </ng-container>
     
         <ng-container matColumnDef="tipo">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </th>
-            <td mat-cell *matCellDef="let element"> {{element.tipo}} </td>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Prioridad/Tipo</th>
+            <td mat-cell *matCellDef="let element"> 
+                <mat-icon [matTooltip]="element.prioridad" 
+                [ngClass]="{
+                'text-danger': element.prioridad == 'Alta',
+                'text-warning': element.prioridad == 'Media',
+                'text-muted': element.prioridad == 'Baja'}">warning</mat-icon>
+              {{element.tipo}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="responsable">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Atendida por </th>
+          <td mat-cell *matCellDef="let element"> <button class="btn btn-link" (click)="openUserDialog(findUsuario(element.responsable))">{{findUsuario(element.responsable).nombre}}</button> </td>
         </ng-container>
     
         <ng-container matColumnDef="zona">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Lugar/Ubicación </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Zona/Ubicación </th>
           <td mat-cell *matCellDef="let element">
             <ng-container *ngIf="element.zona">
-              <button class="btn btn-link" [matMenuTriggerFor]="menu">Localización</button>
+              <button class="btn btn-link" [matMenuTriggerFor]="menu">Zona</button>
               <mat-menu class="p-4" #menu="matMenu">
                 <p *ngIf="element.zona.invernadero"><b>Invernadero:</b> {{element.zona.invernadero}}</p>
                 <p *ngIf="element.zona.sector"><b>Sector:</b> {{element.zona.sector}}</p>
@@ -159,16 +162,14 @@
                 <p *ngIf="element.zona.numero_planta"><b>Planta:</b> {{element.zona.numero_planta}}</p>
               </mat-menu>
             </ng-container>
-            <span *ngIf="!element.zona">Fuera del terreno</span>
             <ng-container *ngIf="element.ubicacion">
-              <button mat-icon-button color="primary" (click)="showMap(true)"><mat-icon>pin_drop</mat-icon></button>
-              <app-map *ngIf="activoMapa" [register]=false [coordinates]="element.ubicacion" (action)="showMap(false)"></app-map>  
+                <button class="btn btn-link" (click)="showMap(true, element.ubicacion)">Ubicación</button>
             </ng-container>  
           </td>
         </ng-container>
     
         <ng-container matColumnDef="autor">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Autor </th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Creada por </th>
             <td mat-cell *matCellDef="let element"> <button class="btn btn-link" (click)="openUserDialog(element.autor)">{{element.autor.nombre}}</button> </td>
         </ng-container>
     
@@ -181,8 +182,10 @@
             </td>
           </ng-container>
       
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
       </table>
       <mat-paginator #paginator3 [pageSizeOptions]="[ 10, 25, 50]" showFirstLastButtons></mat-paginator>
 </div>
+
+<app-map *ngIf="activoMapa" [register]=false [coordinates]="ubicacion" (action)="showMap(false)"></app-map>  

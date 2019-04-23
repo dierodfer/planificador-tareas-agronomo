@@ -1,12 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {MatPaginator, MatTableDataSource, MatSort, MatDialogConfig } from '@angular/material';
-import {COMMA, ENTER, TAB} from '@angular/cdk/keycodes';
-import {MatChipInputEvent} from '@angular/material';
 import {MatDialog} from '@angular/material';
 import { IncidentService } from 'src/app/services/incident.service';
 import { Incidencia } from 'src/app/models/incidencia';
 import { DialogUserComponent } from '../dialog-user/dialog-user.component';
 import { DialogIncidentDetailsComponent } from '../dialog-incident-details/dialog-incident-details.component';
+import { CookieService } from 'ngx-cookie-service';
+import { UserService } from 'src/app/services/user.service';
+import { Usuario } from 'src/app/models/usuario';
 
 @Component({
   selector: 'app-incidents-list',
@@ -15,7 +16,8 @@ import { DialogIncidentDetailsComponent } from '../dialog-incident-details/dialo
 })
 export class IncidentsListComponent implements OnInit {
 
-  displayedColumns: string[] = ['fecha', 'tipo', 'prioridad', 'zona', 'autor', 'acciones'];
+  displayedColumns1: string[] = ['acciones', 'fecha', 'tipo', 'zona', 'autor'];
+  displayedColumns2: string[] = ['acciones', 'fecha', 'tipo', 'zona', 'responsable'];
   dataSourcePendientes: MatTableDataSource<Incidencia>;
   dataSourceAtendidas: MatTableDataSource<Incidencia>;
   dataSourceResueltas: MatTableDataSource<Incidencia>;
@@ -25,16 +27,15 @@ export class IncidentsListComponent implements OnInit {
   @ViewChild('tableSort') sortPendientes: MatSort;
   @ViewChild('tableSort2') sortAtendidas: MatSort;
   @ViewChild('tableSort3') sortResueltas: MatSort;
-  visible = true;
-  selectable = true;
-  removable = true;
-  addOnBlur = true;
-  readonly separatorKeysCodes: number[] = [ENTER, COMMA, TAB];
-  filters: string[] = [];
   activoMapa = false;
+  ubicacion;
+
+  usuarios: Usuario[];
 
   constructor(private incidenciaService: IncidentService,
-    private dialog: MatDialog) { }
+    private dialog: MatDialog,
+    private cookie: CookieService,
+    private usuarioService: UserService) { }
 
   getIncidencias() {
     this.incidenciaService.getIncidentsByState('fechaCreacion', 'Pendiente').subscribe(incidencias => {
@@ -58,8 +59,16 @@ export class IncidentsListComponent implements OnInit {
     this.incidenciaService.updateAtendida(incidencia.id);
   }
 
+  cancelarIncidenciaAtendida(incidencia: Incidencia) {
+    this.incidenciaService.cancelAtendida(incidencia.id);
+  }
+
   incidenciaResuelta(incidencia: Incidencia) {
     this.incidenciaService.updateResuelta(incidencia.id);
+  }
+
+  myId() {
+    return this.cookie.get('sesionId');
   }
 
   openUserDialog(user) {
@@ -74,11 +83,23 @@ export class IncidentsListComponent implements OnInit {
     this.dialog.open(DialogIncidentDetailsComponent, dialogConfig);
   }
 
-  showMap(bool: boolean) {
+  showMap(bool: boolean, ubicacion?) {
+    if (bool) {
+      this.ubicacion = ubicacion;
+    }
     this.activoMapa = bool;
   }
 
+  findUsuario(id) {
+    return this.usuarios.find(user => user.empleado === id);
+  }
+
+  getUsuarios() {
+    this.usuarioService.getAllUsers().subscribe(users => this.usuarios = users as Usuario[]);
+  }
+
   ngOnInit() {
+    this.getUsuarios();
     this.getIncidencias();
   }
 

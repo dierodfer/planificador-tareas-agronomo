@@ -1,3 +1,5 @@
+import { Comentario } from './comentario';
+
 export class Tarea {
     id: string;
     descripcion: string;
@@ -11,5 +13,6 @@ export class Tarea {
     subtipo: string;
     cancelada: boolean;
     finalizada: boolean;
+    comentarios: Comentario[];
     constructor() {}
 }

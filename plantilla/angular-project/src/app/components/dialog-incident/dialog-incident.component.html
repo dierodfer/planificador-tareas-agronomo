@@ -1,5 +1,19 @@
 <h4 mat-dialog-title class="py-3">Enviar Incidencia</h4>
 <div mat-dialog-content>
+  <section>
+      <label>Prioridad:</label>
+      <mat-radio-group [(formControl)]="controlPrioridad">
+        <mat-radio-button class="p-2" value="Baja">
+          Baja
+        </mat-radio-button>
+        <mat-radio-button class="p-2" value="Media">
+          Media
+        </mat-radio-button>
+        <mat-radio-button class="p-2" value="Alta">
+          Alta
+        </mat-radio-button>
+      </mat-radio-group>
+  </section> 
   <mat-form-field class="w-100">
     <mat-select placeholder="Tipo de incidencia" [(formControl)]="control1" required>
         <mat-option value="Anomalía">Anomalía</mat-option>
@@ -21,16 +35,34 @@
   <mat-form-field class="w-50">
       <input matInput [value]="control4.value.nombre"  placeholder="Autor" disabled>
   </mat-form-field>
-  <mat-form-field class="w-100">
-  <mat-select placeholder="Invernadero" [(formControl)]="controlInver" required>
-      <mat-option value="Invernadero 1">Invernadero 1</mat-option>
-      <mat-option value="Invernadero 2">Invernadero 2</mat-option>
-      <mat-option value="Invernadero 3">Invernadero 3</mat-option>
-      <mat-option value="Invernadero 4">Invernadero 4</mat-option>
-      <mat-option value="Invernadero 5">Invernadero 5</mat-option>
-      <mat-option value="Invernadero 6">Invernadero 6</mat-option>
-  </mat-select>
-  <mat-error *ngIf="controlInver.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
+
+  <section >
+    <label>Instalaciones:</label>
+    <mat-radio-group [(formControl)]="controlInsta">
+      <mat-radio-button class="p-2" [value]=true>
+        Dentro
+      </mat-radio-button>
+      <mat-radio-button class="p-2" [value]=false>
+        Fuera
+      </mat-radio-button>
+    </mat-radio-group>
+  </section>
+  <div *ngIf="!controlInsta.value">
+    <button mat-stroked-button (click)="showMapa()" color="primary" *ngIf="!ubicacion">Añadir ubicación * <mat-icon>map</mat-icon></button>
+    <span *ngIf="ubicacion">Longitud: {{ubicacion.longitude}} , Latitud: {{ubicacion.latitude}}<button mat-icon-button matTooltip="Eliminar ubicacion" (click)="deleteUbicacion()" color="warn"><mat-icon>close</mat-icon></button></span>
+  </div>
+
+  <section>
+  <mat-form-field *ngIf="controlInsta.value">
+    <mat-select placeholder="Invernadero" [(formControl)]="controlInver" required>
+        <mat-option value="Invernadero 1">Invernadero 1</mat-option>
+        <mat-option value="Invernadero 2">Invernadero 2</mat-option>
+        <mat-option value="Invernadero 3">Invernadero 3</mat-option>
+        <mat-option value="Invernadero 4">Invernadero 4</mat-option>
+        <mat-option value="Invernadero 5">Invernadero 5</mat-option>
+        <mat-option value="Invernadero 6">Invernadero 6</mat-option>
+    </mat-select>
+    <mat-error *ngIf="controlInver.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
   </mat-form-field>
   <mat-form-field *ngIf="controlInver.value">
     <mat-select placeholder="Sector (opcional)" [(formControl)]="controlSector">
@@ -51,8 +83,8 @@
           <mat-option value="15">15</mat-option>
     </mat-select>
   </mat-form-field>
-  <mat-form-field *ngIf="controlInver.value">
-      <mat-select placeholder="Tabla (opcional)" [(formControl)]="controlTabla">
+  <mat-form-field *ngIf="controlSector.value">
+      <mat-select placeholder="Fila (opcional)" [(formControl)]="controlTabla">
           <mat-option value="1">1</mat-option>
           <mat-option value="2">2</mat-option>
           <mat-option value="3">3</mat-option>
@@ -86,28 +118,14 @@
           <mat-option value="33">33</mat-option>
       </mat-select>
   </mat-form-field>
-  <mat-form-field class="w-50" *ngIf="controlInver.value">
-      <input matInput placeholder="Número de planta (opcional)" type="number" [(formControl)]="controlPlanta">
-  </mat-form-field>
-  <section>
-    <label>Prioridad:</label>
-    <mat-radio-group [(formControl)]="controlPrioridad">
-      <mat-radio-button class="p-2" value="Baja">
-        Baja
-      </mat-radio-button>
-      <mat-radio-button class="p-2" value="Media">
-        Media
-      </mat-radio-button>
-      <mat-radio-button class="p-2" value="Alta">
-        Alta
-      </mat-radio-button>
-    </mat-radio-group>
-  </section> 
-  <p>Añadir Ubicación: <button mat-mini-fab (click)="showMapa()" color="primary"><mat-icon>map</mat-icon></button></p>
-  <span *ngIf="ubicacion">Longitud: {{ubicacion.longitude}} , Latitud: {{ubicacion.latitude}}<button mat-icon-button (click)="deleteUbicacion()"><mat-icon>delete</mat-icon></button></span>
-  <app-map (action)="actionMap($event)" [register]=true *ngIf="activemap"></app-map>
+  <mat-form-field class="w-50" *ngIf="controlTabla.value">
+      <input matInput placeholder="Planta (opcional)" type="number" [(formControl)]="controlPlanta">
+  </mat-form-field> 
+</section>
 </div>
 <div mat-dialog-actions class="float-right">
     <button mat-button (click)="submit()">Enviar</button>
     <button mat-button (click)="close()" color="warn">Cerrar</button>
 </div>
+
+<app-map (action)="actionMap($event)" [register]=true *ngIf="activemap"></app-map>

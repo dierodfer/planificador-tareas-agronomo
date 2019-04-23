@@ -67,6 +67,7 @@ import {MatBadgeModule} from '@angular/material/badge';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatMenuModule} from '@angular/material/menu';
 import { MapComponent } from './components/map/map.component';
+import { DialogConfirmationComponent } from './components/dialog-confirmation/dialog-confirmation.component';
 
 
 @NgModule({
@@ -90,6 +91,7 @@ import { MapComponent } from './components/map/map.component';
     IncidentsListComponent,
     DialogIncidentDetailsComponent,
     MapComponent,
+    DialogConfirmationComponent,
   ],
   imports: [
     BrowserModule,
@@ -115,7 +117,8 @@ import { MapComponent } from './components/map/map.component';
     DialogIncidentComponent,
     DialogUserComponent,
     DialogDeleteComponent,
-    DialogIncidentDetailsComponent
+    DialogIncidentDetailsComponent,
+    DialogConfirmationComponent
   ],
   providers: [MessagingService, AsyncPipe, CookieService],
   bootstrap: [AppComponent]

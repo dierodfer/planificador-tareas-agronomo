@@ -13,6 +13,8 @@ import { DialogUserComponent } from '../dialog-user/dialog-user.component';
 import * as moment from 'moment';
 import { first } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
+import { DialogConfirmationComponent } from '../dialog-confirmation/dialog-confirmation.component';
+
 
 @Component({
   selector: 'app-taks-list',
@@ -28,6 +30,7 @@ export class TaksListComponent implements OnInit {
   usuarios: Usuario[]; misGrupos: Grupo[];
   gruposAux: Grupo[]; usersAux: Usuario[];
   deleteDialog: MatDialogRef<DialogDeleteComponent>;
+  confirmDialog: MatDialogRef<DialogConfirmationComponent>;
   tipoTarea: string;
   editFechaFinalizacion = {}; editFechaComienzo = {};
   pickPendientes = false; pickCanceladas = false; pickFinalizadas = false;
@@ -132,6 +135,53 @@ export class TaksListComponent implements OnInit {
     this.pickCanceladas = true;
   }
 
+  openConfirmDialogFinalizarTarea(id) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
+      tipo: 'finalizarTarea',
+      titulo: '¿Desea añadir algun comentario?'
+    };
+    this.confirmDialog = this.dialog.open(DialogConfirmationComponent, dialogConfig);
+    this.confirmDialog.afterClosed().subscribe(confirmado => {
+      if (confirmado === true) {
+         this.finalizarTarea(id);
+      }
+      if (confirmado) {
+        this.addComentario(id, confirmado);
+        this.finalizarTarea(id);
+      }
+    });
+  }
+
+  openConfirmDialogAnadirComentario(id) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
+      tipo: 'añadirComentario',
+      input: true
+    };
+    this.confirmDialog = this.dialog.open(DialogConfirmationComponent, dialogConfig);
+    this.confirmDialog.afterClosed().subscribe(confirmado => {
+        if (confirmado) {
+          this.addComentario(id, confirmado);
+        }
+    });
+  }
+
+  openConfirmDialogInterrumpirTarea(id) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
+      tipo: 'interrumpirTarea',
+      titulo: '¿Seguro que desea interrumpirla?',
+      detalles: 'El coordinador de la tarea será notificado, se recomienda crear una incidencia si encontró algún problema.'
+    };
+    this.confirmDialog = this.dialog.open(DialogConfirmationComponent, dialogConfig);
+    this.confirmDialog.afterClosed().subscribe(confirmado => {
+      if (confirmado) {
+        this.cancelarTarea(id);
+      }
+    });
+  }
+
   descancelarTarea(id) {
     this.taskService.uncancelTask(id);
     this.pickPendientes = true;
@@ -208,6 +258,10 @@ export class TaksListComponent implements OnInit {
   submitFechaFinalizacion(tarea: Tarea) {
     this.taskService.updateDateEstimated(tarea.id, this.controlFechaFinalizacion.value);
     this.editFechaFinalizacion[tarea.id] = !this.editFechaFinalizacion[tarea.id];
+  }
+
+  addComentario(id, comentario) {
+    this.taskService.addComment(id, comentario);
   }
 
   isCoordinador() {

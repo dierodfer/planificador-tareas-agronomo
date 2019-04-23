@@ -22,6 +22,7 @@ export class DialogIncidentComponent implements OnInit {
   controlSector = new FormControl('');
   controlTabla = new FormControl('');
   controlPlanta = new FormControl('');
+  controlInsta = new FormControl('');
   ubicacion;
 
   activemap = false;
@@ -33,6 +34,7 @@ export class DialogIncidentComponent implements OnInit {
     this.control3.setValue(moment().format('D/M/YYYY, h:mm:ss a'));
     usuarioService.getMyUser().forEach(user => this.control4.setValue(user));
     this.controlPrioridad.setValue('Media');
+    this.controlInsta.setValue(true);
   }
 
   submit() {
@@ -55,8 +57,9 @@ export class DialogIncidentComponent implements OnInit {
     incidencia.estado = 'Pendiente';
     incidencia.prioridad = this.controlPrioridad.value;
     incidencia.descripcion = this.control2.value;
-    incidencia.zona = new Zona(this.controlInver.value, this.controlSector.value, this.controlTabla.value, this.controlPlanta.value);
-    if (this.ubicacion) {
+    if (this.controlInsta.value) {
+      incidencia.zona = new Zona(this.controlInver.value, this.controlSector.value, this.controlTabla.value, this.controlPlanta.value);
+    } else {
       incidencia.ubicacion = this.ubicacion;
     }
     return incidencia;
@@ -64,7 +67,8 @@ export class DialogIncidentComponent implements OnInit {
 
   checkStatus(): boolean {
     return this.control1.status === 'VALID'
-    && this.controlInver.status === 'VALID'
+    && (this.controlInsta.value ? this.controlInver.status === 'VALID' : true)
+    && (!this.controlInsta.value ? this.ubicacion : true)
     && (this.control1.value === 'Otro' ? this.control2.status === 'VALID' : true);
   }
 

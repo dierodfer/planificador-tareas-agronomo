@@ -64,10 +64,10 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getMyBuzon();
-    this.getMyUser();
     const sesionId = this.cookie.get('sesionId');
     if (sesionId !== null) {
+      this.getMyBuzon();
+      this.getMyUser();
       this.messagingService.requestPermission(sesionId);
       this.messagingService.receiveMessage();
     }

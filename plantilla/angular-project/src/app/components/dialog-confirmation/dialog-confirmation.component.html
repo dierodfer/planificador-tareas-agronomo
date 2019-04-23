@@ -1,0 +1,18 @@
+<h2 mat-dialog-title *ngIf="tipo == 'finalizarTarea'">Finalizar Tarea</h2>
+<h2 mat-dialog-title *ngIf="tipo == 'interrumpirTarea'">Interrumpir Tarea</h2>
+<h2 mat-dialog-title *ngIf="tipo == 'añadirComentario'">Añadir Comentario</h2>
+<mat-dialog-content>
+    <p *ngIf="titulo">{{titulo}}</p>
+    <mat-hint *ngIf="detalles" class="text-muted">{{detalles}}</mat-hint>
+    <mat-form-field *ngIf="input" class="w-100">
+      <textarea matInput [(formControl)]="control" placeholder="Comentario" rows="6"></textarea>
+    </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions class="float-right">
+  <button class="text-success" mat-button *ngIf="tipo == 'finalizarTarea' && !input" (click)="openInput()">Sí</button>
+  <button mat-button *ngIf="tipo == 'finalizarTarea' && !input" (click)="confirm()" color="primary">No, solo finalizar</button>
+  <button class="text-success" mat-button *ngIf="tipo == 'finalizarTarea' && input" (click)="confirm(control.value)">Finalizar y añadir</button>
+  <button class="text-success" mat-button *ngIf="tipo == 'añadirComentario' && input" (click)="confirm(control.value)">Añadir</button>
+  <button class="text-success" mat-button *ngIf="tipo == 'interrumpirTarea'" (click)="confirm()">Sí</button>
+  <button mat-button mat-dialog-close>Cerrar</button>
+</mat-dialog-actions> 

@@ -31,21 +31,21 @@
       <mat-error *ngIf="controlSubtipo.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
     </mat-form-field>
 
-    <mat-form-field class="w-50" *ngIf="!controlGrupal.value">
+    <mat-form-field class="w-100">
       <input matInput [min]="minDatepicker" [formControl]="controlFecha" [matDatepicker]="picker" placeholder="Fecha de comienzo" required (dateChange)="dateChange($event)">
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker touchUi #picker></mat-datepicker>
       <mat-error *ngIf="controlFecha.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
     </mat-form-field>
 
-    <mat-form-field class="w-50" *ngIf="!controlGrupal.value">
+<!--     <mat-form-field class="w-50" *ngIf="!controlGrupal.value">
         <input matInput [min]="minDateFinishpicker" [formControl]="controlFechaEstimacion" [matDatepicker]="picker" placeholder="Fecha de finalización(opcional)">
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker touchUi #picker></mat-datepicker>
         <mat-error *ngIf="controlFecha.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
-    </mat-form-field>
+    </mat-form-field> -->
 
-    <mat-form-field class="w-100" *ngIf="!controlGrupal.value">
+    <mat-form-field class="w-100">
       <input matInput placeholder="Duración en días" type="number" [value]="controlRepit.value" disabled>
       <button mat-icon-button matSuffix class="mr-2" (click)="addRepit()"><mat-icon class="big-icon">add</mat-icon></button>
       <button mat-icon-button matSuffix class="mr-2" (click)="subRepit()"><mat-icon class="big-icon">remove</mat-icon></button>
@@ -62,7 +62,7 @@
     </mat-radio-group>
 
     <mat-form-field class="w-100" *ngIf="!controlGrupal.value && usuarios.length > 0">
-      <mat-select placeholder="Elige los usuarios para la tarea" [formControl]="controlUsuarios" multiple required>
+      <mat-select placeholder="Elige responsable/s de la tarea" [formControl]="controlUsuarios" multiple required>
         <mat-select-trigger>
           {{controlUsuarios.value[0] ? controlUsuarios.value[0].nombre+','+controlUsuarios.value[0].apellidos : ''}}
           <span *ngIf="controlUsuarios.value?.length > 1" class="example-additional-selection">

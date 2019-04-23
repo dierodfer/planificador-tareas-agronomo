@@ -95,10 +95,9 @@ export class TaksFormComponent implements OnInit {
     res.descripcion = this.controlDescrip.value.trim();
     res.finalizada = false;
     res.cancelada = false;
+    res.fechaComienzo = this.controlFecha.value;
     if (this.controlGrupal.value) {
       res.responsable = this.controlGrupo.value.coordinador;
-    } else {
-      res.fechaComienzo = this.controlFecha.value;
     }
     // Se calcula fecha de estimacion
     if (this.controlRepit.value > 1) {
@@ -112,10 +111,10 @@ export class TaksFormComponent implements OnInit {
   checkStatus(): boolean {
     return this.controlTipo.status === 'VALID'
     && (this.controlTipo.value.tareas.length > 0 ? this.controlSubtipo.status === 'VALID' : true)
-    && (this.controlGrupal.value ? this.controlGrupo.status === 'VALID' : true)
+    &&  this.controlGrupo.status === 'VALID'
     && (!this.controlGrupal.value ? this.controlUsuarios.status === 'VALID' : true)
-    && (!this.controlGrupal.value ? this.controlFecha.status === 'VALID' : true)
-    && (!this.controlGrupal.value ? this.controlRepit.status === 'VALID' : true);
+    &&  this.controlFecha.status === 'VALID'
+    &&  this.controlRepit.status === 'VALID';
   }
 
   resetValidators() {

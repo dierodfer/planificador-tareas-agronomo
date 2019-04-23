@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material';
 import {MessagingService} from './messaging.service';
 import { NotificationService } from './notification.service';
 import { Notificacion } from '../models/notificacion';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,8 @@ export class IncidentService {
   constructor(private db: AngularFirestore,
     private snackBar: MatSnackBar,
     private messagingService: MessagingService,
-    private noficacionService: NotificationService) { }
+    private noficacionService: NotificationService,
+    private cookie: CookieService) { }
 
   getIncidents() {
     return this.db.collection('incidencias', ref => ref.orderBy('fechaCreacion', 'desc')).valueChanges();
@@ -27,7 +29,16 @@ export class IncidentService {
   updateAtendida(id: string) {
     this.db.collection('incidencias').doc(id).update({
       estado: 'Atendida',
+      responsable: this.cookie.get('sesionId'),
       fechaAtendida: new Date().toJSON()
+    });
+  }
+
+  cancelAtendida(id: string) {
+    this.db.collection('incidencias').doc(id).update({
+      estado: 'Pendiente',
+      responsable: '',
+      fechaAtendida: ''
     });
   }
 
@@ -44,7 +55,7 @@ export class IncidentService {
     this.db.collection('incidencias').doc(incidencia.id).set(copia).then(() => {
       const titulo = 'Nueva Incidencia - ' + incidencia.tipo;
       const cuerpo = 'Autor: ' + incidencia.autor.nombre + ', ' + incidencia.autor.apellidos
-      + ', en el invernadero ' + incidencia.zona.invernadero
+      + (incidencia.zona.invernadero ? ', en el invernadero ' + incidencia.zona.invernadero : '')
       + (incidencia.zona.sector ? ', en el sector: ' + incidencia.zona.sector : '')
       + (incidencia.zona.tabla ? ', en la tabla: ' + incidencia.zona.tabla : '')
       + (incidencia.zona.numero_planta ? ', en el número: ' + incidencia.zona.numero_planta : '');
