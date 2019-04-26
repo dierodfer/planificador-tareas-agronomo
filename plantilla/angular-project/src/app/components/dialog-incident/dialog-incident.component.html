@@ -64,7 +64,7 @@
     </mat-select>
     <mat-error *ngIf="controlInver.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
   </mat-form-field>
-  <mat-form-field *ngIf="controlInver.value">
+  <mat-form-field *ngIf="controlInver.value && controlInsta.value">
     <mat-select placeholder="Sector (opcional)" [(formControl)]="controlSector">
  		      <mat-option value="1">1</mat-option>
           <mat-option value="2">2</mat-option>
@@ -83,7 +83,7 @@
           <mat-option value="15">15</mat-option>
     </mat-select>
   </mat-form-field>
-  <mat-form-field *ngIf="controlSector.value">
+  <mat-form-field *ngIf="controlSector.value && controlInsta.value">
       <mat-select placeholder="Fila (opcional)" [(formControl)]="controlTabla">
           <mat-option value="1">1</mat-option>
           <mat-option value="2">2</mat-option>
@@ -118,7 +118,7 @@
           <mat-option value="33">33</mat-option>
       </mat-select>
   </mat-form-field>
-  <mat-form-field class="w-50" *ngIf="controlTabla.value">
+  <mat-form-field class="w-50" *ngIf="controlTabla.value && controlInsta.value">
       <input matInput placeholder="Planta (opcional)" type="number" [(formControl)]="controlPlanta">
   </mat-form-field> 
 </section>

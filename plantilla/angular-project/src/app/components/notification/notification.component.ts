@@ -41,11 +41,6 @@ export class NotificationComponent implements OnInit, OnDestroy {
     this.notificacionService.deleteNotification(noti);
   }
 
-  enviarAdmin() {
-    this.messagingService.sendMessage('Notificacion Externa', 'Esto es una Notificacion Externa', '0');
-    this.notificacionService.sendNotification('0', new Notificacion('Esto es una Notificacion Interna', 'Notificacion Interna'));
-  }
-
   enviar() {
     this.notificacionService.sendNotification(this.cookie.get('sesionId'),
     new Notificacion('Esto es una descripción', 'Titulo Notificación'));

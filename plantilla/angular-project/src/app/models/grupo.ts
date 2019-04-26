@@ -4,6 +4,7 @@ export class Grupo {
     nombre: string;
     usuarios: string[];
     coordinador: string;
+    eliminado: boolean;
     constructor(nombre, coordinador) {
         this.coordinador = coordinador;
         this.nombre = nombre;

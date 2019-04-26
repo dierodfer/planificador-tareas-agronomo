@@ -137,7 +137,7 @@ export class TaskService {
   uncancelTask(id: string) {
     this.db.collection('tareas').doc(id).update({
       cancelada: false,
-      fechaFinalizacion: ''
+      fechaFinalizacion: firebase.firestore.FieldValue.delete()
     }).then(() => {
       this.snackBar.open('La tarea se ha vuelto a activar', 'Cerrar', {
         duration: 4000,
@@ -159,7 +159,7 @@ export class TaskService {
   unfinishedTask(id: string) {
     this.db.collection('tareas').doc(id).update({
       finalizada: false,
-      fechaFinalizacion: ''
+      fechaFinalizacion: firebase.firestore.FieldValue.delete()
     }).then(() => {
       this.snackBar.open('La tarea se ha marcado como NO finalizada', 'Cerrar', {
         duration: 4000,

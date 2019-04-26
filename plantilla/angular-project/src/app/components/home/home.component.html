@@ -9,7 +9,7 @@
         'bg-red text-white': !(isOnline() | async)
       }">
           <button mat-button class="py-3" (click)="sidenav.toggle()"><mat-icon>vertical_split</mat-icon></button>
-          <small>v1.2.6</small>
+          <small>v1.3.0</small>
 
           <button matTooltip="Notificaciones" mat-button class="py-3 mr-3 float-right" (click)="openNotifications()">
             <mat-icon *ngIf="nuevasNoti">notifications</mat-icon> 
@@ -19,7 +19,7 @@
             <mat-icon>warning</mat-icon>
           </button>
           <button mat-button matTooltip="Mi perfil" class="py-3 float-right" (click)="openMyUserDialog()">
-            <mat-icon>account_circle</mat-icon>
+            <mat-icon>account_circle</mat-icon>{{miUsuario ? miUsuario.nombre: ''}}
           </button>
       </div>
       <div style="margin-top: 92px;" class="pb-5 mb-3">

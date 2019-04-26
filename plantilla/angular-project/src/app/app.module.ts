@@ -68,6 +68,7 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatMenuModule} from '@angular/material/menu';
 import { MapComponent } from './components/map/map.component';
 import { DialogConfirmationComponent } from './components/dialog-confirmation/dialog-confirmation.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 
 @NgModule({
@@ -92,6 +93,7 @@ import { DialogConfirmationComponent } from './components/dialog-confirmation/di
     DialogIncidentDetailsComponent,
     MapComponent,
     DialogConfirmationComponent,
+    DashboardComponent,
   ],
   imports: [
     BrowserModule,

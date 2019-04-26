@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-menu-admin',
@@ -9,7 +10,7 @@ export class MenuAdminComponent implements OnInit {
 
   lastEvent;
 
-  constructor() { }
+  constructor(private cookie: CookieService) { }
 
   click(event) {
     if (this.lastEvent) {
@@ -17,6 +18,10 @@ export class MenuAdminComponent implements OnInit {
     }
     event.target.classList.toggle('click');
     this.lastEvent = event;
+  }
+
+  isAdmin() {
+    return this.cookie.get('rol') === 'ADMIN';
   }
 
   ngOnInit() {

@@ -18,6 +18,10 @@ export class DialogUserComponent implements OnInit {
       this.usuario = data as Usuario;
   }
 
+  urlTelefono(telefono){
+    return 'tel:' + telefono;
+  }
+
   isCoordinador() {
     return this.cookie.get('rol') === 'COORDINADOR' || this.cookie.get('rol') === 'ADMIN';
   }

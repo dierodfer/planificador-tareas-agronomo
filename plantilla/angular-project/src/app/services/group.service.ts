@@ -40,6 +40,12 @@ export class GroupService {
     this.db.collection('grupos').doc(id).delete();
   }
 
+/*   deleteGroup(id) {
+    this.db.collection('grupos').doc(id).update({
+      eliminado: true
+    });
+  } */
+
   updateNameGroup(idGroup, nombre) {
     this.db.collection('grupos').doc(idGroup).update({
       nombre: nombre
@@ -48,6 +54,7 @@ export class GroupService {
 
   addGroup(group: Grupo) {
     group.id = Math.random().toString().substring(2);
+    group.eliminado = false;
     const copia = JSON.parse(JSON.stringify(group));
     this.db.collection('grupos').doc(group.id).set(copia);
   }

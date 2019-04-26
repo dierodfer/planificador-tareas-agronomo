@@ -16,7 +16,7 @@ import { DialogDeleteComponent } from '../dialog-delete/dialog-delete.component'
 })
 export class GroupListComponent implements OnInit, OnDestroy {
 
-  control = new FormControl('', [Validators.required]);
+  control = new FormControl('', [Validators.required, Validators.maxLength(30)]);
 
   grupos: Grupo[];
   usuarios: Usuario[];
@@ -47,11 +47,11 @@ export class GroupListComponent implements OnInit, OnDestroy {
   }
 
   updateNombre(groupId) {
-    if (this.control.value.length > 0) {
-      this.grupoService.updateNameGroup(groupId, this.control.value.trim());
-    }
-    this.editName[groupId] = !this.editName[groupId];
-    this.control.reset('');
+      if (this.control.value.length > 0) {
+        this.grupoService.updateNameGroup(groupId, this.control.value.trim());
+      }
+      this.editName[groupId] = !this.editName[groupId];
+      this.control.reset('');
   }
 
   toggleAddUser(groupId) {
@@ -92,7 +92,7 @@ export class GroupListComponent implements OnInit, OnDestroy {
   }
 
   deleteAllGroupWithoutUsers() {
-    if(this.grupos){
+    if (this.grupos){
       this.grupos.forEach(grupo => {
         if (grupo.usuarios.length === 0) {
           this.grupoService.deleteGroup(grupo.id);
@@ -133,7 +133,7 @@ export class GroupListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.deleteAllGroupWithoutUsers();
+/*     this.deleteAllGroupWithoutUsers(); */
   }
 
 }

@@ -13,11 +13,13 @@ import { Location } from '@angular/common';
   styleUrls: ['./user-form.component.css']
 })
 export class UserFormComponent implements OnInit {
-  controlNombre = new FormControl('', [Validators.required, Validators.maxLength(30)]);
+  controlNombre = new FormControl('', [Validators.required, Validators.maxLength(50)]);
   controlApellidos = new FormControl('', [Validators.required, Validators.maxLength(80)]);
   controlRol = new FormControl('', [Validators.required, Validators.maxLength(20)]);
   controlEmpleado = new FormControl('', [Validators.required, Validators.maxLength(10)]);
   controlGenero = new FormControl('', [Validators.required, Validators.maxLength(10)]);
+  controlTelefono = new FormControl('', [Validators.required, Validators.minLength(9),
+    Validators.maxLength(9), Validators.pattern('^[0-9]*$')]);
 
   editar: Boolean = false;
 
@@ -61,6 +63,7 @@ export class UserFormComponent implements OnInit {
     usuario.rol = this.controlRol.value;
     usuario.empleado = this.controlEmpleado.value.toString();
     usuario.genero = this.controlGenero.value;
+    usuario.telefono = this.controlTelefono.value;
     return usuario;
   }
 
@@ -69,7 +72,8 @@ export class UserFormComponent implements OnInit {
     && this.controlApellidos.status === 'VALID'
     && this.controlRol.status === 'VALID'
     && this.controlEmpleado.status === 'VALID'
-    && this.controlGenero.status === 'VALID';
+    && this.controlGenero.status === 'VALID'
+    && this.controlTelefono.status === 'VALID';
   }
 
   resetValidators() {
@@ -78,6 +82,7 @@ export class UserFormComponent implements OnInit {
     this.controlRol.reset('');
     this.controlEmpleado.reset('');
     this.controlGenero.reset('');
+    this.controlTelefono.reset('');
   }
 
   getRouteParams() {
@@ -90,6 +95,7 @@ export class UserFormComponent implements OnInit {
         this.controlGenero.setValue(usuario.genero);
         this.controlNombre.setValue(usuario.nombre);
         this.controlRol.setValue(usuario.rol);
+        this.controlTelefono.setValue(usuario.telefono);
       });
     }
   }

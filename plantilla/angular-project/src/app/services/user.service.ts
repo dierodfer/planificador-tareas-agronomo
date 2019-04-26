@@ -59,6 +59,7 @@ export class UserService {
       apellidos: usuario.apellidos,
       rol: usuario.rol,
       genero: usuario.genero,
+      telefono: usuario.telefono,
       baneado: false
     }).then(() => {
         this.snackBar.open('El usuario se ha guardado', 'Cerrar', {
@@ -73,6 +74,7 @@ export class UserService {
       nombre: usuario.nombre,
       apellidos: usuario.apellidos,
       genero: usuario.genero,
+      telefono: usuario.telefono
     }).then(() => {
         this.snackBar.open('El usuario se ha actualizado', 'Cerrar', {
           duration: 4000,
@@ -80,7 +82,7 @@ export class UserService {
     });
   }
 
-  blockUser(empleado: string){
+  blockUser(empleado: string) {
     this.db.collection('usuarios').doc(empleado).update({
       baneado: true
     });
@@ -92,7 +94,7 @@ export class UserService {
     });
   }
 
-  // Cambiar por bloquear
+  // NO SE USA
   deleteUsuario(id: string) {
     this.db.collection('usuarios').doc(id).delete().then(() => {
       this.snackBar.open('El usuario ¡se ha borrado correctamente!', 'Cerrar', {

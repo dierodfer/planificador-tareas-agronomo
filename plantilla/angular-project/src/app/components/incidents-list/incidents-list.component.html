@@ -19,10 +19,10 @@
     </ng-container>
 
     <ng-container matColumnDef="zona">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Zona/Ubicación </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Instalaciones </th>
         <td mat-cell *matCellDef="let element">
           <ng-container *ngIf="element.zona">
-            <button class="btn btn-link" [matMenuTriggerFor]="menu">Zona</button>
+            <button class="btn btn-link" [matMenuTriggerFor]="menu">Dentro</button>
             <mat-menu class="p-4" #menu="matMenu">
               <p *ngIf="element.zona.invernadero"><b>Invernadero:</b> {{element.zona.invernadero}}</p>
               <p *ngIf="element.zona.sector"><b>Sector:</b> {{element.zona.sector}}</p>
@@ -31,7 +31,7 @@
             </mat-menu>
           </ng-container>
           <ng-container *ngIf="element.ubicacion">
-            <button class="btn btn-link" (click)="showMap(true, element.ubicacion)">Ubicación</button>
+            <button class="btn btn-link" (click)="showMap(true, element.ubicacion)">Fuera</button>
           </ng-container>  
         </td>
     </ng-container>
@@ -56,10 +56,10 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns1;"></tr>
   </table>
-  <mat-paginator #paginator [pageSizeOptions]="[ 10, 25, 50]" showFirstLastButtons></mat-paginator>
+  <mat-paginator #paginator [pageSizeOptions]="[5, 10, 25, 50]" showFirstLastButtons></mat-paginator>
 </div>
 
-<h4 class="text-info pt-3 pl-3">Atendidas <mat-icon matTooltip="Una incidencia ATENDIDA solo puede ser finalizada por el usuario que la atiende">info</mat-icon></h4>
+<h4 class="text-info pt-3 pl-3">Atendidas <mat-icon matTooltip="Una incidencia ATENDIDA solo puede ser resuelta por el usuario que la atiende">info</mat-icon></h4>
 <div class="table-responsive">
     <table mat-table [dataSource]="dataSourceAtendidas" matSort #tableSort2="matSort" class="mat-elevation-z6 w-100">
     
@@ -85,10 +85,10 @@
         </ng-container>
     
         <ng-container matColumnDef="zona">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Zona/Ubicación </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Instalaciones </th>
           <td mat-cell *matCellDef="let element">
             <ng-container *ngIf="element.zona">
-              <button class="btn btn-link" [matMenuTriggerFor]="menu">Zona</button>
+              <button class="btn btn-link" [matMenuTriggerFor]="menu">Dentro</button>
               <mat-menu class="p-4" #menu="matMenu">
                 <p *ngIf="element.zona.invernadero"><b>Invernadero:</b> {{element.zona.invernadero}}</p>
                 <p *ngIf="element.zona.sector"><b>Sector:</b> {{element.zona.sector}}</p>
@@ -97,7 +97,7 @@
               </mat-menu>
             </ng-container>
             <ng-container *ngIf="element.ubicacion">
-              <button class="btn btn-link" (click)="showMap(true, element.ubicacion)">Ubicación</button>
+              <button class="btn btn-link" (click)="showMap(true, element.ubicacion)">Fuera</button>
             </ng-container>  
           </td>
         </ng-container>
@@ -116,13 +116,16 @@
               <a *ngIf="element.responsable == myId()" matTooltip="Marcar como resuelta" class="text-success" (click)="incidenciaResuelta(element)" mat-icon-button >
                 <mat-icon>done_all</mat-icon>
               </a>  
+              <a *ngIf="element.responsable == myId()" matTooltip="No atender incidencia"  (click)="cancelarIncidenciaAtendida(element)" class="text-danger" mat-icon-button >
+                <mat-icon>cancel_presentation</mat-icon>
+              </a>
             </td>
           </ng-container>
       
         <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
       </table>
-      <mat-paginator #paginator2 [pageSizeOptions]="[ 10, 25, 50]" showFirstLastButtons></mat-paginator>
+      <mat-paginator #paginator2 [pageSizeOptions]="[5, 10, 25, 50]" showFirstLastButtons></mat-paginator>
 </div>
 
 <h4 class="text-success pt-3 pl-3">Resueltas</h4>
@@ -151,10 +154,10 @@
         </ng-container>
     
         <ng-container matColumnDef="zona">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Zona/Ubicación </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Instalaciones </th>
           <td mat-cell *matCellDef="let element">
             <ng-container *ngIf="element.zona">
-              <button class="btn btn-link" [matMenuTriggerFor]="menu">Zona</button>
+              <button class="btn btn-link" [matMenuTriggerFor]="menu">Dentro</button>
               <mat-menu class="p-4" #menu="matMenu">
                 <p *ngIf="element.zona.invernadero"><b>Invernadero:</b> {{element.zona.invernadero}}</p>
                 <p *ngIf="element.zona.sector"><b>Sector:</b> {{element.zona.sector}}</p>
@@ -163,7 +166,7 @@
               </mat-menu>
             </ng-container>
             <ng-container *ngIf="element.ubicacion">
-                <button class="btn btn-link" (click)="showMap(true, element.ubicacion)">Ubicación</button>
+                <button class="btn btn-link" (click)="showMap(true, element.ubicacion)">Fuera</button>
             </ng-container>  
           </td>
         </ng-container>
@@ -185,7 +188,7 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
       </table>
-      <mat-paginator #paginator3 [pageSizeOptions]="[ 10, 25, 50]" showFirstLastButtons></mat-paginator>
+      <mat-paginator #paginator3 [pageSizeOptions]="[5, 10, 25, 50]" showFirstLastButtons></mat-paginator>
 </div>
 
 <app-map *ngIf="activoMapa" [register]=false [coordinates]="ubicacion" (action)="showMap(false)"></app-map>  

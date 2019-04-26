@@ -6,6 +6,8 @@ import {MessagingService} from './messaging.service';
 import { NotificationService } from './notification.service';
 import { Notificacion } from '../models/notificacion';
 import { CookieService } from 'ngx-cookie-service';
+import * as firebase from 'firebase/app';
+import 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -37,8 +39,8 @@ export class IncidentService {
   cancelAtendida(id: string) {
     this.db.collection('incidencias').doc(id).update({
       estado: 'Pendiente',
-      responsable: '',
-      fechaAtendida: ''
+      responsable: firebase.firestore.FieldValue.delete(),
+      fechaAtendida: firebase.firestore.FieldValue.delete()
     });
   }
 
@@ -54,11 +56,14 @@ export class IncidentService {
     const copia = JSON.parse(JSON.stringify(incidencia));
     this.db.collection('incidencias').doc(incidencia.id).set(copia).then(() => {
       const titulo = 'Nueva Incidencia - ' + incidencia.tipo;
-      const cuerpo = 'Autor: ' + incidencia.autor.nombre + ', ' + incidencia.autor.apellidos
-      + (incidencia.zona.invernadero ? ', en el invernadero ' + incidencia.zona.invernadero : '')
-      + (incidencia.zona.sector ? ', en el sector: ' + incidencia.zona.sector : '')
-      + (incidencia.zona.tabla ? ', en la tabla: ' + incidencia.zona.tabla : '')
-      + (incidencia.zona.numero_planta ? ', en el número: ' + incidencia.zona.numero_planta : '');
+      let cuerpo = 'Autor: ' + incidencia.autor.nombre + ', ' + incidencia.autor.apellidos
+      + (incidencia.ubicacion ? ', fuera de las instalaciones.' : '');
+      if (incidencia.zona) {
+        cuerpo = cuerpo + (incidencia.zona.invernadero ? ', en el invernadero ' + incidencia.zona.invernadero : '')
+        + (incidencia.zona.sector ? ', en el sector: ' + incidencia.zona.sector : '')
+        + (incidencia.zona.tabla ? ', en la tabla: ' + incidencia.zona.tabla : '')
+        + (incidencia.zona.numero_planta ? ', en el número: ' + incidencia.zona.numero_planta : '')
+      }
 
       // Envia notiicacion Push e Interna
       this.messagingService.sendMessage(titulo, cuerpo, '0');

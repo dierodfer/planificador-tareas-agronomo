@@ -53,6 +53,24 @@ export class LoginComponent implements OnInit {
     this.error = false;
   }
 
+  enter(event) {
+    if (event.keyCode === 13) {
+      this.login();
+    }
+  }
+
+  admin() {
+    this.control.setValue('0');
+  }
+
+  coordinador() {
+    this.control.setValue('10');
+  }
+
+  trabajador() {
+    this.control.setValue('15');
+  }
+
   ngOnInit() {
     if (this.cookieService.check('sesionId')) {
       if (this.cookieService.get('sesionId') !== 'null'){

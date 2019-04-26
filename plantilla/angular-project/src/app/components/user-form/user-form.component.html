@@ -22,13 +22,19 @@
     <input type="number" matInput placeholder="Nº de empleado" [formControl]="controlEmpleado" [attr.disabled]="editar" required>
     <mat-error *ngIf="controlEmpleado.hasError('required')">Campo obligatorio</mat-error>
   </mat-form-field>
+  <mat-form-field class="w-100">
+    <span matPrefix>+34 &nbsp;</span>
+    <input type="tel" matInput maxlength="9" placeholder="Teléfono" [formControl]="controlTelefono" required>
+    <mat-icon matSuffix>phone</mat-icon>
+    <mat-hint align="end">{{controlTelefono.value.length}} / 9</mat-hint>
+    <mat-error *ngIf="controlTelefono.hasError('required')">Campo obligatorio</mat-error>
+    <mat-error *ngIf="controlTelefono.hasError('pattern')">Solo valores numéricos</mat-error>
+  </mat-form-field>
   <mat-radio-group class="w-100" [formControl]="controlGenero">
     <label class="pt-3 pr-2">Género:</label>
     <mat-radio-button class="pr-2"  value="MUJER">Mujer</mat-radio-button>
     <mat-radio-button  value="HOMBRE">Hombre</mat-radio-button>
   </mat-radio-group>
-  <!-- <mat-label class="pt-3">Edad:</mat-label>
-  <mat-slider class="w-100" [max]="50" [min]="0" color="primary" thumbLabel [tickInterval]="5"></mat-slider> -->
 </div>
 
 <button class="button-right  bg-success" *ngIf="editar" matTooltip="Guardar Usuario" (click)="updateUsuario()" mat-mini-fab color="primary"> <mat-icon class="big-icon">save</mat-icon></button>

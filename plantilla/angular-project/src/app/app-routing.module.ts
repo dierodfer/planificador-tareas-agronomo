@@ -11,12 +11,14 @@ import { GroupListComponent } from './components/group-list/group-list.component
 import { CycleFormComponent } from './components/cycle-form/cycle-form.component';
 import { MenuAdminComponent } from './components/menu-admin/menu-admin.component';
 import { IncidentsListComponent } from './components/incidents-list/incidents-list.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 const routes: Routes = [
   {
     path: 'inicio',
     component: HomeComponent,
     children: [
+          { path: '', component: DashboardComponent},
           { path: 'tareas/lista', component: TaksListComponent},
           { path: 'tareas/formulario', component: TaksFormComponent},
           { path: 'notificaciones', component: NotificationComponent},

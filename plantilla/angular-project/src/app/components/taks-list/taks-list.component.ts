@@ -67,7 +67,7 @@ export class TaksListComponent implements OnInit {
     return this.gruposAux.find(grupo => grupo.id === grupoId);
   }
 
-  findUsuario(userId){
+  findUsuario(userId) {
     return this.usersAux.find(user => user.empleado === userId);
   }
 

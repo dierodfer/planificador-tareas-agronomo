@@ -1,7 +1,7 @@
 
 <div class="p-3 card-columns text-center">
-  <mat-card class="card" (click)="click($event)" [routerLink]="[ 'usuarios/lista' ]">Administrar Usuarios</mat-card>
+  <mat-card *ngIf="isAdmin()" class="card" (click)="click($event)" [routerLink]="[ 'usuarios/lista' ]">Administrar Usuarios</mat-card>
   <mat-card class="card" (click)="click($event)" [routerLink]="[ 'grupos' ]">Administrar Grupos</mat-card>
-  <mat-card class="card" (click)="click($event)" [routerLink]="[ 'fases' ]">Administrar Fases/Tareas</mat-card>
+  <mat-card *ngIf="isAdmin()" class="card" (click)="click($event)" [routerLink]="[ 'fases' ]">Administrar Fases/Tareas</mat-card>
 </div>
 <router-outlet></router-outlet>
