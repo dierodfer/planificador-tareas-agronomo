@@ -62,7 +62,7 @@ export class IncidentService {
         cuerpo = cuerpo + (incidencia.zona.invernadero ? ', en el invernadero ' + incidencia.zona.invernadero : '')
         + (incidencia.zona.sector ? ', en el sector: ' + incidencia.zona.sector : '')
         + (incidencia.zona.tabla ? ', en la tabla: ' + incidencia.zona.tabla : '')
-        + (incidencia.zona.numero_planta ? ', en el número: ' + incidencia.zona.numero_planta : '')
+        + (incidencia.zona.planta ? ', en la planta: ' + incidencia.zona.planta : '');
       }
 
       // Envia notiicacion Push e Interna

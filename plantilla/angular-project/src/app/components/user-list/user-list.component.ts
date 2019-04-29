@@ -73,7 +73,8 @@ export class UserListComponent implements OnInit {
         usuario.apellidos.toLowerCase().indexOf(value) > -1 ||
         usuario.empleado.toString().indexOf(value) > -1 ||
         usuario.rol.toLowerCase().indexOf(value) > -1 ||
-        usuario.genero.toLowerCase().indexOf(value) > -1);
+        usuario.genero.toLowerCase().indexOf(value) > -1 ||
+        usuario.telefono.toLowerCase().indexOf(value) > -1);
       this.filters.push(value);
     }
 
@@ -98,7 +99,8 @@ export class UserListComponent implements OnInit {
               usuario.apellidos.toLowerCase().indexOf(filtro) > -1 ||
               usuario.empleado.toString().indexOf(filtro) > -1 ||
               usuario.rol.toLowerCase().indexOf(filtro) > -1 ||
-              usuario.genero.toLowerCase().indexOf(filtro) > -1)
+              usuario.genero.toLowerCase().indexOf(filtro) > -1 ||
+              usuario.telefono.toLowerCase().indexOf(filtro) > -1)
           );
         });
     }

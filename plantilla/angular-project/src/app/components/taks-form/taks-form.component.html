@@ -21,14 +21,32 @@
       </mat-select>
       <mat-error *ngIf="controlTipo.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
     </mat-form-field>
-    <!-- Tira error ya que el controlform no contiene tareas en un inicio -->
+
     <mat-form-field *ngIf="controlTipo.value.tareas && controlTipo.value.tareas.length > 0" class="w-100">
-      <mat-select placeholder="Tipo de subtarea" [formControl]="controlSubtipo" required>
+      <mat-select placeholder="Tipo de subtarea" [formControl]="controlSubtipo1" required>
           <mat-option *ngFor="let subtarea of controlTipo.value.tareas" [value]="subtarea">
             {{subtarea.nombre}}
           </mat-option>
       </mat-select>
-      <mat-error *ngIf="controlSubtipo.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
+      <mat-error *ngIf="controlSubtipo1.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="controlSubtipo1.value.tareas && controlSubtipo1.value.tareas.length > 0" class="w-100">
+        <mat-select placeholder="Tipo de subtarea" [formControl]="controlSubtipo2" required>
+            <mat-option *ngFor="let subtarea of controlSubtipo1.value.tareas" [value]="subtarea">
+              {{subtarea.nombre}}
+            </mat-option>
+        </mat-select>
+        <mat-error *ngIf="controlSubtipo2.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="controlSubtipo2.value.tareas && controlSubtipo2.value.tareas.length > 0" class="w-100">
+        <mat-select placeholder="Tipo de subtarea" [formControl]="controlSubtipo3" required>
+            <mat-option *ngFor="let subtarea of controlSubtipo2.value.tareas" [value]="subtarea">
+              {{subtarea.nombre}}
+            </mat-option>
+        </mat-select>
+        <mat-error *ngIf="controlSubtipo3.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
     </mat-form-field>
 
     <mat-form-field class="w-100">
@@ -75,7 +93,8 @@
     </mat-form-field>
 
     <mat-form-field class="w-100 pb-5">
-      <textarea matInput placeholder="Descripción (opcional)" rows="2" [formControl]="controlDescrip"></textarea>
+      <textarea matInput maxlength="200" placeholder="Descripción (opcional)" rows="3" [formControl]="controlDescrip"></textarea>
+      <mat-hint align="end">{{controlDescrip.value.length}} / 200</mat-hint>
     </mat-form-field>
  
     <br>

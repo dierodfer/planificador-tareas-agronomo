@@ -59,6 +59,11 @@ export class CycleFormComponent implements OnInit {
     }
   }
 
+  close() {
+    this.toggleEdit();
+    this.getCycle();
+  }
+
   ngOnInit() {
     this.getCycle();
   }

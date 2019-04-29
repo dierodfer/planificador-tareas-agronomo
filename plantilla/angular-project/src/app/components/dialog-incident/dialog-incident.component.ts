@@ -21,7 +21,7 @@ export class DialogIncidentComponent implements OnInit {
   controlPrioridad = new FormControl('', [Validators.required]);
   controlSector = new FormControl('');
   controlTabla = new FormControl('');
-  controlPlanta = new FormControl('');
+  controlPlanta = new FormControl('', Validators.pattern('^[0-9]*$'));
   controlInsta = new FormControl('');
   ubicacion;
 
@@ -69,7 +69,7 @@ export class DialogIncidentComponent implements OnInit {
     return this.control1.status === 'VALID'
     && (this.controlInsta.value ? this.controlInver.status === 'VALID' : true)
     && (!this.controlInsta.value ? this.ubicacion : true)
-    && (this.control1.value === 'Otro' ? this.control2.status === 'VALID' : true);
+    && (this.controlPlanta.value ? this.controlPlanta.status === 'VALID' : true);
   }
 
   showMapa() {

@@ -8,6 +8,10 @@ import { MessagingService } from './messaging.service';
 import * as moment from 'moment';
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
+import { GroupService } from './group.service';
+import { UserService } from './user.service';
+import { Usuario } from '../models/usuario';
+import { Grupo } from '../models/grupo';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +21,10 @@ export class TaskService {
   constructor(private db: AngularFirestore,
     public snackBar: MatSnackBar,
     private notificacionService: NotificationService,
-    private messaging: MessagingService) { }
+    private messaging: MessagingService,
+    private grupoService: GroupService,
+    private usuarioService: UserService,
+    private messagingService: MessagingService) { }
 
   getTasks() {
     return this.db.collection('tareas').valueChanges();
@@ -113,7 +120,10 @@ export class TaskService {
     // Comprueba que no es tarea grupal y la fecha de la tarea es hoy (eliminando el tiempo)
     // y envia notificacion interna y push a los usuarios afectado
     if (!tarea.grupal && moment(tarea.fechaComienzo).startOf('day').diff(moment().startOf('day')) === 0) {
-      const body = 'Se le ha asignado nueva tarea para realizar hoy: ' + tarea.tipo + (tarea.subtipo ? tarea.subtipo : '');
+      const body = 'Se le ha asignado nueva tarea para realizar hoy: '
+      + tarea.tipo + ' ' + (tarea.subtipo1 ? tarea.subtipo1 : '')
+      + ' ' + (tarea.subtipo2 ? tarea.subtipo2 : '')
+      + ' ' + (tarea.subtipo3 ? tarea.subtipo3 : '');
       this.notificacionService.sendNotification(tarea.responsable, new Notificacion(body, 'Nueva Tarea'));
       this.messaging.sendMessage('Nueva Tarea', body, tarea.responsable);
     }
@@ -123,14 +133,23 @@ export class TaskService {
     });
   }
 
-  cancelTask(id: string) {
-    this.db.collection('tareas').doc(id).update({
+  cancelTask(tarea: Tarea) {
+    this.db.collection('tareas').doc(tarea.id).update({
         cancelada: true,
         fechaFinalizacion: new Date().toJSON()
     }).then(() => {
-        this.snackBar.open('La tarea se ha iterrumpido correctamente', 'Cerrar', {
-          duration: 4000,
+      // Envia notificación interna y push a coordinador
+      this.usuarioService.getUserById(tarea.responsable).forEach((usuario: Usuario) => {
+        this.grupoService.getGroupById(tarea.grupo).forEach((grupo: Grupo) => {
+          const titulo = 'Tarea Interrumpida';
+          const cuerpo = 'Responsable: ' + usuario.nombre + ', Grupo: ' + grupo.nombre + ', ' +
+          tarea.tipo + ' ' + (tarea.subtipo1 ? tarea.subtipo1 : '')
+          + ' ' + (tarea.subtipo2 ? tarea.subtipo2 : '') +
+          + ' ' + (tarea.subtipo3 ? tarea.subtipo3 : '');
+          this.notificacionService.sendNotification(grupo.coordinador, new Notificacion(cuerpo, titulo));
+          this.messagingService.sendMessage(titulo, cuerpo, grupo.coordinador);
         });
+      });
     });
   }
 

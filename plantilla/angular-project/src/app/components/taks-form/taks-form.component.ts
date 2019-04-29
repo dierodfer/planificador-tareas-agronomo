@@ -24,7 +24,9 @@ export class TaksFormComponent implements OnInit {
   controlUsuarios = new FormControl('', [Validators.required]);
   controlDescrip = new FormControl('');
   controlRepit = new FormControl('', [Validators.required, Validators.min(1), Validators.max(30)]);
-  controlSubtipo = new FormControl('', [Validators.required]);
+  controlSubtipo1 = new FormControl('', [Validators.required]);
+  controlSubtipo2 = new FormControl('', [Validators.required]);
+  controlSubtipo3 = new FormControl('', [Validators.required]);
   controlGrupal = new FormControl('');
   controlGrupo = new FormControl('', [Validators.required]);
   controlFechaEstimacion = new FormControl('', [Validators.required]);
@@ -89,7 +91,9 @@ export class TaksFormComponent implements OnInit {
   getTarea() {
     const res = new Tarea();
     res.tipo = this.controlTipo.value.nombre;
-    res.subtipo = this.controlSubtipo.value.nombre;
+    res.subtipo1 = this.controlSubtipo1.value.nombre;
+    res.subtipo2 = this.controlSubtipo2.value.nombre;
+    res.subtipo3 = this.controlSubtipo3.value.nombre;
     res.grupal = this.controlGrupal.value;
     res.grupo = this.controlGrupo.value.id;
     res.descripcion = this.controlDescrip.value.trim();
@@ -110,7 +114,9 @@ export class TaksFormComponent implements OnInit {
 
   checkStatus(): boolean {
     return this.controlTipo.status === 'VALID'
-    && (this.controlTipo.value.tareas.length > 0 ? this.controlSubtipo.status === 'VALID' : true)
+    && (this.controlTipo.value.tareas.length > 0 ? this.controlSubtipo1.status === 'VALID' : true)
+    && (this.controlSubtipo1.value.tareas.length > 0 ? this.controlSubtipo2.status === 'VALID' : true)
+    && (this.controlSubtipo2.value.tareas.length > 0 ? this.controlSubtipo3.status === 'VALID' : true)
     &&  this.controlGrupo.status === 'VALID'
     && (!this.controlGrupal.value ? this.controlUsuarios.status === 'VALID' : true)
     &&  this.controlFecha.status === 'VALID'
@@ -122,7 +128,9 @@ export class TaksFormComponent implements OnInit {
     this.controlFecha.reset('');
     this.controlUsuarios.reset('');
     this.controlRepit.setValue(1);
-    this.controlSubtipo.reset('');
+    this.controlSubtipo1.reset('');
+    this.controlSubtipo2.reset('');
+    this.controlSubtipo3.reset('');
     this.controlDescrip.reset('');
     this.controlGrupo.reset('');
   }

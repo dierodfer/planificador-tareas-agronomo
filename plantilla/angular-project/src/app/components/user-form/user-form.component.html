@@ -1,14 +1,15 @@
 <div class="offset-md-3 col-md-6">
-  <h4 class="text-muted mat-dialog-title" *ngIf="editar">Editar Usuario <mat-icon class="float-right">info</mat-icon></h4>
-  <h4 class="text-muted mat-dialog-title" *ngIf="!editar">Registar Usuario <mat-icon class="float-right">info</mat-icon></h4>
+  <h4 class="text-muted mat-dialog-title" *ngIf="editar">Editar Usuario <!-- <mat-icon class="float-right">info</mat-icon> --></h4>
+  <h4 class="text-muted mat-dialog-title" *ngIf="!editar">Registar Usuario <!-- <mat-icon class="float-right">info</mat-icon> --></h4>
   <mat-form-field class="pt-3 w-100">
-    <input matInput placeholder="Nombre" [formControl]="controlNombre" required>
+    <input matInput maxlength="50" placeholder="Nombre" [formControl]="controlNombre" required>
     <mat-error *ngIf="controlNombre.hasError('required')">Campo obligatorio</mat-error>
+    <mat-hint align="end">{{controlNombre.value.length}} / 50</mat-hint>
   </mat-form-field>
   <mat-form-field class="w-100">
-    <input matInput placeholder="Apellidos"  [formControl]="controlApellidos" required>
+    <input matInput maxlength="50" placeholder="Apellidos"  [formControl]="controlApellidos" required>
     <mat-error *ngIf="controlApellidos.hasError('required')">Campo obligatorio</mat-error>
-    
+    <mat-hint align="end">{{controlApellidos.value.length}} / 50</mat-hint>
   </mat-form-field>
   <mat-form-field class="w-100">
     <mat-select placeholder="Rol" [formControl]="controlRol" required [disabled]="editar">
@@ -21,6 +22,8 @@
   <mat-form-field class="w-100">  
     <input type="number" matInput placeholder="Nº de empleado" [formControl]="controlEmpleado" [attr.disabled]="editar" required>
     <mat-error *ngIf="controlEmpleado.hasError('required')">Campo obligatorio</mat-error>
+    <mat-hint align="end">{{(controlEmpleado.value ? controlEmpleado.value.toString().length : 0)}} / 21</mat-hint>
+    <mat-error *ngIf="controlEmpleado.hasError('pattern')">Solo valores numéricos</mat-error>
   </mat-form-field>
   <mat-form-field class="w-100">
     <span matPrefix>+34 &nbsp;</span>

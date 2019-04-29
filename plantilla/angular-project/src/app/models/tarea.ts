@@ -10,7 +10,9 @@ export class Tarea {
     grupal: boolean;
     grupo: string;
     tipo: string;
-    subtipo: string;
+    subtipo1: string;
+    subtipo2: string;
+    subtipo3: string;
     cancelada: boolean;
     finalizada: boolean;
     comentarios: Comentario[];

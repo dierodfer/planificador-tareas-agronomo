@@ -25,7 +25,8 @@
     <mat-error *ngIf="control1.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
   </mat-form-field> 
   <mat-form-field class="w-100" *ngIf="control1.value == 'Otro'">
-    <textarea matInput placeholder="Descripción" [(formControl)]="control2" rows="3" required></textarea>
+    <textarea matInput maxlength="100" placeholder="Descripción" [(formControl)]="control2" rows="3" required></textarea>
+    <mat-hint align="end">{{control2.value.length}} / 100</mat-hint>
     <mat-error *ngIf="control2.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
   </mat-form-field>
   <mat-form-field class="w-50">
@@ -118,8 +119,9 @@
           <mat-option value="33">33</mat-option>
       </mat-select>
   </mat-form-field>
-  <mat-form-field class="w-50" *ngIf="controlTabla.value && controlInsta.value">
+  <mat-form-field *ngIf="controlTabla.value && controlInsta.value">
       <input matInput placeholder="Planta (opcional)" type="number" [(formControl)]="controlPlanta">
+      <mat-hint align="end">{{(controlPlanta.value ? controlPlanta.value.toString().length : 0)}} / 21</mat-hint>
   </mat-form-field> 
 </section>
 </div>

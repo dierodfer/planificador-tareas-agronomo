@@ -5,7 +5,8 @@
     <p *ngIf="titulo">{{titulo}}</p>
     <mat-hint *ngIf="detalles" class="text-muted">{{detalles}}</mat-hint>
     <mat-form-field *ngIf="input" class="w-100">
-      <textarea matInput [(formControl)]="control" placeholder="Comentario" rows="6"></textarea>
+      <textarea matInput maxlength="120" [(formControl)]="control" placeholder="Comentario" rows="6"></textarea>
+      <mat-hint align="end">{{control.value.length}} / 120</mat-hint>
     </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions class="float-right">

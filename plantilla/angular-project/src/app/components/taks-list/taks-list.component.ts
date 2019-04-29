@@ -63,6 +63,14 @@ export class TaksListComponent implements OnInit {
     this.grupoService.getGroupsByCoordinator(this.cookie.get('sesionId')).subscribe(grupos => this.misGrupos = grupos as Grupo[]);
   }
 
+  checkMyId(id) {
+    return this.cookie.get('sesionId') === id;
+  }
+
+  isAdmin() {
+    return this.cookie.get('rol') === 'ADMIN';
+  }
+
   findGrupo(grupoId) {
     return this.gruposAux.find(grupo => grupo.id === grupoId);
   }
@@ -130,8 +138,8 @@ export class TaksListComponent implements OnInit {
     }
   }
 
-  cancelarTarea(id) {
-    this.taskService.cancelTask(id);
+  interrumpirTarea(tarea: Tarea) {
+    this.taskService.cancelTask(tarea);
     this.pickCanceladas = true;
   }
 
@@ -167,7 +175,7 @@ export class TaksListComponent implements OnInit {
     });
   }
 
-  openConfirmDialogInterrumpirTarea(id) {
+  openConfirmDialogInterrumpirTarea(tarea: Tarea) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
       tipo: 'interrumpirTarea',
@@ -177,12 +185,12 @@ export class TaksListComponent implements OnInit {
     this.confirmDialog = this.dialog.open(DialogConfirmationComponent, dialogConfig);
     this.confirmDialog.afterClosed().subscribe(confirmado => {
       if (confirmado) {
-        this.cancelarTarea(id);
+        this.interrumpirTarea(tarea);
       }
     });
   }
 
-  descancelarTarea(id) {
+  reanudarTarea(id) {
     this.taskService.uncancelTask(id);
     this.pickPendientes = true;
   }

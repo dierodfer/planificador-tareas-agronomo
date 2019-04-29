@@ -13,13 +13,12 @@ import { Location } from '@angular/common';
   styleUrls: ['./user-form.component.css']
 })
 export class UserFormComponent implements OnInit {
-  controlNombre = new FormControl('', [Validators.required, Validators.maxLength(50)]);
-  controlApellidos = new FormControl('', [Validators.required, Validators.maxLength(80)]);
-  controlRol = new FormControl('', [Validators.required, Validators.maxLength(20)]);
-  controlEmpleado = new FormControl('', [Validators.required, Validators.maxLength(10)]);
-  controlGenero = new FormControl('', [Validators.required, Validators.maxLength(10)]);
-  controlTelefono = new FormControl('', [Validators.required, Validators.minLength(9),
-    Validators.maxLength(9), Validators.pattern('^[0-9]*$')]);
+  controlNombre = new FormControl('', [Validators.required]);
+  controlApellidos = new FormControl('', [Validators.required]);
+  controlRol = new FormControl('', [Validators.required]);
+  controlEmpleado = new FormControl('', [Validators.required, Validators.pattern('^[0-9]*$')]);
+  controlGenero = new FormControl('', [Validators.required]);
+  controlTelefono = new FormControl('', [Validators.required, Validators.pattern('^[0-9]*$')]);
 
   editar: Boolean = false;
 
@@ -29,7 +28,6 @@ export class UserFormComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private _location: Location) {
-      this.controlGenero.setValue('MUJER');
     }
 
   addUsuario() {
@@ -105,6 +103,7 @@ export class UserFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.controlGenero.setValue('MUJER');
     this.getRouteParams();
   }
 

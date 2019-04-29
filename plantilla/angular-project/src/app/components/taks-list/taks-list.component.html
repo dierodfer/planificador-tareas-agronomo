@@ -57,7 +57,7 @@
     </mat-form-field>
 
     <div class="pt-3" *ngIf="grupoSelected">
-        <p>Tareas Grupales {{grupoSelected.nombre}}</p>
+        <p>Tareas Grupales {{grupoSelected.nombre}}<mat-icon class="text-muted float-right" matTooltip="Los únicos autorizados en cambiar el estado de las tareas grupales son el admin y el propio responsable.">info</mat-icon></p>
         <p class="text-muted text-center mt-3" *ngIf="tareasGrupales.length == 0">
           <mat-icon class="pt-1">date_range</mat-icon> No tiene tareas Grupales {{tipoTarea}}
         </p>
@@ -67,10 +67,10 @@
                 <mat-panel-title>
                   <mat-icon *ngIf="tarea.finalizada" class="text-success">alarm_on</mat-icon>
                   <mat-icon *ngIf="tarea.cancelada"  class="text-danger">pause_circle_outline</mat-icon>
-                  {{tarea.tipo}}{{tarea.subtipo ? ' - '+tarea.subtipo : '' }}
+                <b>{{tarea.tipo}}</b>
                 </mat-panel-title>
                 <mat-panel-description>
-                  <mat-icon class="text-muted" matTooltip="Tarea Retrasada" *ngIf="(tipoTarea == 'Pendientes' && diffDias(tarea.fechaEstimacion)<0)">error</mat-icon>
+                  <!-- <mat-icon class="text-muted" matTooltip="Tarea Retrasada" *ngIf="(tipoTarea == 'Pendientes' && diffDias(tarea.fechaEstimacion)<0)">error</mat-icon> -->
                   <mat-icon class="mr-2" matTooltip="Contiene detalles" *ngIf="tarea.descripcion">comments</mat-icon>
                   <mat-icon class="mr-2" matTooltip="Contiene comentarios" *ngIf="tarea.comentarios">question_answer</mat-icon>
                   <ng-container *ngIf="tipoTarea == 'Pendientes'">
@@ -82,6 +82,10 @@
                   <span [matTooltip]="tarea.fechaFinalizacion | date:'dd/MM/yyyy'" *ngIf="tipoTarea == 'Canceladas' || tipoTarea == 'Finalizadas'" class="font-weight-bolder">{{diffDias(tarea.fechaFinalizacion) == 0? 'Hoy' : (diffDias(tarea.fechaFinalizacion) == -1) ? 'Ayer' : ('Hace '+diffDias(tarea.fechaFinalizacion)*-1+' días')}}</span>
                 </mat-panel-description>
               </mat-expansion-panel-header>
+              <p class="text-center"><b>
+                  {{tarea.tipo}}<br>
+                <span class="text-muted">{{tarea.subtipo1 ? tarea.subtipo1 : '' }}{{tarea.subtipo2 ? ' - '+tarea.subtipo2 : '' }} {{tarea.subtipo3 ? ' - '+tarea.subtipo3 : '' }}
+              </span></b></p>
               <p *ngIf="!editFechaComienzo[tarea.id]"><b>Fecha de comienzo:</b> {{tarea.fechaComienzo | date:'dd/MM/yyyy'}}</p>
               <p *ngIf="editFechaComienzo[tarea.id]">
                   <b>Fecha de comienzo:</b>&nbsp;
@@ -114,32 +118,33 @@
               <p *ngIf="tarea.descripcion"><b>Detalles:</b> {{tarea.descripcion}}</p>
               <br>
               <ng-container *ngIf="!editFechaComienzo[tarea.id] && !editFechaFinalizacion[tarea.id]">
-                <button *ngIf="tarea.comentarios" matTooltip="Comentarios" class="float-right" mat-icon-button [matMenuTriggerFor]="comentarios"><mat-icon>question_answer</mat-icon></button>
-                <button *ngIf="!tarea.cancelada && !tarea.finalizada" class="mx-2 bg-success text-white" mat-raised-button (click)="openConfirmDialogFinalizarTarea(tarea.id)"><mat-icon>alarm_on</mat-icon> Finalizar</button>
-                <button *ngIf="!tarea.cancelada && !tarea.finalizada" class="mx-2" mat-raised-button color="warn" (click)="openConfirmDialogInterrumpirTarea(tarea.id)"><mat-icon>pause_circle_outline</mat-icon> Interrumpir</button>
-                <button *ngIf="!tarea.cancelada && tarea.finalizada" class="mx-2 bg-info text-white" mat-button (click)="activarTarea(tarea.id)">Volver a activar</button>
-                <button *ngIf="tarea.cancelada  && !tarea.finalizada" class="mx-2 bg-info text-white" mat-button (click)="descancelarTarea(tarea.id)">Volver a activar</button>
-                <button *ngIf="!tarea.cancelada && !tarea.finalizada && isCoordinador()" class="float-right" mat-icon-button matTooltip="Opciones" [matMenuTriggerFor]="menu"><mat-icon>more_horiz</mat-icon></button>
+                  <button *ngIf="tarea.comentarios" matTooltip="Comentarios" class="float-right" mat-icon-button [matMenuTriggerFor]="comentarios"><mat-icon>question_answer</mat-icon></button>
+                  <button *ngIf="!tarea.cancelada && !tarea.finalizada && (checkMyId(tarea.responsable) || isAdmin())" class="mx-2 bg-success text-white" mat-raised-button (click)="openConfirmDialogFinalizarTarea(tarea.id)"><mat-icon>alarm_on</mat-icon> Finalizar</button>
+                  <button *ngIf="!tarea.cancelada && !tarea.finalizada && (checkMyId(tarea.responsable) || isAdmin())" class="mx-2" mat-raised-button color="warn" (click)="openConfirmDialogInterrumpirTarea(tarea)"><mat-icon>pause_circle_outline</mat-icon> Interrumpir</button>
+                  <button *ngIf="!tarea.cancelada && tarea.finalizada && (checkMyId(tarea.responsable) || isAdmin())" class="mx-2 bg-info text-white" mat-button (click)="activarTarea(tarea.id)">Volver a activar</button>
+                  <button *ngIf="tarea.cancelada  && !tarea.finalizada && (checkMyId(tarea.responsable) || isAdmin())" class="mx-2 bg-info text-white" mat-button (click)="reanudarTarea(tarea.id)">Volver a activar</button>
+                  <button *ngIf="!tarea.cancelada && !tarea.finalizada" class="float-right" mat-icon-button matTooltip="Opciones" [matMenuTriggerFor]="menu"><mat-icon>more_horiz</mat-icon></button>
                 <mat-menu #menu="matMenu">
                   <button (click)="openConfirmDialogAnadirComentario(tarea.id)" mat-menu-item>
                     <mat-icon>question_answer</mat-icon>
                     Añadir comentario
                   </button>
-                  <button mat-menu-item [matMenuTriggerFor]="modificarFechas">
+                  <button mat-menu-item *ngIf="isCoordinador()" [matMenuTriggerFor]="modificarFechas">
                     <mat-icon>history</mat-icon>
                     <span>Modificar fechas</span>
                   </button>
-                  <mat-menu #comentarios="matMenu">
+                  
+                  <button *ngIf="isCoordinador()" (click)="eliminarTarea(tarea.id)" mat-menu-item>
+                      <mat-icon>delete</mat-icon>
+                      <span>Eliminar</span>
+                  </button>
+                </mat-menu>
+                <mat-menu #comentarios="matMenu">
                     <div class="m-2" *ngFor="let comentario of tarea.comentarios">
                       <b>Fecha: </b> {{comentario.fecha | date:'d/M H:mm:ss'}}<br>
                       {{comentario.cuerpo}}
                     </div>
                   </mat-menu>
-                  <button (click)="eliminarTarea(tarea.id)" mat-menu-item>
-                      <mat-icon>delete</mat-icon>
-                      <span>Eliminar</span>
-                  </button>
-                </mat-menu>
                 <mat-menu #modificarFechas="matMenu">
                   <button (click)="toggleEditFechaComienzo(tarea)" mat-menu-item>Modificar fecha comienzo</button>
                   <button (click)="toggleEditFechaFinalizacion(tarea)" mat-menu-item>Modificar fecha finalización</button>
@@ -149,7 +154,7 @@
         </ng-container>
     </div>  
     <div class="py-3" *ngIf="userSelected">      
-          <p>Tareas de {{userSelected.nombre}} {{userSelected.apellidos}} </p>
+          <p>Tareas de {{userSelected.nombre}} {{userSelected.apellidos}} <mat-icon class="text-muted float-right" matTooltip="Los propios responsables, el admin y coordinadores pueden cambiar el estado de las tareas individuales.">info</mat-icon> </p>
       <p class="text-muted text-center mt-3" *ngIf="tareas.length == 0">
         <mat-icon class="pt-1">date_range</mat-icon> No tiene tareas {{tipoTarea}}
       </p>
@@ -158,7 +163,7 @@
           <mat-panel-title>
             <mat-icon *ngIf="tarea.finalizada" class="text-success">alarm_on</mat-icon>
             <mat-icon *ngIf="tarea.cancelada"  class="text-danger">pause_circle_outline</mat-icon>
-            {{tarea.tipo}}{{tarea.subtipo ? ' - '+tarea.subtipo : '' }}
+            <b>{{tarea.tipo}}</b>
           </mat-panel-title>
           <mat-panel-description>
            <!--  <mat-icon class="text-muted" matTooltip="Tarea Retrasada" *ngIf="(tipoTarea == 'Pendientes' && diffDias(tarea.fechaEstimacion)<0)">error</mat-icon> -->
@@ -173,6 +178,10 @@
             <span [matTooltip]="tarea.fechaFinalizacion | date:'dd/MM/yyyy'" *ngIf="tipoTarea == 'Canceladas' || tipoTarea == 'Finalizadas'" class="font-weight-bolder">{{diffDias(tarea.fechaFinalizacion) == 0? 'Hoy' : (diffDias(tarea.fechaFinalizacion) == -1) ? 'Ayer' : ('Hace '+diffDias(tarea.fechaFinalizacion)*-1+' días')}}</span>
           </mat-panel-description>
         </mat-expansion-panel-header>
+        <p class="text-center"><b>
+            {{tarea.tipo}}<br>
+          <span class="text-muted">{{tarea.subtipo1 ? tarea.subtipo1 : '' }}{{tarea.subtipo2 ? ' - '+tarea.subtipo2 : '' }} {{tarea.subtipo3 ? ' - '+tarea.subtipo3 : '' }}
+        </span></b></p>
         <p *ngIf="!editFechaComienzo[tarea.id]"><b>Fecha de comienzo:</b> {{tarea.fechaComienzo | date:'dd/MM/yyyy'}}</p>
         <p *ngIf="editFechaComienzo[tarea.id]">
             <b>Fecha de comienzo:</b>&nbsp;
@@ -207,10 +216,10 @@
         <ng-container *ngIf="!editFechaComienzo[tarea.id] && !editFechaFinalizacion[tarea.id]">
           <button *ngIf="tarea.comentarios" matTooltip="Comentarios" class="float-right" mat-icon-button [matMenuTriggerFor]="comentarios"><mat-icon>question_answer</mat-icon></button>
           <button *ngIf="!tarea.cancelada && !tarea.finalizada" class="mx-2 bg-success text-white" mat-raised-button (click)="openConfirmDialogFinalizarTarea(tarea.id)"><mat-icon>alarm_on</mat-icon> Finalizar</button>
-          <button *ngIf="!tarea.cancelada && !tarea.finalizada" class="mx-2" mat-raised-button color="warn" (click)="openConfirmDialogInterrumpirTarea(tarea.id)"><mat-icon>pause_circle_outline</mat-icon> Interrumpir</button>
+          <button *ngIf="!tarea.cancelada && !tarea.finalizada" class="mx-2" mat-raised-button color="warn" (click)="openConfirmDialogInterrumpirTarea(tarea)"><mat-icon>pause_circle_outline</mat-icon> Interrumpir</button>
           <button *ngIf="!tarea.cancelada && tarea.finalizada" class="mx-2 bg-info text-white" mat-button (click)="activarTarea(tarea.id)">Volver a activar</button>
-          <button *ngIf="tarea.cancelada  && !tarea.finalizada" class="mx-2 bg-info text-white" mat-button (click)="descancelarTarea(tarea.id)">Volver a activar</button>
-          <button *ngIf="!tarea.cancelada && !tarea.finalizada && isCoordinador()" class="float-right" mat-icon-button matTooltip="Opciones" [matMenuTriggerFor]="menu"><mat-icon>more_horiz</mat-icon></button>
+          <button *ngIf="tarea.cancelada  && !tarea.finalizada" class="mx-2 bg-info text-white" mat-button (click)="reanudarTarea(tarea.id)">Volver a activar</button>
+          <button *ngIf="!tarea.cancelada && !tarea.finalizada" class="float-right" mat-icon-button matTooltip="Opciones" [matMenuTriggerFor]="menu"><mat-icon>more_horiz</mat-icon></button>
           <mat-menu #menu="matMenu">
             <button (click)="openConfirmDialogAnadirComentario(tarea.id)" mat-menu-item>
               <mat-icon>question_answer</mat-icon>
