@@ -1,9 +1,12 @@
 {
   "name": "Planificador de tareas",
   "short_name": "Planificador Tareas",
-  "theme_color": "#b0dbff9e",
+  "theme_color": "#c5fad9",
   "background_color": "#fafafa",
   "display": "standalone",
+  "gcm_sender_id" : "103953800507",
+  "lang" : "Spanish; Castilian",
+  "orientation" : "any",
   "scope": "/",
   "start_url": "/",
   "icons": [
@@ -32,6 +35,5 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ],
-  "gcm_sender_id": "103953800507"
+  ]
 }

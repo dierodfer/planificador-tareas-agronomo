@@ -1,6 +1,8 @@
-.logout{
-    position: absolute;
-    bottom: 0;
+@media screen and ( min-height: 500px ){
+    .logout{
+        position: absolute;
+        bottom: 0;
+    }
 }
 
 .mat-card{
