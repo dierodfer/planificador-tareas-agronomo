@@ -20,6 +20,7 @@ const routes: Routes = [
     children: [
           { path: '', component: DashboardComponent},
           { path: 'tareas/lista', component: TaksListComponent},
+          { path: 'tareas/lista/:id', component: TaksListComponent},
           { path: 'tareas/formulario', component: TaksFormComponent},
           { path: 'notificaciones', component: NotificationComponent},
           { path: 'incidencias', component: IncidentsListComponent},

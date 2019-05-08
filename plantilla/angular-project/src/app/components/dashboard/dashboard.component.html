@@ -1,3 +1,108 @@
-<h5 class="mt-5 text-center pt-5">
-  Página en desarrollo
-</h5>
+<div class="row">
+  <div class="col-sm-6">
+    <p class="font-weight-bold col-12 text-danger clickable" [matMenuTriggerFor]="retrasadas">
+        <span style="font-size: 30px">{{tareasRetrasadas.length}}</span> Tareas Retrasadas
+    </p>
+    <div class="col-12"><h5>Tareas</h5></div>
+    <div class="row mt-3 text-center">
+        <div class="col-12">
+            <mat-chip-list>
+              <mat-chip [selected]="chipTareas == 'day'" (click)="toggleChipTareas('day')">Hoy</mat-chip>
+              <mat-chip [selected]="chipTareas == 'isoWeek'" (click)="toggleChipTareas('isoWeek')">Esta semana</mat-chip>
+              <mat-chip [selected]="chipTareas == 'month'" (click)="toggleChipTareas('month')">Este mes</mat-chip>
+              <mat-chip [selected]="chipTareas == 'year'" (click)="toggleChipTareas('year')">Este año</mat-chip>
+            </mat-chip-list>
+        </div>  
+        <div class="col-4 pt-3 text-info">
+            <h5 class="mb-0">{{numeroTareasActivas}}</h5>
+            <small>Activas</small>
+        </div>
+        <div class="col-4 pt-3 text-warning">
+            <h5 class="mb-0">{{numeroTareasInterrumpidas}}</h5>
+            <small>Interrumpidas</small>
+        </div>
+        <div class="col-4 pt-3 text-success">
+            <h5 class="mb-0">{{numeroTareasFinalizadas}}</h5>
+            <small>Finalizadas</small>
+        </div>
+        <div class="col-12 mt-3">
+            <div class="progress" style="height: 50px;">
+                <div class="progress-bar bg-info" matTooltip="Tareas activas" (click)="getTipoTareasPendientes()" role="progressbar" [ngStyle]="{'width': numeroTareasActivas ? (numeroTareasActivas/getNumTotalTareas())*100 + '%' : '0%' }">{{((numeroTareasActivas/getNumTotalTareas())*100).toFixed(0)}}%</div>
+                <div class="progress-bar bg-warning" matTooltip="Tareas interrumpidas" (click)="getTipoTareasInterrumpidas()" role="progressbar" [ngStyle]="{'width': numeroTareasInterrumpidas ? (numeroTareasInterrumpidas/getNumTotalTareas())*100  + '%' : '0%' }">{{((numeroTareasInterrumpidas/getNumTotalTareas())*100).toFixed(0)}}%</div>
+                <div class="progress-bar bg-success" matTooltip="Tareas Finalizadas" (click)="getTipoTareasFinalizadas()" role="progressbar" [ngStyle]="{'width': numeroTareasFinalizadas ? (numeroTareasFinalizadas/getNumTotalTareas())*100 + '%' : '0%' }">{{((numeroTareasFinalizadas/getNumTotalTareas())*100).toFixed(0)}}%</div>
+            </div>
+        </div>
+        <div class="col-12 pt-3 text-left">
+          <p *ngFor="let item of tipoTareas | keyvalue">{{item.key}} {{item.value}}</p>
+        </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <p class="font-weight-bold col-12 text-danger clickable" [matMenuTriggerFor]="criticas" matTooltip="Incidencias en estado PENDIENTE, de prioridad ALTA, creadas hoy.">
+      <span style="font-size: 30px">{{incidenciasCriticas.length}}</span> Incidencias críticas
+    </p>
+    <div class="col-12"><h5>Incidencias</h5></div>
+    <div class="row mt-3 text-center">
+        <div class="col-12">
+            <mat-chip-list>
+              <mat-chip [selected]="chipIncidencias == 'day'" (click)="toggleChipIncidencias('day')">Hoy</mat-chip>
+              <mat-chip [selected]="chipIncidencias == 'isoWeek'" (click)="toggleChipIncidencias('isoWeek')">Esta semana</mat-chip>
+              <mat-chip [selected]="chipIncidencias == 'month'" (click)="toggleChipIncidencias('month')">Este mes</mat-chip>
+              <mat-chip [selected]="chipIncidencias == 'year'" (click)="toggleChipIncidencias('year')">Este año</mat-chip>
+            </mat-chip-list>
+        </div>  
+        <div class="col-4 pt-3 text-info">
+            <h5 class="mb-0">{{numeroIncidenciasPendientes}}</h5>
+            <small>Pendientes</small>
+        </div>
+        <div class="col-4 pt-3 text-warning">
+            <h5 class="mb-0">{{numeroIncidenciasAtendidas}}</h5>
+            <small>Atendidas</small>
+        </div>
+        <div class="col-4 pt-3 text-success">
+            <h5 class="mb-0">{{numeroIncidenciasResueltas}}</h5>
+            <small>Resueltas</small>
+        </div>
+        <div class="col-12 mt-3">
+            <div class="progress" style="height: 50px;">
+                <div class="progress-bar bg-info" matTooltip="Incidencias pendientes" role="progressbar" [ngStyle]="{'width': numeroIncidenciasPendientes ? (numeroIncidenciasPendientes/getNumTotalIncidencias())*100 + '%' : '0%' }">{{((numeroIncidenciasPendientes/getNumTotalIncidencias())*100).toFixed(0)}}%</div>
+                <div class="progress-bar bg-warning" matTooltip="Incidencias atendidas"  role="progressbar" [ngStyle]="{'width': numeroIncidenciasAtendidas ? (numeroIncidenciasAtendidas/getNumTotalIncidencias())*100  + '%' : '0%' }">{{((numeroIncidenciasAtendidas/getNumTotalIncidencias())*100).toFixed(0)}}%</div>
+                <div class="progress-bar bg-success" matTooltip="Incidencias resueltas"  role="progressbar" [ngStyle]="{'width': numeroIncidenciasResueltas ? (numeroIncidenciasResueltas/getNumTotalIncidencias())*100 + '%' : '0%' }">{{((numeroIncidenciasResueltas/getNumTotalIncidencias())*100).toFixed(0)}}%</div>
+            </div>
+        </div>
+
+    </div>
+  </div>
+</div>
+
+<small class="d-none"> 
+    Numero total de tareas activas segun tipo HECHO <br>
+    Numero de tareas finalizadas segun tipo HECHO<br>
+    Numero total de tareas activas que terminan hoy <br>
+    Porcentaje de tareas activas y finalizadas hoy HECHO <br>
+    Numero de incidencias creadas HECHO<br>
+    Numero de incidencias pendientes HECHO<br>
+    Numero de incidencias atendidas y resueltas HECHO<br>
+  
+    Incidencias críticas (prioridad Alta, el dia de hoy y estado pendiente) HECHO<br>
+    Tareas Retrasadas (tareas con más retraso, retraso >=1) HECHO <br>
+    Tareas activas con mas comentarios(3 maximo, minimo +1 comentario)<br>
+    Usuarios sin tareas hoy <br>
+</small> 
+
+<mat-menu #criticas="matMenu">
+    <button class="clickable" (click)="openIncidentDialog(element)" mat-menu-item *ngFor="let element of incidenciasCriticas">
+      <mat-icon [matTooltip]="element.prioridad" 
+      [ngClass]="{
+      'text-danger': element.prioridad == 'Alta',
+      'text-warning': element.prioridad == 'Media',
+      'text-muted': element.prioridad == 'Baja'}">warning</mat-icon>
+      {{element.tipo}}</button>
+</mat-menu>
+
+<mat-menu #retrasadas="matMenu">
+  <button class="clickable" (click)="goTask(tarea.id)" mat-menu-item *ngFor="let tarea of tareasRetrasadas">
+      <span *ngIf="diffDias(tarea.fechaEstimacion)<0" class="text-danger font-weight-bolder" style="font-size: 20px">{{diffDias(tarea.fechaEstimacion)*-1}} días</span>
+      <span [ngClass]="{'text-info': tarea.grupal}"> {{tarea.tipo}} </span>      
+  </button>
+</mat-menu>

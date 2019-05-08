@@ -14,6 +14,7 @@ import * as moment from 'moment';
 import { first } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 import { DialogConfirmationComponent } from '../dialog-confirmation/dialog-confirmation.component';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -25,7 +26,7 @@ export class TaksListComponent implements OnInit {
 
   tareas: Tarea[] = []; tareasGrupales: Tarea[] = [];
   grupoSelected: Grupo; userSelected: Usuario;
-  filtro = false;
+/*   filtro = false; */
   rol;
   usuarios: Usuario[]; misGrupos: Grupo[];
   gruposAux: Grupo[]; usersAux: Usuario[];
@@ -43,10 +44,11 @@ export class TaksListComponent implements OnInit {
     private usuarioService: UserService,
     private cookie: CookieService,
     private dialog: MatDialog,
-    private grupoService: GroupService) { }
+    private grupoService: GroupService,
+    private route: ActivatedRoute) { }
 
   getAllGrupos() {
-    this.filtro = false;
+ /*    this.filtro = false; */
     this.grupoService.getGroups().subscribe(grupos => this.misGrupos = grupos as Grupo[]);
   }
 
@@ -59,7 +61,7 @@ export class TaksListComponent implements OnInit {
   }
 
   getMisGruposCoordinador() {
-    this.filtro = false;
+  /*   this.filtro = false; */
     this.grupoService.getGroupsByCoordinator(this.cookie.get('sesionId')).subscribe(grupos => this.misGrupos = grupos as Grupo[]);
   }
 
@@ -95,8 +97,16 @@ export class TaksListComponent implements OnInit {
     });
   }
 
+  getUsuarios(grupo: Grupo) {
+    if (!this.grupoSelected || this.grupoSelected.id !== grupo.id) {
+      this.usuarios = [];
+      this.getTareas('Pendientes', grupo);
+      grupo.usuarios.forEach(id => this.usuarioService.getUserById(id).forEach(usuario => this.usuarios.push(usuario as Usuario)));
+    }
+  }
+
   getTareas(estado, grupo: Grupo, usuario?: Usuario) {
-    this.filtro = false;
+/*     this.filtro = false; */
     this.grupoSelected = grupo;
     this.tipoTarea = estado;
     if (usuario) {
@@ -127,14 +137,6 @@ export class TaksListComponent implements OnInit {
         this.taskService.getFinishTaskByGroup(grupo.id).subscribe(tareas => this.tareasGrupales = tareas as Tarea[]);
         this.pickFinalizadas = false;
         break;
-    }
-  }
-
-  getUsuarios(grupo: Grupo) {
-    if (!this.grupoSelected || this.grupoSelected.id !== grupo.id) {
-      this.usuarios = [];
-      this.getTareas('Pendientes', grupo);
-      grupo.usuarios.forEach(id => this.usuarioService.getUserById(id).forEach(usuario => this.usuarios.push(usuario as Usuario)));
     }
   }
 
@@ -219,7 +221,7 @@ export class TaksListComponent implements OnInit {
     });
   }
 
-  dateChange(event) {
+/*   dateChange(event) {
     this.filtro = true;
     // filtrar por usuario o grupo
     this.taskService.getTaskByUserAndDate(this.userSelected.empleado, event.value).subscribe(tareas => this.tareas = tareas as Tarea[]);
@@ -228,7 +230,7 @@ export class TaksListComponent implements OnInit {
   limpiarFiltro() {
     this.filtro = false;
     this.getTareas(this.tipoTarea, this.grupoSelected, this.userSelected);
-  }
+  } */
 
   openUserDialogByGroup(id) {
     this.grupoService.getGroupById(id).forEach((grupo: Grupo) => {
@@ -276,6 +278,25 @@ export class TaksListComponent implements OnInit {
     return this.rol === 'COORDINADOR' || this.rol === 'ADMIN';
   }
 
+  getParamUrl() {
+    // Comprueba y recoge el id pasado por url y busca la tarea
+    if (this.route.snapshot.paramMap.has('id')) {
+      this.taskService.getTaskById(this.route.snapshot.paramMap.get('id')).forEach((tarea: Tarea) => {
+        this.grupoService.getGroupById(tarea.grupo).forEach((grupo: Grupo) => {
+          if (tarea.grupal) {
+              this.getUsuarios(grupo);
+              this.getTareas('Pendientes', grupo);
+          } else {
+              this.usuarioService.getUserById(tarea.responsable).forEach((usuario: Usuario) => {
+                this.getUsuarios(grupo);
+                this.getTareas('Pendientes', grupo, usuario);
+              });
+          }
+        });
+    });
+    }
+  }
+
   ngOnInit() {
     this.rol = this.cookie.get('rol');
     switch (this.rol) {
@@ -292,6 +313,7 @@ export class TaksListComponent implements OnInit {
     // PARCHE
     this.getAllGruposAux();
     this.getAllUserAux();
+    this.getParamUrl();
   }
 
 }

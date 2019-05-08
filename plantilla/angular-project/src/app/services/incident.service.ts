@@ -8,6 +8,7 @@ import { Notificacion } from '../models/notificacion';
 import { CookieService } from 'ngx-cookie-service';
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -28,12 +29,24 @@ export class IncidentService {
     return this.db.collection('incidencias', ref => ref.orderBy(order , 'desc').where('estado', '==', state)).valueChanges();
   }
 
+  getIncidentsByStateAndDate(state: string, date) {
+    return this.db.collection('incidencias', ref => ref.where('estado', '==', state)
+    .where('fechaCreacion', '>=', date.toJSON())).valueChanges();
+  }
+
   updateAtendida(id: string) {
     this.db.collection('incidencias').doc(id).update({
       estado: 'Atendida',
       responsable: this.cookie.get('sesionId'),
       fechaAtendida: new Date().toJSON()
     });
+  }
+
+  getIncidentsCritical() {
+    return this.db.collection('incidencias',
+    ref => ref.where('estado', '==', 'Pendiente')
+    .where('fechaCreacion', '>=', moment().startOf('day').toJSON())
+    .where('prioridad', '==', 'Alta')).valueChanges();
   }
 
   cancelAtendida(id: string) {

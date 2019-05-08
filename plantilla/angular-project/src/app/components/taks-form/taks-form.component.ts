@@ -115,8 +115,8 @@ export class TaksFormComponent implements OnInit {
   checkStatus(): boolean {
     return this.controlTipo.status === 'VALID'
     && (this.controlTipo.value.tareas.length > 0 ? this.controlSubtipo1.status === 'VALID' : true)
-    && (this.controlSubtipo1.value.tareas.length > 0 ? this.controlSubtipo2.status === 'VALID' : true)
-    && (this.controlSubtipo2.value.tareas.length > 0 ? this.controlSubtipo3.status === 'VALID' : true)
+    && ((this.controlSubtipo1.value) && (this.controlTipo.value.tareas.length > 0) ? this.controlSubtipo2.status === 'VALID' : true)
+    && ((this.controlSubtipo2.value) && (this.controlSubtipo2.value.tareas.length > 0) ? this.controlSubtipo3.status === 'VALID' : true)
     &&  this.controlGrupo.status === 'VALID'
     && (!this.controlGrupal.value ? this.controlUsuarios.status === 'VALID' : true)
     &&  this.controlFecha.status === 'VALID'

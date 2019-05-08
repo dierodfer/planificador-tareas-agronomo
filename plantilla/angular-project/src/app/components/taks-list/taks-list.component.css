@@ -1,7 +1,6 @@
 .float-button{
     width: 55px;
     height: 55px;
-/*     background: #db4437; */
     position: fixed;
     bottom: 30px;
     right: 30px;
@@ -19,14 +18,15 @@
     z-index: 9999;
 }
 
-.mat-expansion-panel-header-description {
+ .mat-expansion-panel-header-description {
     position: absolute;
-    right: 52px;
-}
+    right: 20px;
+} 
 
-.mat-expansion-panel-header-title {
+ .mat-expansion-panel-header-title {
     margin-right: 7rem!important;
-}
+} 
+
 
 .addIcon{
     transform: scale(1.5);
@@ -40,9 +40,6 @@ mat-chip{
     background-color: #b0dbff9e;
 }
 
-.bg-grey{
-    background-color: #2E8B57;
-}
 
 button.float-right.mat-icon-button.ng-star-inserted:focus{
     outline: none;

@@ -24,6 +24,7 @@ export class DialogIncidentComponent implements OnInit {
   controlPlanta = new FormControl('', Validators.pattern('^[0-9]*$'));
   controlInsta = new FormControl('');
   ubicacion;
+  sectores = []; filas = [];
 
   activemap = false;
 
@@ -65,6 +66,18 @@ export class DialogIncidentComponent implements OnInit {
     return incidencia;
   }
 
+  getSectores(maxSector) {
+    for (let i = 1; i <= maxSector; i++) {
+      this.sectores.push(i);
+    }
+  }
+
+  getFilas(maxFilas) {
+    for (let i = 1; i <= maxFilas; i++) {
+      this.filas.push(i);
+    }
+  }
+
   checkStatus(): boolean {
     return this.control1.status === 'VALID'
     && (this.controlInsta.value ? this.controlInver.status === 'VALID' : true)
@@ -92,6 +105,8 @@ export class DialogIncidentComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getSectores(20); // Numero máximo de sectores que pueden existir actualmente 7
+    this.getFilas(99); // Numero máximo de sectores que pueden existir actualmente 78
   }
 
 }

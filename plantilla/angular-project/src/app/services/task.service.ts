@@ -5,13 +5,14 @@ import { Tarea } from '../models/tarea';
 import { NotificationService } from './notification.service';
 import { Notificacion } from '../models/notificacion';
 import { MessagingService } from './messaging.service';
-import * as moment from 'moment';
-import * as firebase from 'firebase/app';
-import 'firebase/firestore';
 import { GroupService } from './group.service';
 import { UserService } from './user.service';
 import { Usuario } from '../models/usuario';
 import { Grupo } from '../models/grupo';
+
+import * as moment from 'moment';
+import * as firebase from 'firebase/app';
+import 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -30,11 +31,49 @@ export class TaskService {
     return this.db.collection('tareas').valueChanges();
   }
 
-/*   getTaskByUser(userId: string) {
+  getTaskById(id: string) {
+    return this.db.collection('tareas').doc(id).valueChanges();
+  }
+
+  getFinishTask() {
     return this.db.collection('tareas' , ref =>
-    ref.orderBy('fechaComienzo').where('responsable', '==', userId).where('grupal', '==', false)
+    ref.where('finalizada', '==', true)
     ).valueChanges();
-  } */
+  }
+
+  getCancelTask() {
+    return this.db.collection('tareas' , ref =>
+    ref.where('cancelada', '==', true)
+    ).valueChanges();
+  }
+
+  getPendingTask() {
+    return this.db.collection('tareas' , ref =>
+    ref.where('fechaComienzo', '<=', new Date().toJSON())
+    .where('cancelada', '==', false).where('finalizada', '==', false)
+    ).valueChanges();
+  }
+
+  getFinishTaskByDate(date) {
+    return this.db.collection('tareas' , ref =>
+    ref.where('finalizada', '==', true).where('fechaComienzo', '>=', date.toJSON())
+    .where('fechaComienzo', '<=', moment().toJSON())
+    ).valueChanges();
+  }
+
+  getCancelTaskByDate(date) {
+    return this.db.collection('tareas' , ref =>
+    ref.where('cancelada', '==', true).where('fechaComienzo', '>=', date.toJSON())
+    .where('fechaComienzo', '<=', moment().toJSON())
+    ).valueChanges();
+  }
+
+  getPendingTaskByDate(date) {
+    return this.db.collection('tareas' , ref =>
+    ref.where('cancelada', '==', false).where('finalizada', '==', false)
+    .where('fechaComienzo', '>=', date.toJSON()).where('fechaComienzo', '<=', moment().toJSON())
+    ).valueChanges();
+  }
 
   getFinishTaskByUser(userId: string) {
     return this.db.collection('tareas' , ref =>
@@ -79,16 +118,10 @@ export class TaskService {
     ).valueChanges();
   }
 
-/*   getTaskByGroup(groupId: string) {
-    return this.db.collection('tareas' , ref =>
-    ref.where('grupo', '==' , groupId).where('grupal', '==', true)
-    .where('cancelada', '==', false).where('finalizada', '==', false)
-    ).valueChanges();
-  } */
-
   getTaskByUserAndDate(userId: string, date: Date ) {
     return this.db.collection('tareas' , ref =>
-    ref.where('responsable', '==', userId).where('grupal', '==', false).where('fechaComienzo', '==', date.toJSON())
+    ref.where('responsable', '==', userId).where('grupal', '==', false)
+    .where('fechaComienzo', '==', date.toJSON())
     ).valueChanges();
   }
 
@@ -192,5 +225,12 @@ export class TaskService {
         duration: 4000,
       });
     });
+  }
+
+  getTaskDelayed() {
+    return this.db.collection('tareas' , ref =>
+    ref.where('fechaEstimacion', '<', moment().startOf('day').toJSON())
+    .where('finalizada', '==', false).where('cancelada', '==', false)
+    ).valueChanges();
   }
 }

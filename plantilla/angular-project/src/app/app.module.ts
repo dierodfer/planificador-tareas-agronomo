@@ -35,7 +35,9 @@ import { DialogDeleteComponent } from './components/dialog-delete/dialog-delete.
 import { MenuAdminComponent } from './components/menu-admin/menu-admin.component';
 import { IncidentsListComponent } from './components/incidents-list/incidents-list.component';
 import { DialogIncidentDetailsComponent } from './components/dialog-incident-details/dialog-incident-details.component';
-
+import { MapComponent } from './components/map/map.component';
+import { DialogConfirmationComponent } from './components/dialog-confirmation/dialog-confirmation.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 // Material Angular
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -66,9 +68,7 @@ import {MatListModule} from '@angular/material/list';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatMenuModule} from '@angular/material/menu';
-import { MapComponent } from './components/map/map.component';
-import { DialogConfirmationComponent } from './components/dialog-confirmation/dialog-confirmation.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 
 @NgModule({
@@ -112,6 +112,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
     MatSliderModule, MatSidenavModule, MatNativeDateModule, MatCardModule,
     MatDatepickerModule, MatGridListModule, MatExpansionModule, MatTooltipModule,
     MatProgressSpinnerModule, MatListModule, MatBadgeModule, MatTabsModule, MatMenuModule,
+    MatProgressBarModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   entryComponents: [
