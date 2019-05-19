@@ -43,13 +43,13 @@
 <!--      <a mat-icon-button color="warn" (click)="eliminarUsuario(element.empleado)">
             <mat-icon aria-label="Eliminar permanentemente">delete_forever</mat-icon>
           </a>  --> 
-          <a mat-icon-button matTooltip="Mostar usuario" (click)="openDialogUser(element)">
+          <a mat-icon-button color="primary" matTooltip="Mostar usuario" (click)="openDialogUser(element)">
             <mat-icon>zoom_in</mat-icon>
           </a>
-          <a mat-icon-button color="primary" matTooltip="Editar usuario" (click)="editarUsuario(element.empleado)">
+          <a mat-icon-button class="text-warning" matTooltip="Editar usuario" (click)="editarUsuario(element.empleado)">
             <mat-icon>edit</mat-icon>
           </a> 
-          <a mat-icon-button *ngIf="!element.baneado && element.rol != 'ADMIN'" color="warn" matTooltip="Bloquear usuario" (click)="bloquearUsuario(element.empleado)">
+          <a mat-icon-button *ngIf="!element.baneado && element.rol != 'ADMIN'" color="warn" matTooltip="Bloquear usuario" (click)="bloquearUsuario(element)">
             <mat-icon>lock</mat-icon>
           </a> 
 
@@ -59,7 +59,7 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
-  <mat-paginator #paginator [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons></mat-paginator>
+  <mat-paginator #paginator [pageSizeOptions]="[5, 10, 25, 50]" showFirstLastButtons></mat-paginator>
 
   <button mat-button class="p-2 m-1" color="warn" (click)="showUsuariosBloqueados()">Usuarios bloqueados<mat-icon>lock</mat-icon></button>
   <table *ngIf="bloqueados" mat-table [dataSource]="dataSource2" matSort #sort2="matSort" class="mat-elevation-z6 w-100">
@@ -90,10 +90,10 @@
   <!--      <a mat-icon-button color="warn" (click)="eliminarUsuario(element.empleado)">
               <mat-icon aria-label="Eliminar permanentemente">delete_forever</mat-icon>
             </a>  -->
-            <a mat-icon-button matTooltip="Mostar usuario" (click)="openDialogUser(element)">
+            <a mat-icon-button color="primary" matTooltip="Mostar usuario" (click)="openDialogUser(element)">
               <mat-icon>zoom_in</mat-icon>
             </a> 
-            <a mat-icon-button *ngIf="element.baneado" color="primary" matTooltip="Desbloquear usuario" (click)="desbloquearUsuario(element.empleado)">
+            <a mat-icon-button class="text-muted" *ngIf="element.baneado" color="primary" matTooltip="Desbloquear usuario" (click)="desbloquearUsuario(element)">
               <mat-icon>lock_open</mat-icon>
             </a> 
           </td>

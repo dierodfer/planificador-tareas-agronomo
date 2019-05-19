@@ -12,7 +12,8 @@
         <mat-radio-button class="p-2" value="Alta">
           Alta
         </mat-radio-button>
-      </mat-radio-group>
+      </mat-radio-group><br>
+      <mat-hint *ngIf="controlPrioridad.value == 'Alta'">El administrador será notificado</mat-hint>
   </section> 
   <mat-form-field class="w-100">
     <mat-select placeholder="Tipo de incidencia" [(formControl)]="control1" required>
@@ -25,8 +26,8 @@
     <mat-error *ngIf="control1.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
   </mat-form-field> 
   <mat-form-field class="w-100" *ngIf="control1.value == 'Otro'">
-    <textarea matInput maxlength="100" placeholder="Descripción" [(formControl)]="control2" rows="3" required></textarea>
-    <mat-hint align="end">{{control2.value.length}} / 100</mat-hint>
+    <textarea matInput maxlength="200" placeholder="Descripción" [(formControl)]="control2" rows="3" required></textarea>
+    <mat-hint align="end">{{control2.value.length}} / 200</mat-hint>
     <mat-error *ngIf="control2.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
   </mat-form-field>
   <mat-form-field class="w-50">
@@ -49,7 +50,7 @@
     </mat-radio-group>
   </section>
   <div *ngIf="!controlInsta.value">
-    <button mat-stroked-button (click)="showMapa()" color="primary" *ngIf="!ubicacion">Añadir ubicación * <mat-icon>map</mat-icon></button>
+    <button mat-raised-button (click)="showMapa()" color="primary" *ngIf="!ubicacion">Añadir ubicación * <mat-icon>map</mat-icon></button>
     <span *ngIf="ubicacion">Longitud: {{ubicacion.longitude}} , Latitud: {{ubicacion.latitude}}<button mat-icon-button matTooltip="Eliminar ubicacion" (click)="deleteUbicacion()" color="warn"><mat-icon>close</mat-icon></button></span>
   </div>
 

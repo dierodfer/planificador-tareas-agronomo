@@ -119,7 +119,7 @@
                   <button *ngIf="!tarea.cancelada && !tarea.finalizada" mat-icon-button matTooltip="Opciones" [matMenuTriggerFor]="menu"><mat-icon>more_horiz</mat-icon></button>
                   <button *ngIf="tarea.comentarios" matTooltip="Comentarios" mat-icon-button [matMenuTriggerFor]="comentarios"><mat-icon>question_answer</mat-icon></button>
                 <mat-menu #menu="matMenu">
-                  <button (click)="openConfirmDialogAnadirComentario(tarea.id)" mat-menu-item>
+                  <button (click)="openConfirmDialogAnadirComentario(tarea)" mat-menu-item>
                     <mat-icon>question_answer</mat-icon>
                     Añadir comentario
                   </button>
@@ -208,14 +208,14 @@
         <p *ngIf="tarea.descripcion"><b>Detalles:</b> {{tarea.descripcion}}</p>
         <br>
         <mat-action-row *ngIf="!editFechaComienzo[tarea.id] && !editFechaFinalizacion[tarea.id]">
-          <button *ngIf="tarea.comentarios" matTooltip="Comentarios" class="float-right" mat-icon-button [matMenuTriggerFor]="comentarios"><mat-icon>question_answer</mat-icon></button>
           <button *ngIf="!tarea.cancelada && !tarea.finalizada" class="mx-2 bg-success text-white" mat-raised-button (click)="openConfirmDialogFinalizarTarea(tarea.id)"><mat-icon>alarm_on</mat-icon> Finalizar</button>
           <button *ngIf="!tarea.cancelada && !tarea.finalizada" class="mx-2" mat-raised-button color="warn" (click)="openConfirmDialogInterrumpirTarea(tarea)"><mat-icon>pause_circle_outline</mat-icon> Interrumpir</button>
           <button *ngIf="!tarea.cancelada && tarea.finalizada" class="mx-2 bg-info text-white" mat-button (click)="activarTarea(tarea.id)">Volver a activar</button>
           <button *ngIf="tarea.cancelada  && !tarea.finalizada" class="mx-2 bg-info text-white" mat-button (click)="reanudarTarea(tarea.id)">Volver a activar</button>
           <button *ngIf="!tarea.cancelada && !tarea.finalizada" class="float-right" mat-icon-button matTooltip="Opciones" [matMenuTriggerFor]="menu"><mat-icon>more_horiz</mat-icon></button>
+          <button *ngIf="tarea.comentarios" matTooltip="Comentarios" class="float-right" mat-icon-button [matMenuTriggerFor]="comentarios"><mat-icon>question_answer</mat-icon></button>
           <mat-menu #menu="matMenu">
-            <button (click)="openConfirmDialogAnadirComentario(tarea.id)" mat-menu-item>
+            <button (click)="openConfirmDialogAnadirComentario(tarea)" mat-menu-item>
               <mat-icon>question_answer</mat-icon>
               Añadir comentario
             </button>

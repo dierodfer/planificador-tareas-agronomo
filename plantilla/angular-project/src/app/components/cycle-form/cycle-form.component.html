@@ -1,55 +1,56 @@
 <div class="offset-md-2 col-md-8">
-    <button mat-icon-button class="float-right mr-3 mt-3 big-icon text-muted" matTooltip="Para borrar una fase debe borrar todas las tareas que contiene." ><mat-icon>info</mat-icon></button>
-  <button mat-icon-button class="float-right mr-3 mt-3 big-icon text-warning" matTooltip="Editar" *ngIf="!editable" (click)="toggleEdit()"><mat-icon>edit</mat-icon></button>
-  <button mat-icon-button class="float-right mr-3 mt-3 big-icon text-danger" matTooltip="Cancelar" *ngIf="editable" (click)="close()"><mat-icon>close</mat-icon></button>
-  <button mat-icon-button class="float-right mr-3 mt-3 big-icon text-success" matTooltip="Guardar" *ngIf="editable" (click)="submit()"><mat-icon>save</mat-icon></button>
-
+  <div class="pt-5 float-right sticky-top">
+      <button mat-icon-button class="pt-2 mr-3 mt-3 big-icon text-success" matTooltip="Guardar" *ngIf="editable" (click)="submit()"><mat-icon>save</mat-icon></button>    
+      <button mat-icon-button class="pt-2 mr-3 mt-3 big-icon text-danger" matTooltip="Cancelar" *ngIf="editable" (click)="close()"><mat-icon>close</mat-icon></button>
+      <button mat-icon-button class="pt-2 mr-3 mt-3 big-icon text-warning" matTooltip="Editar" *ngIf="!editable" (click)="toggleEdit()"><mat-icon>edit</mat-icon></button>
+      <button mat-icon-button class="pt-2 mr-3 mt-3 big-icon text-muted" matTooltip="Para borrar una fase o tarea debe borrar todas las tareas que contiene en el nivel inferior." ><mat-icon>info</mat-icon></button>
+  </div>
+  
   <!-- nivel 0 Fases -->
   <ng-container #fasesContainer *ngFor="let fase of fases; let last = last; let first = first;">
     <h5 class="py-3">{{fase.nombre}}  
       <button mat-icon-button matTooltip="Crear tarea" *ngIf="editable" (click)="addTarea(fase,1)"><mat-icon>queue</mat-icon></button>
       <button mat-icon-button matTooltip="Eliminar fase" *ngIf="!first  && ( fases.length > 1) && editable && (fase.tareas.length == 0)" (click)="removeFase(fase)" ><mat-icon>delete</mat-icon></button>
-     
     </h5>   
     <!-- nivel 1 Tareas -->
-    <ng-container *ngFor="let tarea of fase.tareas">
+    <div class="border-tareas" *ngFor="let tarea of fase.tareas">
       <mat-form-field class="w-50"  *ngIf="editable">
             <input maxlength="50" matInput [(ngModel)]="tarea.nombre">
             <mat-hint align="end">{{tarea.nombre.length}} /50</mat-hint>
       </mat-form-field>
       <p *ngIf="!editable">{{tarea.nombre}}</p>
       <button mat-icon-button *ngIf="editable" matTooltip="Crear sub-tareas" (click)="addTarea(tarea,2)"><mat-icon>queue</mat-icon></button>
-      <button mat-icon-button *ngIf="editable" matTooltip="Eliminar tarea" (click)="removeTarea(fase, tarea)"><mat-icon>close</mat-icon></button>
+      <button mat-icon-button *ngIf="editable && (tarea.tareas.length == 0)" matTooltip="Eliminar tarea" (click)="removeTarea(fase, tarea)"><mat-icon>close</mat-icon></button>
       <!-- nivel 2 subTareas -->
-      <ng-container *ngFor="let subtarea of tarea.tareas">
-          <mat-form-field class="ml-4 w-50" *ngIf="editable">
+      <div class="ml-4 border-tareas" *ngFor="let subtarea of tarea.tareas">
+          <mat-form-field class="w-50" *ngIf="editable">
                 <input maxlength="50" matInput [(ngModel)]="subtarea.nombre">
                 <mat-hint align="end">{{subtarea.nombre.length}} /50</mat-hint>
           </mat-form-field>
-          <p class="ml-4" *ngIf="!editable">{{subtarea.nombre}}</p>
+          <p *ngIf="!editable">{{subtarea.nombre}}</p>
           <button mat-icon-button *ngIf="editable" matTooltip="Crear sub-tareas" (click)="addTarea(subtarea,3)"><mat-icon>queue</mat-icon></button>
-          <button mat-icon-button *ngIf="editable" matTooltip="Eliminar sub-tarea" (click)="removeTarea(tarea, subtarea)"><mat-icon>close</mat-icon></button>
+          <button mat-icon-button *ngIf="editable && (subtarea.tareas.length == 0)" matTooltip="Eliminar sub-tarea" (click)="removeTarea(tarea, subtarea)"><mat-icon>close</mat-icon></button>
           <!-- nivel 3 subsubTareas -->
-          <ng-container *ngFor="let subsubtarea of subtarea.tareas">
-            <mat-form-field class="ml-5 pl-2 w-50" *ngIf="editable">
+          <div class="ml-4 border-tareas" *ngFor="let subsubtarea of subtarea.tareas">
+            <mat-form-field class="w-50" *ngIf="editable">
                   <input maxlength="50" matInput [(ngModel)]="subsubtarea.nombre">
                   <mat-hint align="end">{{subsubtarea.nombre.length}} /50</mat-hint>
             </mat-form-field>
-            <p class="ml-5 pl-2" *ngIf="!editable">{{subsubtarea.nombre}}</p>
+            <p *ngIf="!editable">{{subsubtarea.nombre}}</p>
             <button mat-icon-button *ngIf="editable" matTooltip="Crear sub-tareas" (click)="addTarea(subsubtarea,4)"><mat-icon>queue</mat-icon></button>
-            <button mat-icon-button *ngIf="editable" matTooltip="Eliminar sub-tarea" (click)="removeTarea(subtarea, subsubtarea)"><mat-icon>close</mat-icon></button>
+            <button mat-icon-button *ngIf="editable && (subsubtarea.tareas.length == 0)" matTooltip="Eliminar sub-tarea" (click)="removeTarea(subtarea, subsubtarea)"><mat-icon>close</mat-icon></button>
             <!-- nivel 4 subsubsubTareas -->
-            <ng-container *ngFor="let subsubsubtarea of subsubtarea.tareas">
-              <mat-form-field class="ml-5 pl-5 w-50" *ngIf="editable">
+            <div class="ml-4" *ngFor="let subsubsubtarea of subsubtarea.tareas">
+              <mat-form-field class="w-50" *ngIf="editable">
                     <input maxlength="50" matInput [(ngModel)]="subsubsubtarea.nombre">
                     <mat-hint align="end">{{subsubsubtarea.nombre.length}} /50</mat-hint>
               </mat-form-field>
-              <p class="ml-5 pl-5" *ngIf="!editable">{{subsubsubtarea.nombre}}</p>
+              <p *ngIf="!editable">{{subsubsubtarea.nombre}}</p>
               <button mat-icon-button *ngIf="editable" matTooltip="Eliminar sub-tarea" (click)="removeTarea(subsubtarea, subsubsubtarea)"><mat-icon>close</mat-icon></button>
-            </ng-container>
-        </ng-container>
-      </ng-container>
-    </ng-container>
+            </div>
+          </div>
+      </div>
+    </div>
     <br>
     <button mat-raised-button color="primary" class="mt-4" matTooltip="Añadir nueva fase" *ngIf="last && editable" (click)="addFase()"><mat-icon>add</mat-icon>Añadir nueva fase</button>
   </ng-container> 

@@ -54,6 +54,10 @@ export class NotificationComponent implements OnInit, OnDestroy {
     );
   }
 
+  sendMePushNotification() {
+    this.messagingService.sendMessage('Nueva Notificacion', 'Notificacion de ejemplo', this.cookie.get('sesionId'));
+  }
+
   ngOnDestroy() {
     this.notificacionService.toggleMyNotifications();
   }

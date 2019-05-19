@@ -29,14 +29,14 @@
             <mat-list-item *ngIf="newUser[grupo.id]">
               <mat-icon mat-list-icon>account_circle</mat-icon>
               <mat-form-field mat-line>
-                  <mat-select placeholder="Nuevo usuario" [formControl]="control" required>
+                  <mat-select placeholder="Añadir miembro" [formControl]="control" required>
                         <mat-option *ngFor="let usuario of getTrabajadores(grupo)" [value]="usuario.empleado">
                           {{usuario.nombre}}, {{usuario.apellidos}}
                         </mat-option>
                   </mat-select>
                   <mat-error *ngIf="control.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
               </mat-form-field>
-              <button mat-icon-button matSuffix (click)="addUser(grupo,control.value)" matTooltip="Click para guardar"><mat-icon>add_circle_outline</mat-icon></button>
+              <button mat-icon-button matSuffix (click)="addUser(grupo,control.value)" matTooltip="Añadir y guardar"><mat-icon>add_circle_outline</mat-icon></button>
             </mat-list-item>
         </mat-nav-list>
     </mat-card>

@@ -56,14 +56,14 @@
       <mat-error *ngIf="controlFecha.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
     </mat-form-field>
 
-<!--     <mat-form-field class="w-50" *ngIf="!controlGrupal.value">
-        <input matInput [min]="minDateFinishpicker" [formControl]="controlFechaEstimacion" [matDatepicker]="picker" placeholder="Fecha de finalización(opcional)">
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker touchUi #picker></mat-datepicker>
-        <mat-error *ngIf="controlFecha.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
-    </mat-form-field> -->
+    <mat-form-field class="w-50" *ngIf="controlFecha.value">
+        <input matInput [min]="controlFecha.value" [formControl]="controlFechaEstimacion" [matDatepicker]="picker2" placeholder="Fecha de estimación" required (dateChange)="dateChangeEstimacion($event)">
+        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+        <mat-datepicker touchUi #picker2></mat-datepicker>
+        <mat-error *ngIf="controlFechaEstimacion.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
+    </mat-form-field> 
 
-    <mat-form-field class="w-100">
+    <mat-form-field class="w-50" *ngIf="controlFecha.value">
       <input matInput placeholder="Duración en días" type="number" [value]="controlRepit.value" disabled>
       <button mat-icon-button matSuffix class="mr-2" (click)="addRepit()"><mat-icon class="big-icon">add</mat-icon></button>
       <button mat-icon-button matSuffix class="mr-2" (click)="subRepit()"><mat-icon class="big-icon">remove</mat-icon></button>
@@ -99,5 +99,5 @@
  
     <br>
   </div>
-  <button class="button-right bg-success" matTooltip="Guardar tareas" (click)="submit()" mat-mini-fab color="primary"> <mat-icon class="big-icon">save</mat-icon></button>
-  <button class="button-left bg-info" matTooltip="Volver" (click)="goBack()" mat-mini-fab color="primary"> <mat-icon class="big-icon">arrow_back</mat-icon></button>
+  <button class="button-right" color="primary" matTooltip="Guardar tareas" (click)="submit()" mat-mini-fab> <mat-icon class="big-icon">save</mat-icon></button>
+  <button class="button-left" color="accent" matTooltip="Volver" (click)="goBack()" mat-mini-fab> <mat-icon class="big-icon">arrow_back</mat-icon></button>

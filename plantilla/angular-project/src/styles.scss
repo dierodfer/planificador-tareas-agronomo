@@ -1,0 +1,35 @@
+/* You can add global styles to this file, and also import other style files */
+/* @import "~@angular/material/prebuilt-themes/deeppurple-amber.css"; */
+@import '~@angular/material/theming';
+@include mat-core();
+$my-primary: mat-palette($mat-teal);
+$my-accent:  mat-palette($mat-orange);
+$my-warn:    mat-palette($mat-red);
+$my-theme: mat-light-theme($my-primary, $my-accent, $my-warn);
+@include angular-material-theme($my-theme);
+
+.clickable{
+    cursor: pointer;
+}
+
+.primary-bg{
+    background-color: #009688 !important;
+}
+
+.primary-text{
+    color:  #009688 !important;
+}
+
+.mat-row:hover {
+    background-color: rgba(0,0,0,.05);
+}
+
+.row{
+    margin-right: 0px !important;
+    margin-left: 0px !important;
+}
+
+/* PWA */
+body {
+    -webkit-tap-highlight-color: transparent;
+}

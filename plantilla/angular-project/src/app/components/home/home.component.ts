@@ -69,7 +69,7 @@ export class HomeComponent implements OnInit {
       this.getMyBuzon();
       this.getMyUser();
       this.messagingService.requestPermission(sesionId);
-      this.messagingService.receiveMessage();
+      /* this.messagingService.receiveMessage(); */
     }
 
 /*   this.message = this.messagingService.currentMessage; */

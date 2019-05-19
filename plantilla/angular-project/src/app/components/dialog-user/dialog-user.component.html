@@ -8,5 +8,5 @@
     <p *ngIf="isCoordinador()"><b>Rol:</b>  {{usuario.rol | lowercase}}/a</p>
     <p><b>Genero:</b>   {{usuario.genero | lowercase}}</p>
     <p><b>Telefono:</b> {{usuario.telefono}}</p>
-    <a mat-raised-button matTooltip="Realizar llamada" class="w-100 text-white bg-success" [href]="urlTelefono(usuario.telefono)"><mat-icon>phone</mat-icon></a>
+    <a mat-raised-button matTooltip="Realizar llamada" class="w-100 text-white primary-bg" [href]="urlTelefono(usuario.telefono)"><mat-icon>phone</mat-icon></a>
 </mat-dialog-content>

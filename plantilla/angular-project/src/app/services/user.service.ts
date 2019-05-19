@@ -4,6 +4,7 @@ import { Usuario } from '../models/usuario';
 import {MatSnackBar} from '@angular/material';
 import { NotificationService } from './notification.service';
 import { CookieService } from 'ngx-cookie-service';
+import { Notificacion } from '../models/notificacion';
 
 @Injectable({
   providedIn: 'root'
@@ -40,6 +41,10 @@ export class UserService {
     return this.db.collection('usuarios' ,
     ref => ref.where('rol', '==' , 'COORDINADOR')
     ).valueChanges();
+  }
+
+  getAdmin() {
+    return this.db.collection('usuarios').doc('0').valueChanges();
   }
 
   getWorkers() {
@@ -82,9 +87,18 @@ export class UserService {
     });
   }
 
-  blockUser(empleado: string) {
-    this.db.collection('usuarios').doc(empleado).update({
+  blockUser(usuario: Usuario) {
+    this.db.collection('usuarios').doc(usuario.empleado).update({
       baneado: true
+    }).then(() => {
+      const titulo = 'Usuario Bloqueado';
+      const cuerpo = 'El usuario ' + usuario.nombre + ',' + usuario.apellidos + 'ha sido bloqueado del sistema.';
+      // Envia notificación interna a todos los coordinadores
+      this.getCoordinators().forEach(coordinadores => {
+        coordinadores.forEach((coordinador: Usuario) => {
+          this.notificacionService.sendNotification(coordinador.empleado, new Notificacion(cuerpo, titulo));
+        });
+      });
     });
   }
 

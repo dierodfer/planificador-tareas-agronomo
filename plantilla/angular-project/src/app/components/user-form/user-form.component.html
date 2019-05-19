@@ -40,6 +40,6 @@
   </mat-radio-group>
 </div>
 
-<button class="button-right  bg-success" *ngIf="editar" matTooltip="Guardar Usuario" (click)="updateUsuario()" mat-mini-fab color="primary"> <mat-icon class="big-icon">save</mat-icon></button>
-<button class="button-right  bg-success" *ngIf="!editar" matTooltip="Guardar Usuario" (click)="addUsuario()" mat-mini-fab color="primary"> <mat-icon class="big-icon">save</mat-icon></button>
-<button class="button-left bg-info" matTooltip="Volver" (click)="goBack()" mat-mini-fab color="primary"> <mat-icon class="big-icon">arrow_back</mat-icon></button>
+<button class="button-right" *ngIf="editar" matTooltip="Guardar Usuario" (click)="updateUsuario()" mat-mini-fab color="primary"> <mat-icon class="big-icon">save</mat-icon></button>
+<button class="button-right" *ngIf="!editar" matTooltip="Guardar Usuario" (click)="addUsuario()" mat-mini-fab color="primary"> <mat-icon class="big-icon">save</mat-icon></button>
+<button class="button-left" matTooltip="Volver" (click)="goBack()" mat-mini-fab color="accent"> <mat-icon class="big-icon">arrow_back</mat-icon></button>

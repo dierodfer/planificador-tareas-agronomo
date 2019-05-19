@@ -67,6 +67,10 @@ export class IncidentsListComponent implements OnInit {
     this.incidenciaService.updateResuelta(incidencia.id);
   }
 
+  isAdmin(){
+    return this.cookie.get('rol') === 'ADMIN';
+  }
+
   myId() {
     return this.cookie.get('sesionId');
   }

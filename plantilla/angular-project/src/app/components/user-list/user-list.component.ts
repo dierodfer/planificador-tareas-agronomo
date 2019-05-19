@@ -106,12 +106,12 @@ export class UserListComponent implements OnInit {
     }
   }
 
-  bloquearUsuario(empleado) {
-    this.usuarioService.blockUser(empleado);
+  bloquearUsuario(usuario) {
+    this.usuarioService.blockUser(usuario);
   }
 
-  desbloquearUsuario(empleado) {
-    this.usuarioService.unblockUser(empleado);
+  desbloquearUsuario(usuario) {
+    this.usuarioService.unblockUser(usuario.empleado);
   }
 
   openDialogUser(user) {

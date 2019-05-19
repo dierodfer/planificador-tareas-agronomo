@@ -116,7 +116,7 @@
               <a *ngIf="element.responsable == myId()" matTooltip="Marcar como resuelta" class="text-success" (click)="incidenciaResuelta(element)" mat-icon-button >
                 <mat-icon>done_all</mat-icon>
               </a>  
-              <a *ngIf="element.responsable == myId()" matTooltip="No atender incidencia"  (click)="cancelarIncidenciaAtendida(element)" class="text-danger" mat-icon-button >
+              <a *ngIf="element.responsable == myId() || isAdmin()" matTooltip="No atender incidencia"  (click)="cancelarIncidenciaAtendida(element)" class="text-danger" mat-icon-button >
                 <mat-icon>cancel_presentation</mat-icon>
               </a>
             </td>

@@ -2,7 +2,7 @@
     <mat-spinner class="loading d-none" diameter="50"></mat-spinner>
 </div>
 
-<a mat-raised-button class="btn-map5 bg-warning text-white" *ngIf="!register" [href]="getURLGoogleMaps()" target="_blank">Abrir en Google Maps</a>
+<a mat-raised-button class="btn-map5 text-white" *ngIf="!register" [href]="getURLGoogleMaps()" color="accent" target="_blank">¿Como llegar?</a>
 <button mat-raised-button class="btn-map1" (click)="recalcular()" *ngIf="register" color="primary">Recalcular</button>
 <button mat-raised-button class="btn-map2 bg-success text-white" *ngIf="register && location" (click)="submit()">Confirmar</button>
 <button mat-raised-button class="btn-map3 bg-info text-white" (click)="goBack()">Volver</button>

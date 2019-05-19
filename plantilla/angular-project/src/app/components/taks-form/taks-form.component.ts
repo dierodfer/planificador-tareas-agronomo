@@ -58,25 +58,15 @@ export class TaksFormComponent implements OnInit {
   submit() {
      if (this.checkStatus()) {
       if (this.controlGrupal.value) {
-        // Cuando es una tarea grupal
+        // Tarea grupal
         const tarea = this.getTarea();
         this.taskService.addTask(tarea);
       } else {
-        // Cuando es una tarea individual
+        // Tarea individual
         this.controlUsuarios.value.forEach(user => {
-/*           if (this.controlRepit.value > 1) {
-            let a = this.controlRepit.value - 1;
-            do {// Agrega tareas hasta que se cumpla el número de dias requerido
-              const copy = this.getTarea();
-              copy.responsable = user.empleado;
-              this.taskService.addTask(copy);
-              copy.fechaComienzo = moment(copy.fechaComienzo).add(a, 'day').toDate();
-            }while (a-- > 0);
-          } else { */
             const tarea = this.getTarea();
             tarea.responsable = user.empleado;
             this.taskService.addTask(tarea);
-        /*   } */
         });
       }
       this.resetValidators();
@@ -115,7 +105,7 @@ export class TaksFormComponent implements OnInit {
   checkStatus(): boolean {
     return this.controlTipo.status === 'VALID'
     && (this.controlTipo.value.tareas.length > 0 ? this.controlSubtipo1.status === 'VALID' : true)
-    && ((this.controlSubtipo1.value) && (this.controlTipo.value.tareas.length > 0) ? this.controlSubtipo2.status === 'VALID' : true)
+    && ((this.controlSubtipo1.value) && (this.controlSubtipo1.value.tareas.length > 0) ? this.controlSubtipo2.status === 'VALID' : true)
     && ((this.controlSubtipo2.value) && (this.controlSubtipo2.value.tareas.length > 0) ? this.controlSubtipo3.status === 'VALID' : true)
     &&  this.controlGrupo.status === 'VALID'
     && (!this.controlGrupal.value ? this.controlUsuarios.status === 'VALID' : true)
@@ -156,11 +146,13 @@ export class TaksFormComponent implements OnInit {
   subRepit() {
     if (this.controlRepit.value > 1) {
       this.controlRepit.setValue(this.controlRepit.value - 1);
+      this.controlFechaEstimacion.setValue(moment(this.controlFechaEstimacion.value).subtract(1, 'day').toDate());
     }
   }
 
   addRepit() {
     this.controlRepit.setValue(this.controlRepit.value + 1);
+    this.controlFechaEstimacion.setValue(moment(this.controlFechaEstimacion.value).add(1, 'day').toDate());
   }
 
   goBack() {
@@ -168,7 +160,12 @@ export class TaksFormComponent implements OnInit {
   }
 
   dateChange(event) {
-    this.minDateFinishpicker = event.value;
+    this.controlFechaEstimacion.setValue(event.value);
+    this.controlRepit.setValue(1);
+  }
+
+  dateChangeEstimacion(event) {
+    this.controlRepit.setValue(moment(this.controlFechaEstimacion.value).diff(moment(this.controlFecha.value), 'day') + 1);
   }
 
   ngOnInit() {

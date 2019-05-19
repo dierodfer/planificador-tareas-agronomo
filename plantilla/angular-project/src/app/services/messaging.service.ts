@@ -72,16 +72,16 @@ export class MessagingService {
   /**
    * hook method when new notification received in foreground
    */
-  receiveMessage() {
+   receiveMessage() {
     this.angularFireMessaging.messages.subscribe(
       (payload) => {
-/*         console.log('new message received. ', payload); */
+         console.log('new message received. ', payload); 
         this.snackBar.open('¡Se ha recibido una nueva notificación!', 'Cerrar', {
           duration: 4000,
         });
          this.currentMessage.next(payload);
       });
-  }
+  } 
 
   sendMessage(titulo, cuerpo, userId) {
     this.angularFireStore.collection('fcmTokens').doc(userId).valueChanges().forEach(
@@ -98,9 +98,11 @@ export class MessagingService {
       'notification': {
         'title': titulo,
         'body': cuerpo,
-        'icon': 'https://angular-222712.firebaseapp.com/favicon.ico'
+        'icon': 'https://angular-222712.firebaseapp.com/favicon.ico',
+        'badge': 'https://angular-222712.firebaseapp.com/assets/icons/favicon-32x32.png'
       },
-      'to': token
+      'to': token,
+      'priority': 'high'
     };
   }
 

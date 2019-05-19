@@ -137,12 +137,26 @@ export class TaskService {
     });
   }
 
-  addComment(tareaId, comment) {
-    this.db.collection('tareas').doc(tareaId).update({
+  addComment(tarea: Tarea, comment) {
+    console.log(tarea);
+    this.db.collection('tareas').doc(tarea.id).update({
       comentarios:  firebase.firestore.FieldValue.arrayUnion({
           fecha: new Date().toJSON(),
           cuerpo: comment
         })
+      }).then(() => {
+        // Envia notificacion interna al coordinador del grupo responsable
+        this.usuarioService.getUserById(tarea.responsable).forEach((usuario: Usuario) => {
+          this.grupoService.getGroupById(tarea.grupo).forEach((grupo: Grupo) => {
+            const titulo = 'Nuevo Comentario';
+            const cuerpo = 'Responsable: ' + usuario.nombre + ', Grupo: ' + grupo.nombre + ', ' +
+            tarea.tipo + ' ' + (tarea.subtipo1 ? tarea.subtipo1 : '')
+            + ' ' + (tarea.subtipo2 ? tarea.subtipo2 : '') +
+            + ' ' + (tarea.subtipo3 ? tarea.subtipo3 : '') +
+            + ', Comentario: ' + comment;
+            this.notificacionService.sendNotification(grupo.coordinador, new Notificacion(cuerpo, titulo));
+          });
+        });
       });
   }
 

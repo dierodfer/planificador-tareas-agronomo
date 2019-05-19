@@ -80,6 +80,7 @@ export class DialogIncidentComponent implements OnInit {
 
   checkStatus(): boolean {
     return this.control1.status === 'VALID'
+    && (this.control1.value === 'Otro' ? this.control2.status === 'VALID' : true)
     && (this.controlInsta.value ? this.controlInver.status === 'VALID' : true)
     && (!this.controlInsta.value ? this.ubicacion : true)
     && (this.controlPlanta.value ? this.controlPlanta.status === 'VALID' : true);

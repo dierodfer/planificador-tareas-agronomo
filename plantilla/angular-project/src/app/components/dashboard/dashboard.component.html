@@ -21,7 +21,7 @@
             <h5 class="mb-0">{{numeroTareasInterrumpidas}}</h5>
             <small>Interrumpidas</small>
         </div>
-        <div class="col-4 pt-3 text-success">
+        <div class="col-4 pt-3 primary-text">
             <h5 class="mb-0">{{numeroTareasFinalizadas}}</h5>
             <small>Finalizadas</small>
         </div>
@@ -29,7 +29,7 @@
             <div class="progress" style="height: 50px;">
                 <div class="progress-bar bg-info" matTooltip="Tareas activas" (click)="getTipoTareasPendientes()" role="progressbar" [ngStyle]="{'width': numeroTareasActivas ? (numeroTareasActivas/getNumTotalTareas())*100 + '%' : '0%' }">{{((numeroTareasActivas/getNumTotalTareas())*100).toFixed(0)}}%</div>
                 <div class="progress-bar bg-warning" matTooltip="Tareas interrumpidas" (click)="getTipoTareasInterrumpidas()" role="progressbar" [ngStyle]="{'width': numeroTareasInterrumpidas ? (numeroTareasInterrumpidas/getNumTotalTareas())*100  + '%' : '0%' }">{{((numeroTareasInterrumpidas/getNumTotalTareas())*100).toFixed(0)}}%</div>
-                <div class="progress-bar bg-success" matTooltip="Tareas Finalizadas" (click)="getTipoTareasFinalizadas()" role="progressbar" [ngStyle]="{'width': numeroTareasFinalizadas ? (numeroTareasFinalizadas/getNumTotalTareas())*100 + '%' : '0%' }">{{((numeroTareasFinalizadas/getNumTotalTareas())*100).toFixed(0)}}%</div>
+                <div class="progress-bar primary-bg" matTooltip="Tareas Finalizadas" (click)="getTipoTareasFinalizadas()" role="progressbar" [ngStyle]="{'width': numeroTareasFinalizadas ? (numeroTareasFinalizadas/getNumTotalTareas())*100 + '%' : '0%' }">{{((numeroTareasFinalizadas/getNumTotalTareas())*100).toFixed(0)}}%</div>
             </div>
         </div>
         <div class="col-12 pt-3 text-left">
@@ -59,7 +59,7 @@
             <h5 class="mb-0">{{numeroIncidenciasAtendidas}}</h5>
             <small>Atendidas</small>
         </div>
-        <div class="col-4 pt-3 text-success">
+        <div class="col-4 pt-3 primary-text">
             <h5 class="mb-0">{{numeroIncidenciasResueltas}}</h5>
             <small>Resueltas</small>
         </div>
@@ -67,7 +67,7 @@
             <div class="progress" style="height: 50px;">
                 <div class="progress-bar bg-info" matTooltip="Incidencias pendientes" role="progressbar" [ngStyle]="{'width': numeroIncidenciasPendientes ? (numeroIncidenciasPendientes/getNumTotalIncidencias())*100 + '%' : '0%' }">{{((numeroIncidenciasPendientes/getNumTotalIncidencias())*100).toFixed(0)}}%</div>
                 <div class="progress-bar bg-warning" matTooltip="Incidencias atendidas"  role="progressbar" [ngStyle]="{'width': numeroIncidenciasAtendidas ? (numeroIncidenciasAtendidas/getNumTotalIncidencias())*100  + '%' : '0%' }">{{((numeroIncidenciasAtendidas/getNumTotalIncidencias())*100).toFixed(0)}}%</div>
-                <div class="progress-bar bg-success" matTooltip="Incidencias resueltas"  role="progressbar" [ngStyle]="{'width': numeroIncidenciasResueltas ? (numeroIncidenciasResueltas/getNumTotalIncidencias())*100 + '%' : '0%' }">{{((numeroIncidenciasResueltas/getNumTotalIncidencias())*100).toFixed(0)}}%</div>
+                <div class="progress-bar primary-bg" matTooltip="Incidencias resueltas"  role="progressbar" [ngStyle]="{'width': numeroIncidenciasResueltas ? (numeroIncidenciasResueltas/getNumTotalIncidencias())*100 + '%' : '0%' }">{{((numeroIncidenciasResueltas/getNumTotalIncidencias())*100).toFixed(0)}}%</div>
             </div>
         </div>
 
@@ -103,6 +103,6 @@
 <mat-menu #retrasadas="matMenu">
   <button class="clickable" (click)="goTask(tarea.id)" mat-menu-item *ngFor="let tarea of tareasRetrasadas">
       <span *ngIf="diffDias(tarea.fechaEstimacion)<0" class="text-danger font-weight-bolder" style="font-size: 20px">{{diffDias(tarea.fechaEstimacion)*-1}} días</span>
-      <span [ngClass]="{'text-info': tarea.grupal}"> {{tarea.tipo}} </span>      
+      <span [ngClass]="{'text-info': tarea.grupal}"> {{tarea.tipo}} <mat-icon *ngIf="tarea.grupal" matTooltip="Tarea grupal" style="font-size: 17px">info</mat-icon> </span>      
   </button>
 </mat-menu>

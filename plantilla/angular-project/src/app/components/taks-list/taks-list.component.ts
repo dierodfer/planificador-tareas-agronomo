@@ -163,16 +163,17 @@ export class TaksListComponent implements OnInit {
     });
   }
 
-  openConfirmDialogAnadirComentario(id) {
+  openConfirmDialogAnadirComentario(tarea) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
       tipo: 'añadirComentario',
+      detalles: 'El coordinador de la tarea será notificado',
       input: true
     };
     this.confirmDialog = this.dialog.open(DialogConfirmationComponent, dialogConfig);
     this.confirmDialog.afterClosed().subscribe(confirmado => {
         if (confirmado) {
-          this.addComentario(id, confirmado);
+          this.addComentario(tarea, confirmado);
         }
     });
   }
@@ -270,8 +271,8 @@ export class TaksListComponent implements OnInit {
     this.editFechaFinalizacion[tarea.id] = !this.editFechaFinalizacion[tarea.id];
   }
 
-  addComentario(id, comentario) {
-    this.taskService.addComment(id, comentario);
+  addComentario(tarea, comentario) {
+    this.taskService.addComment(tarea, comentario);
   }
 
   isCoordinador() {

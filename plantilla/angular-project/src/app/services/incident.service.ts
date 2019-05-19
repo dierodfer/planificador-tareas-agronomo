@@ -9,6 +9,8 @@ import { CookieService } from 'ngx-cookie-service';
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 import * as moment from 'moment';
+import { UserService } from './user.service';
+import { Usuario } from '../models/usuario';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +21,8 @@ export class IncidentService {
     private snackBar: MatSnackBar,
     private messagingService: MessagingService,
     private noficacionService: NotificationService,
-    private cookie: CookieService) { }
+    private cookie: CookieService,
+    private usuarioService: UserService) { }
 
   getIncidents() {
     return this.db.collection('incidencias', ref => ref.orderBy('fechaCreacion', 'desc')).valueChanges();
@@ -78,10 +81,19 @@ export class IncidentService {
         + (incidencia.zona.planta ? ', en la planta: ' + incidencia.zona.planta : '');
       }
 
-      // Envia notiicacion Push e Interna
-      this.messagingService.sendMessage(titulo, cuerpo, '0');
+      // Envia notificacion Push a administrador
+      if (incidencia.prioridad === 'Alta') {
+        this.messagingService.sendMessage(titulo, cuerpo, '0');
+      }
+      // Envia notificación interna a todos los coordinadores
+      this.usuarioService.getCoordinators().forEach(coordinadores => {
+        coordinadores.forEach((coordinador: Usuario) => {
+          this.noficacionService.sendNotification(coordinador.empleado, new Notificacion(cuerpo, titulo));
+        });
+      });
+      // Envia notificacion interna a administrador
       this.noficacionService.sendNotification('0', new Notificacion(cuerpo, titulo));
-      this.snackBar.open('La incidencia se ha enviado correctamente y el ADMIN a sido notificado', 'Cerrar', {
+      this.snackBar.open('La incidencia se ha enviado correctamente, los coordinadores han sido notificados', 'Cerrar', {
         duration: 10000,
       });
     });
