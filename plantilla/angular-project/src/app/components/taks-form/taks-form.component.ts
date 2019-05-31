@@ -55,6 +55,20 @@ export class TaksFormComponent implements OnInit {
     grupo.usuarios.forEach(id => this.usuarioService.getUserById(id).forEach(usuario => this.usuarios.push(usuario as Usuario)));
   }
 
+  getFases() {
+    this.fasesService.getFases().subscribe(fases => this.fases = fases as Fase[]);
+  }
+
+  getMyGroups() {
+    this.groupService.getGroupsByCoordinator(this.cookie.get('sesionId')).subscribe(
+      grupos => this.misGrupos = grupos as Grupo[]
+    );
+  }
+
+  getAllGroups() {
+    this.groupService.getGroups().subscribe(grupos => this.misGrupos = grupos as Grupo[]);
+  }
+
   submit() {
      if (this.checkStatus()) {
       if (this.controlGrupal.value) {
@@ -133,15 +147,6 @@ export class TaksFormComponent implements OnInit {
     return ids;
   }
 
-  getFases() {
-    this.fasesService.getFases().subscribe(fases => this.fases = fases as Fase[]);
-  }
-
-  getMyGroups() {
-    this.groupService.getGroupsByCoordinator(this.cookie.get('sesionId')).subscribe(
-      grupos => this.misGrupos = grupos as Grupo[]
-    );
-  }
 
   subRepit() {
     if (this.controlRepit.value > 1) {
@@ -164,17 +169,19 @@ export class TaksFormComponent implements OnInit {
     this.controlRepit.setValue(1);
   }
 
-  dateChangeEstimacion(event) {
+  dateChangeEstimacion() {
     this.controlRepit.setValue(moment(this.controlFechaEstimacion.value).diff(moment(this.controlFecha.value), 'day') + 1);
   }
 
   ngOnInit() {
     this.controlGrupal.setValue(false);
     this.controlRepit.setValue(1);
-    // Solo para admin
-    // this.getUsuarios();
     this.getFases();
-    this.getMyGroups();
+    if (this.cookie.get('rol') === 'ADMIN') {
+      this.getAllGroups();
+    } else {
+      this.getMyGroups();
+    }
   }
 
 }

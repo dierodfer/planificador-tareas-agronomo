@@ -3,8 +3,7 @@ import { Usuario } from '../../models/usuario';
 import { UserService } from '../../services/user.service';
 import {FormControl, Validators} from '@angular/forms';
 import {MatSnackBar} from '@angular/material';
-import { switchMap } from 'rxjs/operators';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 
 @Component({
@@ -32,25 +31,40 @@ export class UserFormComponent implements OnInit {
 
   addUsuario() {
     if (this.checkStatus()) {
-      this.userService.addUsuario(this.getUsuario());
-      this.resetValidators();
-    } else {
-      this.snackBar.open('Debe rellenar todos los campos obligatorios', 'Cerrar', {
-        duration: 3000,
-        panelClass: 'bg-danger',
-      });
+      if (this.checkPhone()) {
+        this.userService.getUserById(this.getUsuario().empleado).forEach((usuario: Usuario) => {
+          if (usuario) {
+            this.snackBar.open('Ya existe un usuario con ese número de empleado', 'Cerrar', {
+              duration: 3000,
+              panelClass: 'bg-danger',
+            });
+          } else {
+            this.userService.addUsuario(this.getUsuario());
+            this.resetValidators();
+          }
+        });
+      }
     }
   }
 
   updateUsuario() {
     if (this.checkStatus()) {
-      this.userService.addUsuario(this.getUsuario());
-      this.router.navigate(['inicio/admin/usuarios/lista']);
+      if (this.checkPhone()) {
+        this.userService.updateUsuario(this.getUsuario());
+        this.router.navigate(['inicio/admin/usuarios/lista']);
+      }
+    }
+  }
+
+  checkPhone() {
+    if (this.controlTelefono.value && this.controlTelefono.value.length === 9){
+      return true;
     } else {
-      this.snackBar.open('Debe rellenar todos los campos obligatorios', 'Cerrar', {
+      this.snackBar.open('Teléfono inválido', 'Cerrar', {
         duration: 3000,
         panelClass: 'bg-danger',
       });
+      return false;
     }
   }
 
@@ -66,12 +80,20 @@ export class UserFormComponent implements OnInit {
   }
 
   checkStatus(): boolean {
-    return this.controlNombre.status === 'VALID'
+    if (this.controlNombre.status === 'VALID'
     && this.controlApellidos.status === 'VALID'
     && this.controlRol.status === 'VALID'
     && this.controlEmpleado.status === 'VALID'
     && this.controlGenero.status === 'VALID'
-    && this.controlTelefono.status === 'VALID';
+    && this.controlTelefono.status === 'VALID') {
+      return true;
+    } else {
+      this.snackBar.open('Debe rellenar todos los campos obligatorios', 'Cerrar', {
+        duration: 3000,
+        panelClass: 'bg-danger',
+      });
+      return false;
+    }
   }
 
   resetValidators() {

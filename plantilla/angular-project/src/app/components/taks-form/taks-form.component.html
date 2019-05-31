@@ -21,6 +21,7 @@
       </mat-select>
       <mat-error *ngIf="controlTipo.hasError('required')">Campo <strong>obligatorio</strong></mat-error>
     </mat-form-field>
+    <span class="text-danger" *ngIf="!controlTipo.value && fases.length == 0">Taxonomía de tareas vacía, contacte con el administrador</span>
 
     <mat-form-field *ngIf="controlTipo.value.tareas && controlTipo.value.tareas.length > 0" class="w-100">
       <mat-select placeholder="Tipo de subtarea" [formControl]="controlSubtipo1" required>
@@ -57,7 +58,7 @@
     </mat-form-field>
 
     <mat-form-field class="w-50" *ngIf="controlFecha.value">
-        <input matInput [min]="controlFecha.value" [formControl]="controlFechaEstimacion" [matDatepicker]="picker2" placeholder="Fecha de estimación" required (dateChange)="dateChangeEstimacion($event)">
+        <input matInput [min]="controlFecha.value" [formControl]="controlFechaEstimacion" [matDatepicker]="picker2" placeholder="Fecha de estimación" required (dateChange)="dateChangeEstimacion()">
         <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
         <mat-datepicker touchUi #picker2></mat-datepicker>
         <mat-error *ngIf="controlFechaEstimacion.hasError('required')">Campo <strong>obligatorio</strong></mat-error>

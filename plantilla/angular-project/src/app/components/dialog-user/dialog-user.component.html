@@ -4,8 +4,8 @@
 
 <mat-dialog-content>
     <p><b>Nombre completo:</b> {{usuario.nombre}}, {{usuario.apellidos}}</p>
-    <p><b>Nº de empleado/a:</b>  {{usuario.empleado}}</p>
-    <p *ngIf="isCoordinador()"><b>Rol:</b>  {{usuario.rol | lowercase}}/a</p>
+    <p *ngIf="isCoordinador()"><b>Nº de empleado/a:</b>  {{usuario.empleado}}</p>
+    <p><b>Rol:</b>  {{usuario.rol | lowercase}}/a</p>
     <p><b>Genero:</b>   {{usuario.genero | lowercase}}</p>
     <p><b>Telefono:</b> {{usuario.telefono}}</p>
     <a mat-raised-button matTooltip="Realizar llamada" class="w-100 text-white primary-bg" [href]="urlTelefono(usuario.telefono)"><mat-icon>phone</mat-icon></a>

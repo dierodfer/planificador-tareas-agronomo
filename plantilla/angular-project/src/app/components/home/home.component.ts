@@ -20,6 +20,7 @@ export class HomeComponent implements OnInit {
 
   nuevasNoti: Boolean;
   miUsuario: Usuario;
+  notifications = [];
 
   constructor(
     private dialog: MatDialog,
@@ -63,16 +64,22 @@ export class HomeComponent implements OnInit {
     );
   }
 
+  closeNotification(notification) {
+    this.messagingService.deleteNotification(notification);
+  }
+
   ngOnInit() {
     const sesionId = this.cookie.get('sesionId');
-    if (sesionId !== null) {
+    if (sesionId !== null && sesionId !== 'null') {
       this.getMyBuzon();
       this.getMyUser();
       this.messagingService.requestPermission(sesionId);
-      /* this.messagingService.receiveMessage(); */
+      this.messagingService.receiveMessage();
+    } else {
+      this.cookie.deleteAll();
     }
 
-/*   this.message = this.messagingService.currentMessage; */
+    this.notifications = this.messagingService.notifications;
   }
 
 }

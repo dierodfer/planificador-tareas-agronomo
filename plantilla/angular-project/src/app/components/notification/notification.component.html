@@ -1,7 +1,7 @@
 <div class="offset-md-3 col-md-6">
   <button mat-button (click)="enviar()">Enviar nuevo ejemplo</button>
   <button mat-button (click)="deleteAllNotificacion()">Limpiar todos</button>
-  <!-- <button mat-button (click)="sendMePushNotification()">Recibir notificacion push a mi mismo</button> -->
+  <button mat-button (click)="sendMePushNotification()">Recibir notificacion push a mi mismo</button>
 
   <mat-card *ngFor="let noti of notificaciones" class="my-2">
     <mat-icon *ngIf="!noti.leido" class="new text-warning">new_releases</mat-icon>

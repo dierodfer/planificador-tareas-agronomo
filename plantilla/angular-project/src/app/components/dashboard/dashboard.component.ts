@@ -7,6 +7,7 @@ import { MatDialogConfig, MatDialog } from '@angular/material';
 import { DialogIncidentDetailsComponent } from '../dialog-incident-details/dialog-incident-details.component';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-dashboard',
@@ -28,7 +29,8 @@ export class DashboardComponent implements OnInit {
     private tareaService: TaskService,
     private incidenciaService: IncidentService,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private cookie: CookieService
   ) { }
 
   getNumTareasActivas() {
@@ -151,6 +153,9 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.cookie.get('rol') === 'TRABAJADOR' || this.cookie.get('rol') === 'COORDINADOR') {
+      this.router.navigate(['inicio/tareas/lista']);
+    }
     this.getNumTareasActivas();
     this.getNumTareasInterrumpidas();
     this.getNumTareasFinalizadas();

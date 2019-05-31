@@ -35,6 +35,12 @@ export class TaskService {
     return this.db.collection('tareas').doc(id).valueChanges();
   }
 
+  getTaskByGrupoId(groupId: string) {
+    return this.db.collection('tareas', ref =>
+    ref.where('grupo', '==', groupId)
+    ).valueChanges();
+  }
+
   getFinishTask() {
     return this.db.collection('tareas' , ref =>
     ref.where('finalizada', '==', true)
@@ -72,6 +78,22 @@ export class TaskService {
     return this.db.collection('tareas' , ref =>
     ref.where('cancelada', '==', false).where('finalizada', '==', false)
     .where('fechaComienzo', '>=', date.toJSON()).where('fechaComienzo', '<=', moment().toJSON())
+    ).valueChanges();
+  }
+
+  getFutureTaskByUser(userId: string) {
+    return this.db.collection('tareas' , ref =>
+    ref.orderBy('fechaComienzo').where('responsable', '==', userId)
+    .where('grupal', '==', false).where('fechaComienzo', '>', new Date().toJSON())
+    .where('cancelada', '==', false).where('finalizada', '==', false)
+    ).valueChanges();
+  }
+
+  getFutureTaskByGroup(groupId: string) {
+    return this.db.collection('tareas' , ref =>
+    ref.orderBy('fechaComienzo').where('grupo', '==', groupId)
+    .where('grupal', '==', true).where('fechaComienzo', '>', new Date().toJSON())
+    .where('cancelada', '==', false).where('finalizada', '==', false)
     ).valueChanges();
   }
 
@@ -113,7 +135,8 @@ export class TaskService {
 
   getPendingTaskByGroup(groupId: string) {
     return this.db.collection('tareas' , ref =>
-    ref.where('grupo', '==', groupId).where('grupal', '==', true)
+    ref.orderBy('fechaComienzo').where('grupo', '==', groupId)
+    .where('grupal', '==', true).where('fechaComienzo', '<=', new Date().toJSON())
     .where('cancelada', '==', false).where('finalizada', '==', false)
     ).valueChanges();
   }
@@ -246,5 +269,15 @@ export class TaskService {
     ref.where('fechaEstimacion', '<', moment().startOf('day').toJSON())
     .where('finalizada', '==', false).where('cancelada', '==', false)
     ).valueChanges();
+  }
+
+  deleteAllGroupTask(groupId) {
+    this.getTaskByGrupoId(groupId).forEach((tasks: Tarea[]) => {
+      tasks.forEach(task => {
+        if (task.grupal) {
+          this.deleteTask(task.id);
+        }
+      });
+    });
   }
 }

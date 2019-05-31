@@ -1,3 +1,4 @@
+
 <div class="row">
   <div class="col-sm-6">
     <p class="font-weight-bold col-12 text-danger clickable" [matMenuTriggerFor]="retrasadas">
@@ -74,21 +75,6 @@
     </div>
   </div>
 </div>
-
-<small class="d-none"> 
-    Numero total de tareas activas segun tipo HECHO <br>
-    Numero de tareas finalizadas segun tipo HECHO<br>
-    Numero total de tareas activas que terminan hoy <br>
-    Porcentaje de tareas activas y finalizadas hoy HECHO <br>
-    Numero de incidencias creadas HECHO<br>
-    Numero de incidencias pendientes HECHO<br>
-    Numero de incidencias atendidas y resueltas HECHO<br>
-  
-    Incidencias críticas (prioridad Alta, el dia de hoy y estado pendiente) HECHO<br>
-    Tareas Retrasadas (tareas con más retraso, retraso >=1) HECHO <br>
-    Tareas activas con mas comentarios(3 maximo, minimo +1 comentario)<br>
-    Usuarios sin tareas hoy <br>
-</small> 
 
 <mat-menu #criticas="matMenu">
     <button class="clickable" (click)="openIncidentDialog(element)" mat-menu-item *ngFor="let element of incidenciasCriticas">

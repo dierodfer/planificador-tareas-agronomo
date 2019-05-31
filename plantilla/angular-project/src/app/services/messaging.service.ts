@@ -14,18 +14,15 @@ export class Token {
   }
 }
 
-
-
 @Injectable()
 
 export class MessagingService {
 
-  currentMessage = new BehaviorSubject(null);
+  notifications = [];
   private keyServer = environment.keyServer;
 
   constructor(
     private http: HttpClient,
-    private snackBar: MatSnackBar,
     private angularFireStore: AngularFirestore,
     private angularFireAuth: AngularFireAuth,
     private angularFireMessaging: AngularFireMessaging) {
@@ -75,13 +72,9 @@ export class MessagingService {
    receiveMessage() {
     this.angularFireMessaging.messages.subscribe(
       (payload) => {
-         console.log('new message received. ', payload); 
-        this.snackBar.open('¡Se ha recibido una nueva notificación!', 'Cerrar', {
-          duration: 4000,
-        });
-         this.currentMessage.next(payload);
+          this.notifications.push(Object.assign({}, payload));
       });
-  } 
+  }
 
   sendMessage(titulo, cuerpo, userId) {
     this.angularFireStore.collection('fcmTokens').doc(userId).valueChanges().forEach(
@@ -91,6 +84,10 @@ export class MessagingService {
         this.http.post('https://fcm.googleapis.com/fcm/send', body, {headers}).subscribe();
       }
     );
+  }
+
+  deleteNotification(notification) {
+    this.notifications.splice(this.notifications.findIndex(n => n === notification), 1 );
   }
 
   private getBody(titulo, cuerpo, token) {

@@ -8,6 +8,7 @@ import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
 import { DialogUserComponent } from '../dialog-user/dialog-user.component';
 import { CookieService } from 'ngx-cookie-service';
 import { DialogDeleteComponent } from '../dialog-delete/dialog-delete.component';
+import { TaskService } from 'src/app/services/task.service';
 
 @Component({
   selector: 'app-group-list',
@@ -27,6 +28,7 @@ export class GroupListComponent implements OnInit, OnDestroy {
 
   constructor(private grupoService: GroupService,
     private usuarioService: UserService,
+    private taskService: TaskService,
     private dialog: MatDialog,
     private cookie: CookieService) {
       this.rol = this.cookie.get('rol');
@@ -71,8 +73,17 @@ export class GroupListComponent implements OnInit, OnDestroy {
     this.dialog.open(DialogUserComponent, dialogConfig);
   }
 
-  deleteUser(group, idUser) {
-    this.grupoService.deleteUserToGroup(group.id, idUser);
+  deleteUser(grupo, idUser) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
+      titulo: '¿Seguro desea eliminar usuario del grupo: ' + grupo.nombre + '?'
+    };
+    this.deleteDialog = this.dialog.open(DialogDeleteComponent, dialogConfig);
+    this.deleteDialog.afterClosed().subscribe(confirmado => {
+      if (confirmado) {
+        this.grupoService.deleteUserToGroup(grupo.id, idUser);
+      }
+    });
   }
 
   getUsuarios() {
@@ -91,7 +102,7 @@ export class GroupListComponent implements OnInit, OnDestroy {
     this.grupoService.addGroup(new Grupo('Nuevo Grupo', this.cookie.get('sesionId')));
   }
 
-  deleteAllGroupWithoutUsers() {
+/*   deleteAllGroupWithoutUsers() {
     if (this.grupos){
       this.grupos.forEach(grupo => {
         if (grupo.usuarios.length === 0) {
@@ -99,7 +110,7 @@ export class GroupListComponent implements OnInit, OnDestroy {
         }
       });
     }
-  }
+  } */
 
   deleteGrupo(grupo: Grupo) {
     if (grupo.usuarios.length > 0) {
@@ -112,6 +123,7 @@ export class GroupListComponent implements OnInit, OnDestroy {
       this.deleteDialog = this.dialog.open(DialogDeleteComponent, dialogConfig);
       this.deleteDialog.afterClosed().subscribe(confirmado => {
         if (confirmado) {
+          this.taskService.deleteAllGroupTask(grupo.id);
           this.grupoService.deleteGroup(grupo.id);
         }
       });

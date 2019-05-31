@@ -1,5 +1,5 @@
 
-<mat-card class="mx-5 my-4 clickable" [routerLink]="['/']"> 
+<mat-card class="mx-5 my-4 clickable" *ngIf="isAdmin()" [routerLink]="['/']"> 
   <mat-icon>equalizer</mat-icon> Resumen
 </mat-card>
 

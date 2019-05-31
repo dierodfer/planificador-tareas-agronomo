@@ -18,11 +18,16 @@ export class MenuComponent implements OnInit {
   cerrarSesion() {
     this.cookie.set('sesionId', 'null');
     this.cookie.set('rol', 'null');
+/*     this.cookie.deleteAll(); */
     this.router.navigate(['/login']);
   }
 
   isCoordinador() {
     return (this.rol === 'COORDINADOR') || (this.rol === 'ADMIN');
+  }
+
+  isAdmin() {
+    return (this.rol === 'ADMIN');
   }
 
   ngOnInit() {

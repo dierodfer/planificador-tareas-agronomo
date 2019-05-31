@@ -2,7 +2,7 @@
 <div class="px-3">
 <div class="card-columns">
     <mat-card class="card" *ngFor="let grupo of grupos">
-       <!--  <button mat-icon-button (click)="deleteGrupo(grupo)"  matTooltip="Eliminar Grupo" class="float-right mr-3"><mat-icon>delete</mat-icon></button> -->
+        <button mat-icon-button (click)="deleteGrupo(grupo)"  matTooltip="Eliminar Grupo" class="float-right mr-3"><mat-icon>delete</mat-icon></button>
         <button mat-icon-button (click)="toggleAddUser(grupo.id)" *ngIf="!newUser[grupo.id] && !editName[grupo.id]" matTooltip="Añadir nuevo miembro"  class="float-right"><mat-icon>person_add</mat-icon></button>
         <button mat-icon-button (click)="toggleAddUser(grupo.id)" *ngIf="newUser[grupo.id]" matTooltip="Cancelar añadir nuevo miembro" class="float-right"><mat-icon>person_add_disabled</mat-icon></button>
         <button mat-icon-button (click)="toggleEditName(grupo.id)" *ngIf="!newUser[grupo.id] && !editName[grupo.id]" matTooltip="Editar nombre del grupo" class="float-right"><mat-icon>edit</mat-icon></button>

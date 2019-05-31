@@ -34,8 +34,8 @@ export class TaksListComponent implements OnInit {
   confirmDialog: MatDialogRef<DialogConfirmationComponent>;
   tipoTarea: string;
   editFechaFinalizacion = {}; editFechaComienzo = {};
-  pickPendientes = false; pickCanceladas = false; pickFinalizadas = false;
-  numPendientes: number; numCanceladas: number; numFinalizadas: number;
+  pickPendientes = false; pickCanceladas = false; pickFinalizadas = false; pickFuturas = false;
+  numPendientes: number; numCanceladas: number; numFinalizadas: number; numFuturas: number;
   controlFechaComienzo = new FormControl('');
   controlFechaFinalizacion = new FormControl('');
 
@@ -81,7 +81,7 @@ export class TaksListComponent implements OnInit {
     return this.usersAux.find(user => user.empleado === userId);
   }
 
-   // Busca los grupos en los que pertenece el trabajador y selecciona el primero
+   // Para trabajadores busca sus grupos y selecciona el primero
    getMisGruposUsuario() {
     this.misGrupos = [];
     const id =  this.cookie.get('sesionId');
@@ -114,6 +114,7 @@ export class TaksListComponent implements OnInit {
       this.taskService.getPendingTaskByUser(usuario.empleado).subscribe((tareas: Tarea[]) => this.numPendientes = tareas.length);
       this.taskService.getCancelTaskByUser(usuario.empleado).subscribe((tareas: Tarea[]) => this.numCanceladas = tareas.length);
       this.taskService.getFinishTaskByUser(usuario.empleado).subscribe((tareas: Tarea[]) => this.numFinalizadas = tareas.length);
+      this.taskService.getFutureTaskByUser(usuario.empleado).subscribe((tareas: Tarea[]) => this.numFuturas = tareas.length);
     }
     switch (estado) {
       case 'Pendientes':
@@ -136,6 +137,13 @@ export class TaksListComponent implements OnInit {
         }
         this.taskService.getFinishTaskByGroup(grupo.id).subscribe(tareas => this.tareasGrupales = tareas as Tarea[]);
         this.pickFinalizadas = false;
+        break;
+      case 'Futuras':
+        if (usuario) {
+          this.taskService.getFutureTaskByUser(usuario.empleado).subscribe(tareas => this.tareas = tareas as Tarea[]);
+        }
+        this.taskService.getFutureTaskByGroup(grupo.id).subscribe(tareas => this.tareasGrupales = tareas as Tarea[]);
+        this.pickFuturas = false;
         break;
     }
   }
@@ -253,22 +261,30 @@ export class TaksListComponent implements OnInit {
 
   toggleEditFechaComienzo(tarea: Tarea) {
     this.controlFechaComienzo.setValue(moment(tarea.fechaComienzo).toDate());
-    this.editFechaComienzo[tarea.id] = !this.editFechaComienzo[tarea.id];
+    this.closeSubmitFechaComienzo(tarea);
   }
 
   toggleEditFechaFinalizacion(tarea: Tarea) {
     this.controlFechaFinalizacion.setValue(moment(tarea.fechaEstimacion).toDate());
-    this.editFechaFinalizacion[tarea.id] = !this.editFechaFinalizacion[tarea.id];
+    this.closeSubmitFechaFinalizacion(tarea);
   }
 
   submitFechaComienzo(tarea: Tarea) {
     this.taskService.updateDateStart(tarea.id, this.controlFechaComienzo.value);
-    this.editFechaComienzo[tarea.id] = !this.editFechaComienzo[tarea.id];
+    this.closeSubmitFechaComienzo(tarea);
   }
 
   submitFechaFinalizacion(tarea: Tarea) {
     this.taskService.updateDateEstimated(tarea.id, this.controlFechaFinalizacion.value);
+    this.closeSubmitFechaFinalizacion(tarea);
+  }
+
+  closeSubmitFechaFinalizacion(tarea: Tarea) {
     this.editFechaFinalizacion[tarea.id] = !this.editFechaFinalizacion[tarea.id];
+  }
+
+  closeSubmitFechaComienzo(tarea: Tarea) {
+    this.editFechaComienzo[tarea.id] = !this.editFechaComienzo[tarea.id];
   }
 
   addComentario(tarea, comentario) {
@@ -311,7 +327,6 @@ export class TaksListComponent implements OnInit {
         this.getAllGrupos();
       break;
     }
-    // PARCHE
     this.getAllGruposAux();
     this.getAllUserAux();
     this.getParamUrl();
