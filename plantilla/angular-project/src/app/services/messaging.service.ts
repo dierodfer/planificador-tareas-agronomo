@@ -3,10 +3,9 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireMessaging } from '@angular/fire/messaging';
 import { take } from 'rxjs/operators';
-import { BehaviorSubject } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import {MatSnackBar} from '@angular/material';
 import {environment} from '../../environments/environment';
+import { UserService } from './user.service';
 
 export class Token {
   token: string;
@@ -69,7 +68,7 @@ export class MessagingService {
   /**
    * hook method when new notification received in foreground
    */
-   receiveMessage() {
+  receiveMessage() {
     this.angularFireMessaging.messages.subscribe(
       (payload) => {
           this.notifications.push(Object.assign({}, payload));

@@ -42,7 +42,7 @@ export class HomeComponent implements OnInit {
 
   openNotifications() {
     this.notificacionService.toggleBuzon();
-    this.router.navigate(['inicio', 'notificaciones']);
+    this.router.navigate(['notificaciones']);
   }
 
   openMyUserDialog() {

@@ -149,13 +149,10 @@ export class DashboardComponent implements OnInit {
   }
 
   goTask(id) {
-    this.router.navigate(['inicio/tareas/lista/', id]);
+    this.router.navigate(['tareas/lista/', id]);
   }
 
   ngOnInit() {
-    if (this.cookie.get('rol') === 'TRABAJADOR' || this.cookie.get('rol') === 'COORDINADOR') {
-      this.router.navigate(['inicio/tareas/lista']);
-    }
     this.getNumTareasActivas();
     this.getNumTareasInterrumpidas();
     this.getNumTareasFinalizadas();

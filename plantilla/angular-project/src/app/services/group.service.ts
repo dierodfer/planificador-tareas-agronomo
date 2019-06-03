@@ -40,12 +40,6 @@ export class GroupService {
     this.db.collection('grupos').doc(id).delete();
   }
 
-/*   deleteGroup(id) {
-    this.db.collection('grupos').doc(id).update({
-      eliminado: true
-    });
-  } */
-
   updateNameGroup(idGroup, nombre) {
     this.db.collection('grupos').doc(idGroup).update({
       nombre: nombre

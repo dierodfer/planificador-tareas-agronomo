@@ -22,7 +22,6 @@ import { AppRoutingModule } from './/app-routing.module';
 import { UserListComponent } from './components/user-list/user-list.component';
 import { UserFormComponent } from './components/user-form/user-form.component';
 import { MenuComponent } from './components/menu/menu.component';
-import { ModalComponent } from './components/modal/modal.component';
 import { TaksListComponent } from './components/taks-list/taks-list.component';
 import { TaksFormComponent } from './components/taks-form/taks-form.component';
 import { DialogIncidentComponent } from './components/dialog-incident/dialog-incident.component';
@@ -77,7 +76,6 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
     UserListComponent,
     UserFormComponent,
     MenuComponent,
-    ModalComponent,
     NotificationComponent,
     TaksListComponent,
     TaksFormComponent,
@@ -116,7 +114,6 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   entryComponents: [
-    ModalComponent,
     DialogIncidentComponent,
     DialogUserComponent,
     DialogDeleteComponent,

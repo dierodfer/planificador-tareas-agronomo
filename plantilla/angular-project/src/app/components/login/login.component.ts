@@ -24,8 +24,21 @@ export class LoginComponent implements OnInit {
     public router: Router,
     private cookieService: CookieService) { }
 
-  goHome() {
-    this.router.navigate(['/inicio']);
+  redirectByRol(){
+    if (this.cookieService.get('rol') === 'ADMIN'){
+      this.goResumen();
+    }
+    if (this.cookieService.get('rol') === 'TRABAJADOR' || this.cookieService.get('rol') === 'COORDINADOR') {
+      this.goTareas();
+    }
+  }
+
+  goResumen() {
+    this.router.navigate(['resumen']);
+  }
+
+  goTareas() {
+    this.router.navigate(['tareas/lista']);
   }
 
   login() {
@@ -36,7 +49,7 @@ export class LoginComponent implements OnInit {
         if (user !== undefined && !user.baneado) {
           this.cookieService.set( 'sesionId', (user as Usuario).empleado );
           this.cookieService.set( 'rol', (user as Usuario).rol );
-          this.goHome();
+          this.redirectByRol();
         } else {
           this.errorBloqueado = true;
           this.loading = false;
@@ -73,8 +86,8 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     if (this.cookieService.check('sesionId')) {
-      if (this.cookieService.get('sesionId') !== 'null'){
-        this.goHome();
+      if (this.cookieService.get('sesionId') !== 'null') {
+        this.redirectByRol();
       }
     }
   }

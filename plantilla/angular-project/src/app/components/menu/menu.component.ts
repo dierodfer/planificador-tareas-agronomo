@@ -19,7 +19,7 @@ export class MenuComponent implements OnInit {
     this.cookie.set('sesionId', 'null');
     this.cookie.set('rol', 'null');
 /*     this.cookie.deleteAll(); */
-    this.router.navigate(['/login']);
+    this.goLogin();
   }
 
   isCoordinador() {
@@ -30,12 +30,16 @@ export class MenuComponent implements OnInit {
     return (this.rol === 'ADMIN');
   }
 
+  goLogin(){
+    this.router.navigate(['login']);
+  }
+
   ngOnInit() {
     if (!this.cookie.check('sesionId') || !this.cookie.check('rol')) {
-      this.router.navigate(['login']);
+      this.goLogin();
     } else {
       if (this.cookie.get('sesionId') === 'null' || this.cookie.get('rol') === null) {
-        this.router.navigate(['login']);
+        this.goLogin();
       } else {
         this.rol = this.cookie.get('rol');
       }

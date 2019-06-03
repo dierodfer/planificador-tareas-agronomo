@@ -26,8 +26,8 @@ export class NotificationComponent implements OnInit, OnDestroy {
   deleteAllNotificacion() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
-      detalles: 'El buzón se vaciará por completo.',
-      titulo: '¿Seguro desea eliminar?'
+      detalles: 'Todas las notificaciones de eliminarán.',
+      titulo: '¿Seguro desea vaciar buzón?'
     };
     this.deleteDialog = this.dialog.open(DialogDeleteComponent, dialogConfig);
     this.deleteDialog.afterClosed().subscribe(confirmado => {
@@ -41,10 +41,10 @@ export class NotificationComponent implements OnInit, OnDestroy {
     this.notificacionService.deleteNotification(noti);
   }
 
-  enviar() {
+/*   enviar() {
     this.notificacionService.sendNotification(this.cookie.get('sesionId'),
     new Notificacion('Esto es una descripción', 'Titulo Notificación'));
-  }
+  } */
 
   ngOnInit() {
     this.notificacionService.getMyBuzon().subscribe(
@@ -54,9 +54,9 @@ export class NotificationComponent implements OnInit, OnDestroy {
     );
   }
 
-  sendMePushNotification() {
+/*   sendMePushNotification() {
     this.messagingService.sendMessage('Nueva Notificacion', 'Notificacion de ejemplo', this.cookie.get('sesionId'));
-  }
+  } */
 
   ngOnDestroy() {
     this.notificacionService.toggleMyNotifications();

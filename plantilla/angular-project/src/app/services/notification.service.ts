@@ -69,4 +69,12 @@ export class NotificationService {
       notificaciones: []
     });
   }
+
+  getBuzonById(id) {
+    return this.db.collection('buzones').doc(id).valueChanges();
+  }
+
+  deleteBuzon(id) {
+    this.db.collection('buzones').doc(id).delete();
+  }
 }

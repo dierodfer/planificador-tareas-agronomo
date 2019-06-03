@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import {MatPaginator, MatTableDataSource, MatSort, MatDialogConfig } from '@angular/material';
 import {Usuario} from '../../models/usuario';
-import {ModalComponent} from '../../components/modal/modal.component';
 import {COMMA, ENTER, TAB} from '@angular/cdk/keycodes';
 import {MatChipInputEvent} from '@angular/material';
 import {MatDialog} from '@angular/material';
@@ -59,7 +58,7 @@ export class UserListComponent implements OnInit {
   }
 
   editarUsuario(id) {
-    this.router.navigate(['inicio/admin/usuarios/formulario/', id]);
+    this.router.navigate(['admin/usuarios/formulario/', id]);
   }
 
   addFilter(event: MatChipInputEvent): void {

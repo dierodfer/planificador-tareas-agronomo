@@ -15,10 +15,10 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 const routes: Routes = [
   {
-    path: 'inicio',
+    path: '',
     component: HomeComponent,
     children: [
-          { path: '', component: DashboardComponent},
+          { path: 'resumen', component: DashboardComponent},
           { path: 'tareas/lista', component: TaksListComponent},
           { path: 'tareas/lista/:id', component: TaksListComponent},
           { path: 'tareas/formulario', component: TaksFormComponent},

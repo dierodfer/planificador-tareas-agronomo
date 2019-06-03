@@ -76,7 +76,8 @@ export class GroupListComponent implements OnInit, OnDestroy {
   deleteUser(grupo, idUser) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
-      titulo: '¿Seguro desea eliminar usuario del grupo: ' + grupo.nombre + '?'
+      titulo: '¿Seguro desea eliminar el miembro del grupo: ' + grupo.nombre + '?',
+      detalles: 'Dejará de ver las tareas grupales del grupo'
     };
     this.deleteDialog = this.dialog.open(DialogDeleteComponent, dialogConfig);
     this.deleteDialog.afterClosed().subscribe(confirmado => {
@@ -116,9 +117,9 @@ export class GroupListComponent implements OnInit, OnDestroy {
     if (grupo.usuarios.length > 0) {
       const dialogConfig = new MatDialogConfig();
       dialogConfig.data = {
-        detalles: 'Nota: Contiene ' + grupo.usuarios.length + ' usuarios.' +
+        detalles: 'Contiene ' + grupo.usuarios.length + ' miembros. ' +
          ' Si contiene tareas grupales estas se borraran, las tareas individuales persisten.',
-        titulo: '¿Seguro desea eliminar' + grupo.nombre + '?'
+        titulo: '¿Seguro desea eliminar el grupo: ' + grupo.nombre + '?'
       };
       this.deleteDialog = this.dialog.open(DialogDeleteComponent, dialogConfig);
       this.deleteDialog.afterClosed().subscribe(confirmado => {

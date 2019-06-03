@@ -92,7 +92,7 @@ export class UserService {
       baneado: true
     }).then(() => {
       const titulo = 'Usuario Bloqueado';
-      const cuerpo = 'El usuario ' + usuario.nombre + ',' + usuario.apellidos + 'ha sido bloqueado del sistema.';
+      const cuerpo = 'El usuario ' + usuario.nombre + ',' + usuario.apellidos + ', ha sido bloqueado del sistema.';
       // Envia notificación interna a todos los coordinadores
       this.getCoordinators().forEach(coordinadores => {
         coordinadores.forEach((coordinador: Usuario) => {
@@ -111,6 +111,7 @@ export class UserService {
   // NO SE USA
   deleteUsuario(id: string) {
     this.db.collection('usuarios').doc(id).delete().then(() => {
+      this.notificacionService.deleteBuzon(id);
       this.snackBar.open('El usuario ¡se ha borrado correctamente!', 'Cerrar', {
         duration: 4000,
       });

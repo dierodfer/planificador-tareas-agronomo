@@ -50,7 +50,7 @@
     </mat-form-field>
  -->
     <div class="pt-3" *ngIf="grupoSelected">
-        <p>Tareas Grupales {{grupoSelected.nombre}}<mat-icon class="text-muted float-right" matTooltip="Los únicos autorizados en cambiar el estado de las tareas grupales son el admin y el propio responsable.">info</mat-icon></p>
+        <p>Tareas Grupales <b>{{grupoSelected.nombre}}</b><mat-icon class="text-muted float-right" matTooltip="Los únicos autorizados en cambiar el estado de las tareas grupales son el admin y el propio responsable.">info</mat-icon></p>
         <p class="text-muted text-center mt-3" *ngIf="tareasGrupales.length == 0">
           <mat-icon class="pt-1">date_range</mat-icon> No tiene tareas Grupales {{tipoTarea}}
         </p>
@@ -152,7 +152,7 @@
         </ng-container>
     </div>  
     <div class="py-3" *ngIf="userSelected">      
-          <p>Tareas de {{userSelected.nombre}} {{userSelected.apellidos}} <mat-icon class="text-muted float-right" matTooltip="Los propios responsables, el admin y coordinadores pueden cambiar el estado de las tareas individuales.">info</mat-icon> </p>
+          <p>Tareas de <b>{{userSelected.nombre}} {{userSelected.apellidos}}</b> <mat-icon class="text-muted float-right" matTooltip="Los propios responsables, el admin y coordinadores pueden cambiar el estado de las tareas individuales.">info</mat-icon> </p>
       <p class="text-muted text-center mt-3" *ngIf="tareas.length == 0">
         <mat-icon class="pt-1">date_range</mat-icon> No tiene tareas {{tipoTarea}}
       </p>

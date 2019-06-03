@@ -25,7 +25,6 @@ export class UserFormComponent implements OnInit {
     private userService: UserService,
     private snackBar: MatSnackBar,
     private route: ActivatedRoute,
-    private router: Router,
     private _location: Location) {
     }
 
@@ -51,7 +50,7 @@ export class UserFormComponent implements OnInit {
     if (this.checkStatus()) {
       if (this.checkPhone()) {
         this.userService.updateUsuario(this.getUsuario());
-        this.router.navigate(['inicio/admin/usuarios/lista']);
+        this._location.back();
       }
     }
   }

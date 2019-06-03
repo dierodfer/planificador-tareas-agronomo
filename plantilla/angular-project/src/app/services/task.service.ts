@@ -22,7 +22,6 @@ export class TaskService {
   constructor(private db: AngularFirestore,
     public snackBar: MatSnackBar,
     private notificacionService: NotificationService,
-    private messaging: MessagingService,
     private grupoService: GroupService,
     private usuarioService: UserService,
     private messagingService: MessagingService) { }
@@ -161,7 +160,6 @@ export class TaskService {
   }
 
   addComment(tarea: Tarea, comment) {
-    console.log(tarea);
     this.db.collection('tareas').doc(tarea.id).update({
       comentarios:  firebase.firestore.FieldValue.arrayUnion({
           fecha: new Date().toJSON(),
@@ -195,7 +193,7 @@ export class TaskService {
       + ' ' + (tarea.subtipo2 ? tarea.subtipo2 : '')
       + ' ' + (tarea.subtipo3 ? tarea.subtipo3 : '');
       this.notificacionService.sendNotification(tarea.responsable, new Notificacion(body, 'Nueva Tarea'));
-      this.messaging.sendMessage('Nueva Tarea', body, tarea.responsable);
+      this.messagingService.sendMessage('Nueva Tarea', body, tarea.responsable);
     }
     this.snackBar.open('La tarea se ha guardado correctamente', 'Cerrar', {
       duration: 4000,
