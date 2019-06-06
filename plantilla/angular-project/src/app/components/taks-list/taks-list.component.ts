@@ -153,7 +153,7 @@ export class TaksListComponent implements OnInit {
     this.pickCanceladas = true;
   }
 
-  openConfirmDialogFinalizarTarea(id) {
+  openConfirmDialogFinalizarTarea(tarea) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
       tipo: 'finalizarTarea',
@@ -162,11 +162,11 @@ export class TaksListComponent implements OnInit {
     this.confirmDialog = this.dialog.open(DialogConfirmationComponent, dialogConfig);
     this.confirmDialog.afterClosed().subscribe(confirmado => {
       if (confirmado === true) {
-         this.finalizarTarea(id);
+         this.finalizarTarea(tarea.id);
       }
       if (confirmado) {
-        this.addComentario(id, confirmado);
-        this.finalizarTarea(id);
+        this.addComentario(tarea, confirmado);
+        this.finalizarTarea(tarea.id);
       }
     });
   }

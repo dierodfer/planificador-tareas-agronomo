@@ -116,7 +116,7 @@
               <p *ngIf="tarea.descripcion"><b>Detalles:</b> {{tarea.descripcion}}</p>
               <br>
               <mat-action-row *ngIf="!editFechaComienzo[tarea.id] && !editFechaFinalizacion[tarea.id]">
-                  <button *ngIf="!tarea.cancelada && !tarea.finalizada && (checkMyId(tarea.responsable) || isAdmin())" class="mx-2 bg-success text-white" mat-raised-button (click)="openConfirmDialogFinalizarTarea(tarea.id)"><mat-icon>alarm_on</mat-icon> Finalizar</button>
+                  <button *ngIf="!tarea.cancelada && !tarea.finalizada && (checkMyId(tarea.responsable) || isAdmin())" class="mx-2 bg-success text-white" mat-raised-button (click)="openConfirmDialogFinalizarTarea(tarea)"><mat-icon>alarm_on</mat-icon> Finalizar</button>
                   <button *ngIf="!tarea.cancelada && !tarea.finalizada && (checkMyId(tarea.responsable) || isAdmin())" class="mx-2" mat-raised-button color="warn" (click)="openConfirmDialogInterrumpirTarea(tarea)"><mat-icon>pause_circle_outline</mat-icon> Interrumpir</button>
                   <button *ngIf="!tarea.cancelada && tarea.finalizada && (checkMyId(tarea.responsable) || isAdmin())" class="mx-2 bg-info text-white" mat-button (click)="activarTarea(tarea.id)">Volver a activar</button>
                   <button *ngIf="tarea.cancelada  && !tarea.finalizada && (checkMyId(tarea.responsable) || isAdmin())" class="mx-2 bg-info text-white" mat-button (click)="reanudarTarea(tarea.id)">Volver a reanudar</button>
@@ -219,7 +219,7 @@
         <p *ngIf="tarea.descripcion"><b>Detalles:</b> {{tarea.descripcion}}</p>
         <br>
         <mat-action-row *ngIf="!editFechaComienzo[tarea.id] && !editFechaFinalizacion[tarea.id]">
-          <button *ngIf="!tarea.cancelada && !tarea.finalizada" class="mx-2 bg-success text-white" mat-raised-button (click)="openConfirmDialogFinalizarTarea(tarea.id)"><mat-icon>alarm_on</mat-icon> Finalizar</button>
+          <button *ngIf="!tarea.cancelada && !tarea.finalizada" class="mx-2 bg-success text-white" mat-raised-button (click)="openConfirmDialogFinalizarTarea(tarea)"><mat-icon>alarm_on</mat-icon> Finalizar</button>
           <button *ngIf="!tarea.cancelada && !tarea.finalizada" class="mx-2" mat-raised-button color="warn" (click)="openConfirmDialogInterrumpirTarea(tarea)"><mat-icon>pause_circle_outline</mat-icon> Interrumpir</button>
           <button *ngIf="!tarea.cancelada && tarea.finalizada && (isCoordinador())" class="mx-2 bg-info text-white" mat-button (click)="activarTarea(tarea.id)">Volver a activar</button>
           <button *ngIf="tarea.cancelada  && !tarea.finalizada" class="mx-2 bg-info text-white" mat-button (click)="reanudarTarea(tarea.id)">Volver a reanudar</button>

@@ -34,7 +34,7 @@ export class TaksFormComponent implements OnInit {
   minDatepicker = moment().subtract(6, 'days').toDate();
   minDateFinishpicker = moment().subtract(6, 'days').toDate();
   usuarios: Usuario[] = [];
-  fases: Fase[];
+  fases: Fase[] = [];
   misGrupos: Grupo[] = [];
 
   constructor(
@@ -52,7 +52,11 @@ export class TaksFormComponent implements OnInit {
 
   getUsariosPorGrupo(grupo: Grupo) {
     this.usuarios = [];
+    this.usuarioService.getUserById(grupo.coordinador).forEach((user) => {
+      this.usuarios.push(user as Usuario);
+    });
     grupo.usuarios.forEach(id => this.usuarioService.getUserById(id).forEach(usuario => this.usuarios.push(usuario as Usuario)));
+
   }
 
   getFases() {
