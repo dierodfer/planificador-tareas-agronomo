@@ -18,6 +18,7 @@
           <p><b>Nº de empleado/a:</b>  {{incidencia.autor.empleado}}</p>
           <p><b>Rol:</b>  {{incidencia.autor.rol | lowercase}}</p>
           <p><b>Sexo:</b>   {{incidencia.autor.genero | lowercase}}</p>
+          <a mat-raised-button matTooltip="Realizar llamada" class="w-100 text-white primary-bg" [href]="'tel:+34'+incidencia.autor.telefono"><mat-icon>phone</mat-icon></a>
       </mat-menu>
     </p>
     <p *ngIf="incidencia.responsable && findUsuario(incidencia.responsable)"><b>Atendida por:</b> 
@@ -27,6 +28,7 @@
             <p><b>Nº de empleado/a:</b>  {{findUsuario(incidencia.responsable).empleado}}</p>
             <p><b>Rol:</b>  {{findUsuario(incidencia.responsable).rol | lowercase}}</p>
             <p><b>Sexo:</b>   {{findUsuario(incidencia.responsable).genero | lowercase}}</p>
+            <a mat-raised-button matTooltip="Realizar llamada" class="w-100 text-white primary-bg" [href]="'tel:+34'+findUsuario(incidencia.responsable).telefono"><mat-icon>phone</mat-icon></a>
       </mat-menu>
     </p>
     <p *ngIf="incidencia.zona"><b>Zona:</b>

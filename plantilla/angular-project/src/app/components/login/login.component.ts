@@ -24,8 +24,8 @@ export class LoginComponent implements OnInit {
     public router: Router,
     private cookieService: CookieService) { }
 
-  redirectByRol(){
-    if (this.cookieService.get('rol') === 'ADMIN'){
+  redirectByRol() {
+    if (this.cookieService.get('rol') === 'ADMIN') {
       this.goResumen();
     }
     if (this.cookieService.get('rol') === 'TRABAJADOR' || this.cookieService.get('rol') === 'COORDINADOR') {
@@ -46,14 +46,18 @@ export class LoginComponent implements OnInit {
     this.resetErrors();
     if (this.control.status === 'VALID') {
       this.usuarioService.getUserById(this.control.value).subscribe((user: Usuario) => {
-        if (user !== undefined && !user.baneado) {
-          this.cookieService.set( 'sesionId', (user as Usuario).empleado );
-          this.cookieService.set( 'rol', (user as Usuario).rol );
-          this.redirectByRol();
+        if (user !== undefined){
+          if (!user.baneado) {
+            this.cookieService.set( 'sesionId', (user as Usuario).empleado );
+            this.cookieService.set( 'rol', (user as Usuario).rol );
+            this.redirectByRol();
+          } else {
+            this.errorBloqueado = true;
+          }
         } else {
-          this.errorBloqueado = true;
-          this.loading = false;
+          this.error = true;
         }
+        this.loading = false;
       });
     } else {
       this.loading = false;

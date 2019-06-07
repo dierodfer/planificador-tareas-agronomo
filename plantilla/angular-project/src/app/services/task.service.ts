@@ -170,11 +170,11 @@ export class TaskService {
         this.usuarioService.getUserById(tarea.responsable).forEach((usuario: Usuario) => {
           this.grupoService.getGroupById(tarea.grupo).forEach((grupo: Grupo) => {
             const titulo = 'Nuevo Comentario';
-            const cuerpo = 'Responsable: ' + usuario.nombre + ', Grupo: ' + grupo.nombre + ', ' +
-            tarea.tipo + ' ' + (tarea.subtipo1 ? tarea.subtipo1 : '')
-            + ' ' + (tarea.subtipo2 ? tarea.subtipo2 : '') +
-            + ' ' + (tarea.subtipo3 ? tarea.subtipo3 : '') +
-            + ', Comentario: ' + comment;
+            const cuerpo = 'Responsable: ' + usuario.nombre +
+            ', Grupo: ' + grupo.nombre + ', ' + tarea.tipo + ' ' +
+            (tarea.subtipo1 ? tarea.subtipo1 : '') + ' ' +
+            (tarea.subtipo2 ? tarea.subtipo2 : '') + ' ' +
+            (tarea.subtipo3 ? tarea.subtipo3 : '') + ', Comentario: ' + comment;
             this.notificacionService.sendNotification(grupo.coordinador, new Notificacion(cuerpo, titulo));
           });
         });
@@ -182,7 +182,7 @@ export class TaskService {
   }
 
   addTask(tarea: Tarea) {
-    tarea.id = Math.random().toString().substring(2); // ARREGLAR
+    tarea.id = Math.random().toString().substring(2);
     const json =  JSON.parse(JSON.stringify(tarea));
     this.db.collection('tareas').doc(tarea.id).set(json).then(() => {
     // Comprueba que no es tarea grupal y la fecha de la tarea es hoy (eliminando el tiempo)
